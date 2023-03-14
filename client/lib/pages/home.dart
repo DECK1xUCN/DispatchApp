@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
     return Container(
       color: Colors.blue[200],
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Sidebar(),
           Dashboard()
