@@ -26,9 +26,14 @@ class _HomeState extends State<Home> {
       color: Colors.blue[200],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Sidebar(),
-          Dashboard()
+        children: const [
+          SizedBox(
+              width: 250,
+              child: Sidebar()
+          ),
+          Expanded(
+              child: Dashboard()
+          )
         ],
       ),
     );
