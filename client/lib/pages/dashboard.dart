@@ -10,10 +10,28 @@ class Dashboard extends StatefulWidget {
 class _SidebarState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.red,
       body: SafeArea(
-        child: Text('Dashboard'),
+        child: Padding(
+            padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: const <Widget>[
+                  SizedBox(
+                    height: 50,
+                    child: Text('Title'),
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: Text('Graph'),
+                  ),
+                  Expanded(
+                    child: Text('Buttons'),
+                  )
+                ],
+            )
+        )
       ),
     );
   }
