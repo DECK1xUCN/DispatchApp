@@ -10,6 +10,11 @@ class Sidebar extends StatefulWidget {
 class _SidebarState extends State<Sidebar> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      backgroundColor: Colors.blue,
+      body: SafeArea(
+        child: Text('Sidebar'),
+      ),
+    );
   }
 }
