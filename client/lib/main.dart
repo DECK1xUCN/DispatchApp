@@ -21,12 +21,14 @@ void main() => runApp(MaterialApp(
     ),
     initialRoute: '/home',
     routes: {
-      '/': (context) => Loading(),
-      '/home': (context) => Home(),
+      '/': (context) => const Loading(),
+      '/home': (context) => const Home(),
     }
 ));
 
 class Loading extends StatelessWidget {
+  const Loading({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Text('Loading');
