@@ -25,10 +25,15 @@ class _HomeState extends State<Home> {
     return Container(
       color: Colors.blue[200],
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Sidebar(),
-          Dashboard()
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          SizedBox(
+              width: 250,
+              child: Sidebar()
+          ),
+          Expanded(
+              child: Dashboard()
+          )
         ],
       ),
     );

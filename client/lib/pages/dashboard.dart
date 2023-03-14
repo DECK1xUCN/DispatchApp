@@ -10,6 +10,11 @@ class Dashboard extends StatefulWidget {
 class _SidebarState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold(
+      backgroundColor: Colors.red,
+      body: SafeArea(
+        child: Text('Dashboard'),
+      ),
+    );
   }
 }
