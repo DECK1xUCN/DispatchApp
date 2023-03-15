@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class CardContent {
   String title;
   String subtitle;
-  String icon;
+  IconData icon;
 
   CardContent({
     required this.title,
