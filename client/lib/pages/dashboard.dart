@@ -29,7 +29,13 @@ class _SidebarState extends State<Dashboard> {
                 children: <Widget>[
                   const SizedBox(
                     height: 50,
-                    child: Text('Title'),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Welocme, User', // replace once backend is functional
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 200,
