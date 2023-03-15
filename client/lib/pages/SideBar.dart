@@ -7,8 +7,10 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color myColor = const Color.fromRGBO(245, 245, 245, 1.0);
+    Color myColor = const Color.fromRGBO(240, 240, 240, 1.0);
+    Color myColor2 = const Color.fromRGBO(1, 1,1, 1.0);
     return Drawer(
+      backgroundColor: myColor,
       child: Column(
         children: [
           Container(
@@ -18,11 +20,21 @@ class SideBar extends StatelessWidget {
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
 
-                children: const [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage("https://www.google.com/imgres?imgurl=https%3A%2F%2Fdeck1.com%2Fgraphics%2Fdeck1-01.svg&imgrefurl=https%3A%2F%2Fdeck1.dk%2F&tbnid=CwSYtpf-VgBTTM&vet=12ahUKEwie0szlwdv9AhWFtioKHVH0DfoQMygAegUIARDgAQ..i&docid=zo-aJGPaRKhy2M&w=800&h=380&q=deck1&ved=2ahUKEwie0szlwdv9AhWFtioKHVH0DfoQMygAegUIARDgAQ"),
+                    child: const Center(
+                      child: Text(
+                        'DICK2',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30.0,
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 10),
                 ],
@@ -33,38 +45,80 @@ class SideBar extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(
-                  title: const Text(
-                      'Dashboard',
-                      style: TextStyle(fontFamily:HttpHeaders.contentMD5Header ),),
-
+                  tileColor: myColor,
+                  leading: IconButton(
+                    icon:  Icon(
+                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
+                    ),
+                    color: Colors.black,
+                    iconSize: 30,
+                    onPressed: () {},
+                  ),
+                  title: const Text('Dashboard',
+                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
                   onTap: () {
                     // Handle the click on the Home button
                   },
                 ),
                 ListTile(
-                  title: const Text('Daily Reports',style: TextStyle(fontFamily:HttpHeaders.contentMD5Header ),),
+                  tileColor: myColor,
+                  leading: IconButton(
+                    icon:  Icon(
+                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
+                    ),
+                    color: Colors.black,
+                    iconSize: 30,
+                    onPressed: () {},
+                  ),
+                  title: const Text('Daily reports',
+                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
                   onTap: () {
-                    // Handle the click on the Search button
+                    // Handle the click on the Profile button
                   },
                 ),
                 ListTile(
-                  title: const Text('Daily update'),
+                  tileColor: myColor,
+                  leading: IconButton(
+                    icon:  Icon(
+                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
+                    ),
+                    color: Colors.black,
+                    iconSize: 30,
+                    onPressed: () {},
+                  ),
+                  title: const Text('Daily updates',
+                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
                   onTap: () {
                     // Handle the click on the Settings button
                   },
                 ),
                 ListTile(
-                  title: const Text('Site'),
+                  tileColor: myColor,
+                  leading: IconButton(
+                    icon:  Icon(
+                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
+                    ),
+                    color: Colors.black,
+                    iconSize: 30,
+                    onPressed: () {},
+                  ),
+                  title: const Text('Sites',
+                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
                   onTap: () {
-                    // Handle the click on the About button
+                    // Handle the click on the Logout button
                   },
                 ),
               ],
             ),
           ),
+
           ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Log out'),
+            tileColor: myColor,
+            leading: const Icon(Icons.logout,color: Colors.black,),
+            title: const Text('Log out',
+              style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
             onTap: () {
               // Handle the click on the Logout button
             },
