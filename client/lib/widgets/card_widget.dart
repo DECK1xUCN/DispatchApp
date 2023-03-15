@@ -17,38 +17,41 @@ class CardWidget extends StatelessWidget {
         child: SizedBox(
           width: 300,
           height: 120,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CircleAvatar(
-                radius: 45,
-                backgroundColor: Colors.purple[200],
-                child: const Icon(
-                  Icons.flight,
-                  color: Colors.deepPurple,
-                  size: 60,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(
+                  radius: 45,
+                  backgroundColor: Colors.purple[100],
+                  child: const Icon(
+                    Icons.flight,
+                    color: Colors.deepPurple,
+                    size: 60,
+                  ),
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    cardContent.title,
-                    style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black),
-                  ),
-                  Text(
-                    cardContent.subtitle,
-                    style: const TextStyle(
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                ],
-              )
-            ],
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      cardContent.title,
+                      style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black),
+                    ),
+                    Text(
+                      cardContent.subtitle,
+                      style: const TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ));
   }
