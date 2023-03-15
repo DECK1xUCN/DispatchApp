@@ -1,4 +1,7 @@
+import 'package:client/classes/CardContent.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/card_widget.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -8,6 +11,12 @@ class Dashboard extends StatefulWidget {
 }
 
 class _SidebarState extends State<Dashboard> {
+  CardContent cardContent = CardContent(
+      title: 'Title 1',
+      subtitle: 'Subtitle 1',
+      icon: 'Icon 1'
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,17 +26,35 @@ class _SidebarState extends State<Dashboard> {
             padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const <Widget>[
-                  SizedBox(
+                children: <Widget>[
+                  const SizedBox(
                     height: 50,
                     child: Text('Title'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 200,
                     child: Text('Graph'),
                   ),
                   Expanded(
-                    child: Text('Buttons'),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CardWidget(cardContent: cardContent),
+                            CardWidget(cardContent: cardContent),
+                          ],
+                        ),
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CardWidget(cardContent: cardContent),
+                            CardWidget(cardContent: cardContent),
+                          ],
+                        )
+                      ],
+                    )
                   )
                 ],
             )
