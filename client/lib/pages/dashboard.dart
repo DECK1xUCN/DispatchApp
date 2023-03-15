@@ -22,7 +22,7 @@ class _SidebarState extends State<Dashboard> {
       backgroundColor: Colors.red,
       body: SafeArea(
           child: Padding(
-              padding: const EdgeInsets.fromLTRB(50, 20, 0, 20),
+              padding: const EdgeInsets.fromLTRB(50, 20, 50, 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,14 +50,14 @@ class _SidebarState extends State<Dashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CardWidget(cardContent: cardContent),
                           CardWidget(cardContent: cardContent),
                         ],
                       ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CardWidget(cardContent: cardContent),
                           CardWidget(cardContent: cardContent),
