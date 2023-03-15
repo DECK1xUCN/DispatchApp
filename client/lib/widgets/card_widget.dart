@@ -37,7 +37,6 @@ class CardWidget extends StatelessWidget {
                     cardContent.title,
                     style: const TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
                         color: Colors.black),
                   ),
                   Text(
