@@ -9,41 +9,48 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.purple,
-      elevation: 10,
-      child: SizedBox(
-        width: 300,
-        height: 100,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Icon(
-                Icons.airplanemode_active,
-                size: 50,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
+        color: Colors.white,
+        elevation: 20,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: SizedBox(
+          width: 300,
+          height: 120,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CircleAvatar(
+                radius: 45,
+                backgroundColor: Colors.purple[200],
+                child: const Icon(
+                  Icons.flight,
+                  color: Colors.deepPurple,
+                  size: 60,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
                     cardContent.title,
                     style: const TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold
-                    ),
-                ),
-                Text(
-                    cardContent.subtitle,
-                  style: const TextStyle(
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
-      )
-    );
+                  Text(
+                    cardContent.subtitle,
+                    style: const TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
   }
 }
-
