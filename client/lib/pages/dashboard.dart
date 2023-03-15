@@ -14,18 +14,18 @@ class _SidebarState extends State<Dashboard> {
   CardContent cardContent = CardContent(
       title: 'Title 1',
       subtitle: 'Subtitle 1',
-      icon: 'Icon 1'
-  );
+      icon: Icons.airplanemode_active);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.red,
       body: SafeArea(
-        child: Padding(
-            padding: const EdgeInsets.all(20.0),
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(50, 20, 0, 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(
                     height: 50,
@@ -38,34 +38,35 @@ class _SidebarState extends State<Dashboard> {
                     ),
                   ),
                   const SizedBox(
-                    height: 200,
+                    height: 100,
                     child: Text('Graph'),
                   ),
+                  const Text(
+                    'Today',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CardWidget(cardContent: cardContent),
-                            CardWidget(cardContent: cardContent),
-                          ],
-                        ),
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CardWidget(cardContent: cardContent),
-                            CardWidget(cardContent: cardContent),
-                          ],
-                        )
-                      ],
-                    )
-                  )
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CardWidget(cardContent: cardContent),
+                          CardWidget(cardContent: cardContent),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CardWidget(cardContent: cardContent),
+                          CardWidget(cardContent: cardContent),
+                        ],
+                      )
+                    ],
+                  ))
                 ],
-            )
-        )
-      ),
+              ))),
     );
   }
 }
