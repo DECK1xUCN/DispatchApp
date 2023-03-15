@@ -12,8 +12,8 @@ class Dashboard extends StatefulWidget {
 
 class _SidebarState extends State<Dashboard> {
   CardContent cardContent = CardContent(
-      title: 'Title 1',
-      subtitle: 'Subtitle 1',
+      title: 'Dispatched flights',
+      subtitle: '7',
       icon: Icons.airplanemode_active);
 
   @override
@@ -38,7 +38,7 @@ class _SidebarState extends State<Dashboard> {
                     ),
                   ),
                   const SizedBox(
-                    height: 100,
+                    height: 200,
                     child: Text('Graph'),
                   ),
                   const Text(
