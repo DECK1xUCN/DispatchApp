@@ -11,6 +11,9 @@ class Dashboard extends StatefulWidget {
 }
 
 class _SidebarState extends State<Dashboard> {
+  String user = 'John Doe';
+  String title = 'Airport Flight Officer';
+
   CardContent cardContent = CardContent(
       title: 'Dispatched flights',
       subtitle: '7',
@@ -19,7 +22,7 @@ class _SidebarState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.fromLTRB(50, 20, 50, 20),
@@ -27,19 +30,32 @@ class _SidebarState extends State<Dashboard> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const SizedBox(
-                    height: 50,
+                  SizedBox(
+                    height: 100,
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text(
-                        'Welocme, User', // replace once backend is functional
-                        style: TextStyle(fontSize: 30),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Welcome, $user",
+                            style: TextStyle(fontSize: 40, color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            title,
+                            style: TextStyle(fontSize: 20, color: Colors.black),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 200,
-                    child: Text('Graph'),
+                    child: Text(
+                        'Graph',
+                      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
                   ),
                   const Text(
                     'Today',
