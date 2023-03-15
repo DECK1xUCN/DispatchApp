@@ -43,7 +43,7 @@ class _SidebarState extends State<Dashboard> {
                   ),
                   const Text(
                     'Today',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                   Expanded(
                       child: Column(
