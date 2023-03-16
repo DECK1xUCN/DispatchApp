@@ -1,3 +1,4 @@
+import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
 
@@ -19,19 +20,12 @@ void main() => runApp(MaterialApp(
         bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
       ),
     ),
-    initialRoute: '/home',
+    initialRoute: '/',
     routes: {
       '/': (context) => Loading(),
       '/home': (context) => Home(),
     }
 ));
-
-class Loading extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Text('Loading');
-  }
-}
 
 
 
