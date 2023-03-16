@@ -27,7 +27,7 @@ class SideBar extends StatelessWidget {
 
                     child: const Center(
                       child: Text(
-                        'DICK2',
+                        'DECK2',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -46,14 +46,7 @@ class SideBar extends StatelessWidget {
               children: [
                 ListTile(
                   tileColor: myColor,
-                  leading: IconButton(
-                    icon:  Icon(
-                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
-                    ),
-                    color: Colors.black,
-                    iconSize: 30,
-                    onPressed: () {},
-                  ),
+                  leading: const Icon(Icons.space_dashboard_outlined,color: Colors.black,),
                   title: const Text('Dashboard',
                     style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -63,14 +56,7 @@ class SideBar extends StatelessWidget {
                 ),
                 ListTile(
                   tileColor: myColor,
-                  leading: IconButton(
-                    icon:  Icon(
-                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
-                    ),
-                    color: Colors.black,
-                    iconSize: 30,
-                    onPressed: () {},
-                  ),
+                  leading: const Icon(Icons.message_outlined,color: Colors.black,),
                   title: const Text('Daily reports',
                     style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -80,14 +66,7 @@ class SideBar extends StatelessWidget {
                 ),
                 ListTile(
                   tileColor: myColor,
-                  leading: IconButton(
-                    icon:  Icon(
-                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
-                    ),
-                    color: Colors.black,
-                    iconSize: 30,
-                    onPressed: () {},
-                  ),
+                  leading: const Icon(Icons.restart_alt,color: Colors.black,),
                   title: const Text('Daily updates',
                     style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
                   onTap: () {
@@ -96,14 +75,7 @@ class SideBar extends StatelessWidget {
                 ),
                 ListTile(
                   tileColor: myColor,
-                  leading: IconButton(
-                    icon:  Icon(
-                      IconData(0xe900, fontFamily: 'DailyUpdates'),//you fucktard go die in a hole kisses
-                    ),
-                    color: Colors.black,
-                    iconSize: 30,
-                    onPressed: () {},
-                  ),
+                  leading: const Icon(Icons.map_outlined,color: Colors.black,),
                   title: const Text('Sites',
                     style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
                   onTap: () {
