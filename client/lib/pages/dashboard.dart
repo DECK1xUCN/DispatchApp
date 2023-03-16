@@ -27,7 +27,9 @@ class _SidebarState extends State<Dashboard> {
   CardContent cardContent = CardContent(
       title: 'Dispatched flights',
       subtitle: '7',
-      icon: Icons.airplanemode_active);
+      icon: Icons.airplanemode_active,
+      onTap: () => print('test')
+  );
 
   @override
   Widget build(BuildContext context) {
