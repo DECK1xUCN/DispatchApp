@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/home.dart';
 
 void main() => runApp(MaterialApp(
     title: 'Deck1 Dispatch App',
@@ -20,12 +21,14 @@ void main() => runApp(MaterialApp(
     ),
     initialRoute: '/home',
     routes: {
-      '/': (context) => Loading(),
-      '/home': (context) => Home(),
+      '/': (context) => const Loading(),
+      '/home': (context) => const Home(),
     }
 ));
 
 class Loading extends StatelessWidget {
+  const Loading({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Text('Loading');
@@ -34,9 +37,3 @@ class Loading extends StatelessWidget {
 
 
 
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Text('Home');
-  }
-}
