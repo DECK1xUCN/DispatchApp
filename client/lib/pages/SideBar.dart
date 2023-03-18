@@ -9,8 +9,8 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     Color myColor = const Color.fromRGBO(240, 240, 240, 1.0);
     Color myColor2 = const Color.fromRGBO(1, 1, 1, 1.0);
-    double width = 35;
-    double height = 35;
+    double width = 35;//icon width
+    double height = 35;//icon height
     return Drawer(
       backgroundColor: myColor,
       child: Column(
@@ -61,7 +61,9 @@ class SideBar extends StatelessWidget {
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
-                  onTap: () {
+                  onTap: (
+
+                      ) {
                     // Handle the click on the Profile button
                   },
                 ),
