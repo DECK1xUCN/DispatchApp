@@ -5,9 +5,9 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color myColor = const Color.fromRGBO(240, 240, 240, 1.0);//background color
-    double width = 35;//icon width
-    double height = 35;//icon height
+    Color myColor = const Color.fromRGBO(240, 240, 240, 1.0); //background color
+    double width = 60; //icon width
+    double height = 60; //icon height
     return Drawer(
       backgroundColor: myColor,
       child: Column(
@@ -27,6 +27,7 @@ class SideBar extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(
+                  hoverColor: Colors.blue,
                   tileColor: myColor,
                   leading: SizedBox(
                     width: width,
@@ -60,9 +61,7 @@ class SideBar extends StatelessWidget {
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
                   ),
-                  onTap: (
-
-                      ) {
+                  onTap: () {
                     // Handle the click on the Profile button
                   },
                 ),
