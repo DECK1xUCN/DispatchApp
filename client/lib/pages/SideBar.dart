@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
@@ -8,36 +8,21 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color myColor = const Color.fromRGBO(240, 240, 240, 1.0);
-    Color myColor2 = const Color.fromRGBO(1, 1,1, 1.0);
+    Color myColor2 = const Color.fromRGBO(1, 1, 1, 1.0);
+    double width = 35;
+    double height = 35;
     return Drawer(
       backgroundColor: myColor,
       child: Column(
         children: [
           Container(
             width: double.infinity,
-            height: 200,
+            height: 300,
             color: myColor,
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-
-                    child: const Center(
-                      child: Text(
-                        'DECK2',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 30.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                ],
+              child: Image.asset(
+                "assets/deck1-logo.png",
+                scale: 0.5,
               ),
             ),
           ),
@@ -46,9 +31,17 @@ class SideBar extends StatelessWidget {
               children: [
                 ListTile(
                   tileColor: myColor,
-                  leading: const Icon(Icons.space_dashboard_outlined,color: Colors.black,),
-                  title: const Text('Dashboard',
-                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
+                  leading: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Image.asset("assets/Dashboard.png"),
+                  ),
+                  title: const Text(
+                    'Dashboard',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
                     // Handle the click on the Home button
@@ -56,9 +49,17 @@ class SideBar extends StatelessWidget {
                 ),
                 ListTile(
                   tileColor: myColor,
-                  leading: const Icon(Icons.message_outlined,color: Colors.black,),
-                  title: const Text('Daily reports',
-                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
+                  leading: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Image.asset("assets/DailyReports.png"),
+                  ),
+                  title: const Text(
+                    'Daily reports',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
                     // Handle the click on the Profile button
@@ -66,18 +67,36 @@ class SideBar extends StatelessWidget {
                 ),
                 ListTile(
                   tileColor: myColor,
-                  leading: const Icon(Icons.restart_alt,color: Colors.black,),
-                  title: const Text('Daily updates',
-                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
+                  leading: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Image.asset("assets/DailyUpdates.png"),
+                  ),
+                  title: const Text(
+                    'Daily updates',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
                   onTap: () {
                     // Handle the click on the Settings button
                   },
                 ),
                 ListTile(
                   tileColor: myColor,
-                  leading: const Icon(Icons.map_outlined,color: Colors.black,),
-                  title: const Text('Sites',
-                    style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
+                  leading: SizedBox(
+                    width: width,
+                    height: height,
+                    child: Image.asset("assets/Sites.png"),
+                  ),
+                  title: const Text(
+                    'Sites',
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
                   onTap: () {
                     // Handle the click on the Logout button
                   },
@@ -85,12 +104,19 @@ class SideBar extends StatelessWidget {
               ],
             ),
           ),
-
           ListTile(
             tileColor: myColor,
-            leading: const Icon(Icons.logout,color: Colors.black,),
-            title: const Text('Log out',
-              style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),),
+            leading: const Icon(
+              Icons.logout,
+              color: Colors.black,
+            ),
+            title: const Text(
+              'Log out',
+              style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
             onTap: () {
               // Handle the click on the Logout button
             },
