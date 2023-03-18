@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: const [
           SizedBox(
-              width: 250,
+              width: 350,
               child: Sidebar()
           ),
           Expanded(
