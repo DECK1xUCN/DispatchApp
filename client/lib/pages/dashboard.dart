@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:client/classes/CardContent.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -15,14 +17,9 @@ class Dashboard extends StatefulWidget {
 class _SidebarState extends State<Dashboard> {
   String user = 'John Doe';
   String title = 'Airport Flight Officer';
-  List<FlSpot> spots = [
-    FlSpot(0,0),
-    FlSpot(1,5),
-    FlSpot(2,4),
-    FlSpot(3,3),
-    FlSpot(4,2),
-    FlSpot(5,1),
-  ];
+  final List<FlSpot> dummyData1 = List.generate(8, (index) {
+    return FlSpot(index.toDouble(), index * Random().nextDouble());
+  });
 
   CardContent cardContent = CardContent(
       title: 'Dispatched flights',
@@ -30,6 +27,70 @@ class _SidebarState extends State<Dashboard> {
       icon: Icons.airplanemode_active,
       onTap: () => print('test')
   );
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+        color: Color(0xff72719b), fontWeight: FontWeight.w400, fontSize: 16);
+
+    Widget text;
+    switch (value.toInt()) {
+      case 1:
+        text = Text('1', style: style);
+        break;
+      case 2:
+        text = Text('2', style: style);
+        break;
+      case 3:
+        text = Text('3', style: style);
+        break;
+      case 4:
+        text = Text('4', style: style);
+        break;
+      case 5:
+        text = Text('5', style: style);
+        break;
+      case 6:
+        text = Text('6', style: style);
+        break;
+      case 7:
+        text = Text('7', style: style);
+        break;
+      case 8:
+        text = Text('8', style: style);
+        break;
+      case 9:
+        text = Text('9', style: style);
+        break;
+      case 10:
+        text = const RotationTransition(
+            turns: AlwaysStoppedAnimation(-90 / 360),
+            child: Text('5 PM   ', style: style));
+        break;
+      case 11:
+        text = const RotationTransition(
+            turns: AlwaysStoppedAnimation(-90 / 360),
+            child: Text('6 PM   ', style: style));
+        break;
+      case 12:
+        text = const RotationTransition(
+            turns: AlwaysStoppedAnimation(-90 / 360),
+            child: Text('7 PM   ', style: style));
+        break;
+      case 13:
+        text = Text('8 PM   ', style: style);
+        break;
+      default:
+        text = const Text('');
+        break;
+    }
+    return SideTitleWidget(axisSide: meta.axisSide, space: 5, child: text);
+  }
+
+  SideTitles get _bottomTitles => SideTitles(
+        showTitles: true,
+        getTitlesWidget: bottomTitleWidgets,
+        interval: 1,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +113,8 @@ class _SidebarState extends State<Dashboard> {
                         children: [
                           Text(
                             "Welcome, $user",
-                            style: TextStyle(fontSize: 40,
+                            style: TextStyle(
+                                fontSize: 40,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -64,63 +126,36 @@ class _SidebarState extends State<Dashboard> {
                       ),
                     ),
                   ),
-                  Container( // TODO: Make more beutiful
-                    height: 100,
+                  AspectRatio(
+                    aspectRatio: 3.5,
                     child: LineChart(
-                        LineChartData(
-                          lineTouchData: LineTouchData(enabled: false),
-                          gridData: FlGridData(
-                            show: true,
-                            getDrawingHorizontalLine: (value) {
-                              return FlLine(
-                                color: Colors.grey,
-                                strokeWidth: 1,
-                              );
-                            },
-                            drawVerticalLine: true,
-                            getDrawingVerticalLine: (value) {
-                              return FlLine(
-                                color: Colors.grey,
-                                strokeWidth: 1,
-                              );
-                            },
-                          ),
-                          titlesData: FlTitlesData(
-                            show: true,
-                            bottomTitles: AxisTitles(
-                              axisNameWidget: Text("Bottom"),
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: defaultGetTitle,
-                              ),
-                            ),
-                            leftTitles: AxisTitles(
-                              axisNameWidget: Text("Left"),
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: defaultGetTitle,
-                              ),
+                      LineChartData(
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: dummyData1,
+                            isCurved: true,
+                            dotData: FlDotData(
+                              show: false,
                             ),
                           ),
-                          minX: 0,
-                          maxX: 20,
-                          minY: 0,
-                          maxY: 20,
-                          lineBarsData: [
-                            LineChartBarData(
-                              show: true,
-                              spots: spots,
-                              color: Colors.green,
-                              barWidth: 2,
-                              isCurved: true,
-
-                            ),
-                          ]
+                        ],
+                        borderData: FlBorderData(
+                            border: const Border(
+                                bottom: BorderSide(),
+                                left: BorderSide()
+                            )
                         ),
-
-
-
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                              sideTitles: _bottomTitles,
+                          ),
+                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true,)),
+                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+                        ),
                       ),
+                    ),
                   ),
                   const Text(
                     'Today',
