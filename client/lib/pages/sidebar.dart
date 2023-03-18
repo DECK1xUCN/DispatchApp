@@ -13,12 +13,12 @@ class Sidebar extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            height: 300,
+            height: 200,
             color: myColor,
             child: Center(
               child: Image.asset(
                 "assets/deck1Logo.png",
-                scale: 0.5,
+                scale: 0.8,
               ),
             ),
           ),
