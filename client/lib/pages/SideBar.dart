@@ -7,8 +7,7 @@ class SideBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color myColor = const Color.fromRGBO(240, 240, 240, 1.0);
-    Color myColor2 = const Color.fromRGBO(1, 1, 1, 1.0);
+    Color myColor = const Color.fromRGBO(240, 240, 240, 1.0);//background color
     double width = 35;//icon width
     double height = 35;//icon height
     return Drawer(
