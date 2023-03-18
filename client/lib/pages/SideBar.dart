@@ -36,6 +36,7 @@ class SideBar extends StatelessWidget {
                   title: const Text(
                     'Dashboard',
                     style: TextStyle(
+                        fontFamily: 'Roboto',
                         fontSize: 30,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
@@ -54,6 +55,7 @@ class SideBar extends StatelessWidget {
                   title: const Text(
                     'Daily reports',
                     style: TextStyle(
+                        fontFamily: 'Roboto',
                         fontSize: 30,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
@@ -74,6 +76,7 @@ class SideBar extends StatelessWidget {
                   title: const Text(
                     'Daily updates',
                     style: TextStyle(
+                        fontFamily: 'Roboto',
                         fontSize: 30,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
@@ -92,6 +95,7 @@ class SideBar extends StatelessWidget {
                   title: const Text(
                     'Sites',
                     style: TextStyle(
+                        fontFamily: 'Roboto',
                         fontSize: 30,
                         color: Colors.black,
                         fontWeight: FontWeight.bold),
@@ -112,6 +116,7 @@ class SideBar extends StatelessWidget {
             title: const Text(
               'Log out',
               style: TextStyle(
+                  fontFamily: 'Roboto',
                   fontSize: 30,
                   color: Colors.black,
                   fontWeight: FontWeight.bold),
