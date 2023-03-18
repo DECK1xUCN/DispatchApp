@@ -31,57 +31,13 @@ class _SidebarState extends State<Dashboard> {
     const style = TextStyle(
         color: Color(0xff72719b), fontWeight: FontWeight.w400, fontSize: 16);
 
-    Widget text;
-    switch (value.toInt()) {
-      case 1:
-        text = Text('1', style: style);
-        break;
-      case 2:
-        text = Text('2', style: style);
-        break;
-      case 3:
-        text = Text('3', style: style);
-        break;
-      case 4:
-        text = Text('4', style: style);
-        break;
-      case 5:
-        text = Text('5', style: style);
-        break;
-      case 6:
-        text = Text('6', style: style);
-        break;
-      case 7:
-        text = Text('7', style: style);
-        break;
-      case 8:
-        text = Text('8', style: style);
-        break;
-      case 9:
-        text = Text('9', style: style);
-        break;
-      case 10:
-        text = const RotationTransition(
-            turns: AlwaysStoppedAnimation(-90 / 360),
-            child: Text('5 PM   ', style: style));
-        break;
-      case 11:
-        text = const RotationTransition(
-            turns: AlwaysStoppedAnimation(-90 / 360),
-            child: Text('6 PM   ', style: style));
-        break;
-      case 12:
-        text = const RotationTransition(
-            turns: AlwaysStoppedAnimation(-90 / 360),
-            child: Text('7 PM   ', style: style));
-        break;
-      case 13:
-        text = Text('8 PM   ', style: style);
-        break;
-      default:
-        text = const Text('');
-        break;
+    Widget text = Text('');
+    for(int i = 1; i <32; i++) {
+      if(value == i) {
+        text = Text('$i', style: style);
+      }
     }
+
     return SideTitleWidget(axisSide: meta.axisSide, space: 5, child: text);
   }
 
