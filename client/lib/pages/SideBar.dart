@@ -6,8 +6,7 @@ class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color myColor = const Color.fromRGBO(240, 240, 240, 1.0); //background color
-    double width = 60; //icon width
-    double height = 60; //icon height
+    double width = 40; //icon width
     return Drawer(
       backgroundColor: myColor,
       child: Column(
@@ -31,7 +30,7 @@ class SideBar extends StatelessWidget {
                   tileColor: myColor,
                   leading: SizedBox(
                     width: width,
-                    height: height,
+                    height: width,
                     child: Image.asset("assets/Dashboard.png"),
                   ),
                   title: const Text(
@@ -50,7 +49,7 @@ class SideBar extends StatelessWidget {
                   tileColor: myColor,
                   leading: SizedBox(
                     width: width,
-                    height: height,
+                    height: width,
                     child: Image.asset("assets/DailyReports.png"),
                   ),
                   title: const Text(
@@ -69,7 +68,7 @@ class SideBar extends StatelessWidget {
                   tileColor: myColor,
                   leading: SizedBox(
                     width: width,
-                    height: height,
+                    height: width,
                     child: Image.asset("assets/DailyUpdates.png"),
                   ),
                   title: const Text(
@@ -88,7 +87,7 @@ class SideBar extends StatelessWidget {
                   tileColor: myColor,
                   leading: SizedBox(
                     width: width,
-                    height: height,
+                    height: width,
                     child: Image.asset("assets/Sites.png"),
                   ),
                   title: const Text(
