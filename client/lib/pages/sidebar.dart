@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SideBar extends StatelessWidget {
-  const SideBar({super.key});
+class Sidebar extends StatelessWidget {
+  const Sidebar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class SideBar extends StatelessWidget {
             color: myColor,
             child: Center(
               child: Image.asset(
-                "assets/deck1-logo.png",
+                "assets/deck1Logo.png",
                 scale: 0.5,
               ),
             ),
@@ -31,7 +31,7 @@ class SideBar extends StatelessWidget {
                   leading: SizedBox(
                     width: width,
                     height: width,
-                    child: Image.asset("assets/Dashboard.png"),
+                    child: Image.asset("assets/dashboard.png"),
                   ),
                   title: const Text(
                     'Dashboard',
@@ -50,7 +50,7 @@ class SideBar extends StatelessWidget {
                   leading: SizedBox(
                     width: width,
                     height: width,
-                    child: Image.asset("assets/DailyReports.png"),
+                    child: Image.asset("assets/dailyReports.png"),
                   ),
                   title: const Text(
                     'Daily reports',
@@ -69,7 +69,7 @@ class SideBar extends StatelessWidget {
                   leading: SizedBox(
                     width: width,
                     height: width,
-                    child: Image.asset("assets/DailyUpdates.png"),
+                    child: Image.asset("assets/dailyUpdates.png"),
                   ),
                   title: const Text(
                     'Daily updates',
@@ -88,7 +88,7 @@ class SideBar extends StatelessWidget {
                   leading: SizedBox(
                     width: width,
                     height: width,
-                    child: Image.asset("assets/Sites.png"),
+                    child: Image.asset("assets/sites.png"),
                   ),
                   title: const Text(
                     'Sites',

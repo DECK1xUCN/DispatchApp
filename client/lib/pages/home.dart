@@ -1,5 +1,5 @@
 import 'package:client/pages/dashboard.dart';
-import 'package:client/pages/SideBar.dart';
+import 'package:client/pages/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: const [
-          SideBar(),
+          Sidebar(),
           Dashboard()
         ],
       ),
