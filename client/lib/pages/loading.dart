@@ -12,21 +12,17 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   void getDashboardData() async {
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, '/home', arguments: {
-      'test': true
-    });
+    Navigator.pushReplacementNamed(context, '/home', arguments: {'test': true});
   }
-  
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
     getDashboardData();
-
   }
 
   @override

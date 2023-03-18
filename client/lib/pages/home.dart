@@ -12,7 +12,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -27,13 +27,8 @@ class _HomeState extends State<Home> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: const [
-          SizedBox(
-              width: 350,
-              child: Sidebar()
-          ),
-          Expanded(
-              child: Dashboard()
-          )
+          SizedBox(width: 300, child: Sidebar()),
+          Expanded(child: Dashboard())
         ],
       ),
     );

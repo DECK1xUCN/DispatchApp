@@ -39,7 +39,8 @@ class CardWidget extends StatelessWidget {
                     children: [
                       Text(
                         cardContent.title,
-                        style: const TextStyle(fontSize: 15, color: Colors.black),
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.black),
                       ),
                       Text(
                         cardContent.subtitle,

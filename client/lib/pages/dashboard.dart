@@ -25,8 +25,7 @@ class _SidebarState extends State<Dashboard> {
       title: 'Dispatched flights',
       subtitle: '7',
       icon: Icons.airplanemode_active,
-      onTap: () => print('test')
-  );
+      onTap: () => print('test'));
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
@@ -141,18 +140,20 @@ class _SidebarState extends State<Dashboard> {
                         ],
                         borderData: FlBorderData(
                             border: const Border(
-                                bottom: BorderSide(),
-                                left: BorderSide()
-                            )
-                        ),
+                                bottom: BorderSide(), left: BorderSide())),
                         gridData: FlGridData(show: false),
                         titlesData: FlTitlesData(
                           bottomTitles: AxisTitles(
-                              sideTitles: _bottomTitles,
+                            sideTitles: _bottomTitles,
                           ),
-                          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true,)),
-                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
-                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+                          leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                            showTitles: true,
+                          )),
+                          topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: true)),
+                          rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: true)),
                         ),
                       ),
                     ),
