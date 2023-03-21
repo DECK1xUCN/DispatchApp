@@ -2,38 +2,36 @@ name: Flutter CI
 
 on:
   push:
-    branches: 
+    branches:
       - main
       - dev
 
   pull_request:
-    branches: 
+    branches:
       - main
       - dev
-
-
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Flutter
-      uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '3.7.7'
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "3.7.7"
 
-    #- name: Flutter Lint
+      #- name: Flutter Lint
       #working-directory: client
       #run: flutter analyze
 
-    - name: Flutter Build
-      #working-directory: client
-      run: flutter build
+      - name: Flutter Build
+        working-directory: client
+        run: flutter build
 
     #- name: Flutter Test
-     #working-directory: client
-     # run: flutter test
+    #working-directory: client
+    # run: flutter test
