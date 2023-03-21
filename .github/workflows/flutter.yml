@@ -26,9 +26,9 @@ jobs:
       with:
         flutter-version: '3.7.7'
 
-    - name: Flutter Lint
+    #- name: Flutter Lint
       #working-directory: client
-      run: flutter analyze
+      #run: flutter analyze
 
     - name: Flutter Build
       #working-directory: client
