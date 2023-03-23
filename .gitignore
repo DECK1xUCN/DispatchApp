@@ -141,3 +141,8 @@ app.*.symbols
 bin/
 obj/
 *.user
+
+# nodejs
+node_modules/
+.env
+*.env

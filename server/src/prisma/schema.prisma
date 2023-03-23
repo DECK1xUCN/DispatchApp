@@ -1,0 +1,22 @@
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "darwin", "darwin-arm64"] // apple silicon
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Flight {
+    from         String
+    via          String
+    to           String
+    flightNumber String   @id @unique
+    ETD          DateTime
+    PAX          Int
+    cargo        Int
+    hoistCycles  Int
+    lateNote     String
+    delayCode    String
+}
