@@ -1,6 +1,6 @@
-//import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
-const typeDefs = /* GraphQL */ `
+const flightTypeDefs = gql`
   scalar DateTime
   scalar Date
 
@@ -36,4 +36,4 @@ const typeDefs = /* GraphQL */ `
   }
 `;
 
-export default typeDefs;
+export default flightTypeDefs;

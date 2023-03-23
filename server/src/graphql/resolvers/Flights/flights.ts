@@ -1,4 +1,3 @@
-// 1
 type Flight = {
   from: String;
   via: String;
@@ -12,7 +11,6 @@ type Flight = {
   delayCode: String;
 };
 
-// 2
 const flights: Flight[] = [
   {
     from: "LHR",
@@ -40,7 +38,7 @@ const flights: Flight[] = [
   },
 ];
 
-const resolvers: any = {
+const flightResolver: any = {
   Query: {
     flight: () => flights,
   },
@@ -73,11 +71,9 @@ const resolvers: any = {
         delayCode: args.delayCode,
       };
 
-      flights.push(flight);
-
-      return flight ? true : false;
+      return flight ? flights.push(flight) && true : false;
     },
   },
 };
 
-export default resolvers;
+export default flightResolver;

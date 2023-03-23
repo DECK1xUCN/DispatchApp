@@ -10,9 +10,12 @@
   },
   "devDependencies": {
     "@prisma/client": "^4.11.0",
+    "@types/lodash.merge": "^4.6.7",
     "@types/node": "^18.15.5",
     "cross-env": "^7.0.3",
+    "graphql-tag": "^2.12.6",
     "graphql-yoga": "^3.7.3",
+    "lodash.merge": "^4.6.2",
     "nodemon": "^2.0.22",
     "prisma": "^4.11.0",
     "ts-node": "^10.9.1",
