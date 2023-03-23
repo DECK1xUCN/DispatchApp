@@ -1,4 +1,9 @@
+import 'package:client/pages/home.dart';
+import 'package:client/pages/noHome.dart';
+import 'package:client/pages/notimplemented.dart';
 import 'package:flutter/material.dart';
+
+import 'dashboard.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({super.key});
@@ -42,7 +47,10 @@ class Sidebar extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    // Handle the click on the Home button
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Home()),
+                    );
                   },
                 ),
                 ListTile(
@@ -61,7 +69,10 @@ class Sidebar extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
-                    // Handle the click on the Profile button
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NoHome()),
+                    );
                   },
                 ),
                 ListTile(
@@ -80,6 +91,11 @@ class Sidebar extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NoHome()),
+                    );
+                    //change page
                     // Handle the click on the Settings button
                   },
                 ),
@@ -99,6 +115,10 @@ class Sidebar extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NoHome()),
+                    );
                     // Handle the click on the Logout button
                   },
                 ),
@@ -120,11 +140,16 @@ class Sidebar extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             onTap: () {
-              // Handle the click on the Logout button
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NoHome()),
+              );
             },
           ),
         ],
       ),
     );
   }
+
+
 }
