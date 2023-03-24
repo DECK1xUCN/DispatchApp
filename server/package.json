@@ -5,6 +5,7 @@
   "author": "Tomáš Sabol",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon src/index.ts",
     "start": "nodemon ts-node src/index.ts"
   },
