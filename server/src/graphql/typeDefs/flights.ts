@@ -21,6 +21,7 @@ const flightTypeDefs = gql`
     from: String!
     via: String!
     to: String!
+    etd: DateTime!
     pax: Int!
     cargoPP: Int!
     hoistCycles: Int!
@@ -35,6 +36,7 @@ const flightTypeDefs = gql`
     flightNumber: String!
     via: String!
     to: String!
+    etd: DateTime!
     pax: Int!
     cargoPP: Int!
     hoistCycles: Int!
@@ -48,6 +50,7 @@ const flightTypeDefs = gql`
     flightNumber: String
     via: String
     to: String
+    etd: DateTime
     pax: Int
     cargoPP: Int
     hoistCycles: Int
@@ -57,7 +60,6 @@ const flightTypeDefs = gql`
   }
 
   scalar DateTime
-  scalar Date
 `;
 
 export default flightTypeDefs;

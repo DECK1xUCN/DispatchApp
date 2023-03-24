@@ -9,15 +9,16 @@ datasource db {
 }
 
 model Flights {
-  id           String  @id @unique @default(uuid()) @db.Uuid
-  flightNumber String  @unique
+  id           String   @id @unique @default(uuid()) @db.Uuid
+  flightNumber String   @unique
   from         String
   via          String
   to           String
+  etd          DateTime
   pax          Int
   cargoPP      Int
   hoistCycles  Int
   late         Boolean
-  lateNote     String  @default("N/A")
-  delayCode    String  @default("N/A")
+  lateNote     String   @default("N/A")
+  delayCode    String   @default("N/A")
 }

@@ -145,3 +145,4 @@ obj/
 node_modules/
 .env
 *.env
+migrations/

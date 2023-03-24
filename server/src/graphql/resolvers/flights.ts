@@ -1,5 +1,6 @@
 import { Context } from "@/utils/context";
-import { FlightCreateInput } from "@/types/flights";
+import { FlightCreateInput, FlightUpdateInput } from "@/types/flights";
+import moment from "moment";
 
 const flightResolver: any = {
   Query: {
@@ -11,7 +12,7 @@ const flightResolver: any = {
      * @param context The context object containing the Prisma client
      * @returns {Promise} A promise that resolves to an array of flight objects.
      */
-    findAll: (parent: unknown, args: any, context: Context) => {
+    findAll: (parent: any, args: any, context: Context) => {
       return context.prisma.flights.findMany();
     },
 
@@ -23,7 +24,7 @@ const flightResolver: any = {
      * @param context The context object containing the Prisma client
      * @returns {Promise} A promise that resolves to a flight object.
      */
-    findById: (parent: unknown, args: { id: string }, context: Context) => {
+    findById: (parent: any, args: { id: string }, context: Context) => {
       return context.prisma.flights.findUnique({
         where: {
           id: args.id,
@@ -40,7 +41,7 @@ const flightResolver: any = {
      * @returns {Promise} A promise that resolves to a flight object.
      */
     findByFlightNumber: (
-      parent: unknown,
+      parent: any,
       args: { flightNumber: string },
       context: Context
     ) => {
@@ -72,6 +73,7 @@ const flightResolver: any = {
           from: args.data.from,
           via: args.data.via,
           to: args.data.to,
+          etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
           pax: args.data.pax,
           cargoPP: args.data.cargoPP,
           hoistCycles: args.data.hoistCycles,
@@ -97,23 +99,44 @@ const flightResolver: any = {
       args: { id: string; data: FlightCreateInput },
       context: Context
     ) => {
-      return context.prisma.flights.update({
-        where: {
-          id: args.id,
-        },
-        data: {
-          flightNumber: args.data.flightNumber,
-          from: args.data.from,
-          via: args.data.via,
-          to: args.data.to,
-          pax: args.data.pax,
-          cargoPP: args.data.cargoPP,
-          hoistCycles: args.data.hoistCycles,
-          late: args.data.late,
-          delayCode: args.data.delayCode,
-          lateNote: args.data.lateNote,
-        },
-      });
+      if (args.data.etd) {
+        return context.prisma.flights.update({
+          where: {
+            id: args.id,
+          },
+          data: {
+            from: args.data.from,
+            via: args.data.via,
+            to: args.data.to,
+            etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            flightNumber: args.data.flightNumber,
+            pax: args.data.pax,
+            cargoPP: args.data.cargoPP,
+            hoistCycles: args.data.hoistCycles,
+            late: args.data.late,
+            delayCode: args.data.delayCode,
+            lateNote: args.data.lateNote,
+          },
+        });
+      } else {
+        return context.prisma.flights.update({
+          where: {
+            id: args.id,
+          },
+          data: {
+            from: args.data.from,
+            via: args.data.via,
+            to: args.data.to,
+            flightNumber: args.data.flightNumber,
+            pax: args.data.pax,
+            cargoPP: args.data.cargoPP,
+            hoistCycles: args.data.hoistCycles,
+            late: args.data.late,
+            delayCode: args.data.delayCode,
+            lateNote: args.data.lateNote,
+          },
+        });
+      }
     },
 
     /**
@@ -128,26 +151,47 @@ const flightResolver: any = {
       */
     updateByFlightNumber: (
       parent: any,
-      args: { flightNumber: string; data: FlightCreateInput },
+      args: { flightNumber: string; data: FlightUpdateInput },
       context: Context
     ) => {
-      return context.prisma.flights.update({
-        where: {
-          flightNumber: args.flightNumber,
-        },
-        data: {
-          from: args.data.from,
-          via: args.data.via,
-          to: args.data.to,
-          flightNumber: args.data.flightNumber,
-          pax: args.data.pax,
-          cargoPP: args.data.cargoPP,
-          hoistCycles: args.data.hoistCycles,
-          late: args.data.late,
-          delayCode: args.data.delayCode,
-          lateNote: args.data.lateNote,
-        },
-      });
+      if (args.data.etd) {
+        return context.prisma.flights.update({
+          where: {
+            flightNumber: args.flightNumber,
+          },
+          data: {
+            from: args.data.from,
+            via: args.data.via,
+            to: args.data.to,
+            etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            flightNumber: args.data.flightNumber,
+            pax: args.data.pax,
+            cargoPP: args.data.cargoPP,
+            hoistCycles: args.data.hoistCycles,
+            late: args.data.late,
+            delayCode: args.data.delayCode,
+            lateNote: args.data.lateNote,
+          },
+        });
+      } else {
+        return context.prisma.flights.update({
+          where: {
+            flightNumber: args.flightNumber,
+          },
+          data: {
+            from: args.data.from,
+            via: args.data.via,
+            to: args.data.to,
+            flightNumber: args.data.flightNumber,
+            pax: args.data.pax,
+            cargoPP: args.data.cargoPP,
+            hoistCycles: args.data.hoistCycles,
+            late: args.data.late,
+            delayCode: args.data.delayCode,
+            lateNote: args.data.lateNote,
+          },
+        });
+      }
     },
   },
 };

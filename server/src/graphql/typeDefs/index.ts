@@ -1,5 +1,5 @@
 import merge from "lodash.merge";
-import flightResolver from "./Flights/flights";
+import flightResolver from "./flights";
 
 const resolvers = merge({}, flightResolver);
 
