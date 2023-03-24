@@ -1,39 +1,63 @@
 import gql from "graphql-tag";
 
 const flightTypeDefs = gql`
-  scalar DateTime
-  scalar Date
+  type Query {
+    findAll: [Flight!]!
+    findById(id: String!): Flight!
+    findByFlightNumber(flightNumber: String!): Flight!
+  }
+  type Mutation {
+    createFlight(data: FlightCreateInput): Flight!
+    updateById(id: String!, data: FlightUpdateInput): Flight!
+    updateByFlightNumber(
+      flightNumber: String!
+      data: FlightUpdateInput
+    ): Flight!
+  }
 
   type Flight {
+    id: String!
+    flightNumber: String!
     from: String!
     via: String!
     to: String!
-    flightNumber: String!
-    ETD: Date!
-    PAX: Int!
-    cargo: Int!
+    pax: Int!
+    cargoPP: Int!
     hoistCycles: Int!
+    late: Boolean!
+    latenote: String
+    delayCode: String
+  }
+
+  # Input types
+  input FlightCreateInput {
+    from: String!
+    flightNumber: String!
+    via: String!
+    to: String!
+    pax: Int!
+    cargoPP: Int!
+    hoistCycles: Int!
+    late: Boolean!
+    latenote: String
+    delayCode: String
+  }
+
+  input FlightUpdateInput {
+    from: String
+    flightNumber: String
+    via: String
+    to: String
+    pax: Int
+    cargoPP: Int
+    hoistCycles: Int
+    late: Boolean
     lateNote: String
     delayCode: String
   }
 
-  type Query {
-    flight: [Flight!]!
-  }
-  type Mutation {
-    createFlight(
-      from: String!
-      via: String!
-      to: String!
-      flightNumber: String!
-      ETD: Date!
-      PAX: Int!
-      cargo: Int!
-      hoistCycles: Int!
-      lateNote: String
-      delayCode: String
-    ): Boolean!
-  }
+  scalar DateTime
+  scalar Date
 `;
 
 export default flightTypeDefs;

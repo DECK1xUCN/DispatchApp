@@ -1,77 +1,153 @@
-type Flight = {
-  from: String;
-  via: String;
-  to: String;
-  flightNumber: String;
-  ETD: Date;
-  PAX: number;
-  cargo: number;
-  hoistCycles: number;
-  lateNote: String;
-  delayCode: String;
-};
-
-const flights: Flight[] = [
-  {
-    from: "LHR",
-    via: "AMS",
-    to: "AMS",
-    flightNumber: "BA123",
-    ETD: new Date(),
-    PAX: 100,
-    cargo: 100,
-    hoistCycles: 100,
-    lateNote: "late",
-    delayCode: "delay",
-  },
-  {
-    from: "LHR",
-    via: "AMS",
-    to: "AMS",
-    flightNumber: "BA123",
-    ETD: new Date(),
-    PAX: 100,
-    cargo: 100,
-    hoistCycles: 100,
-    lateNote: "late",
-    delayCode: "delay",
-  },
-];
+import { Context } from "@/utils/context";
+import { FlightCreateInput } from "@/types/flights";
 
 const flightResolver: any = {
   Query: {
-    flight: () => flights,
-  },
-  Mutation: {
-    createFlight: (
-      parent: unknown,
-      args: {
-        from: string;
-        via: string;
-        to: string;
-        flightNumber: string;
-        ETD: Date;
-        PAX: number;
-        cargo: number;
-        hoistCycles: number;
-        lateNote: string;
-        delayCode: string;
-      }
-    ) => {
-      const flight: Flight = {
-        from: args.from,
-        via: args.via,
-        to: args.to,
-        flightNumber: args.flightNumber,
-        ETD: args.ETD,
-        PAX: args.PAX,
-        cargo: args.cargo,
-        hoistCycles: args.hoistCycles,
-        lateNote: args.lateNote,
-        delayCode: args.delayCode,
-      };
+    /**
+     * Resolver function that returns all flights in the database.
+     *
+     * @param parent The parent object (unused in this case)
+     * @param args The arguments passed to the query (unused in this case)
+     * @param context The context object containing the Prisma client
+     * @returns {Promise} A promise that resolves to an array of flight objects.
+     */
+    findAll: (parent: unknown, args: any, context: Context) => {
+      return context.prisma.flights.findMany();
+    },
 
-      return flight ? flights.push(flight) && true : false;
+    /**
+     * Resolver function that returns a single flight based on its ID.
+     *
+     * @param parent The parent object (unused in this case)
+     * @param args The arguments passed to the query, which should include the ID of the flight to retrieve
+     * @param context The context object containing the Prisma client
+     * @returns {Promise} A promise that resolves to a flight object.
+     */
+    findById: (parent: unknown, args: { id: string }, context: Context) => {
+      return context.prisma.flights.findUnique({
+        where: {
+          id: args.id,
+        },
+      });
+    },
+
+    /**
+     * Resolver function that returns a single flight based on its flight number.
+     *
+     * @param parent The parent object (unused in this case)
+     * @param args The arguments passed to the query, which should include the flight number of the flight to retrieve
+     * @param context The context object containing the Prisma client
+     * @returns {Promise} A promise that resolves to a flight object.
+     */
+    findByFlightNumber: (
+      parent: unknown,
+      args: { flightNumber: string },
+      context: Context
+    ) => {
+      return context.prisma.flights.findUnique({
+        where: {
+          flightNumber: args.flightNumber,
+        },
+      });
+    },
+  },
+
+  Mutation: {
+    /**
+     * Resolver function that creates a new flight in the database.
+     *
+     * @param parent The parent object (unused in this case)
+     * @param args The arguments passed to the mutation, which should include the flight data for the new flight
+     * @param context The context object containing the Prisma client
+     * @returns {Promise} A promise that resolves to the newly created flight object.
+     */
+    createFlight: (
+      parent: any,
+      args: { data: FlightCreateInput },
+      context: Context
+    ) => {
+      return context.prisma.flights.create({
+        data: {
+          flightNumber: args.data.flightNumber,
+          from: args.data.from,
+          via: args.data.via,
+          to: args.data.to,
+          pax: args.data.pax,
+          cargoPP: args.data.cargoPP,
+          hoistCycles: args.data.hoistCycles,
+          late: args.data.late,
+          delayCode: args.data.delayCode,
+          lateNote: args.data.lateNote,
+        },
+      });
+    },
+
+    /**
+      Update a flight by its ID
+      This mutation allows updating a flight's details using its unique ID.
+      The ID is used to find the flight to update in the database, and the data argument
+      contains the new values for the flight's fields.
+      @param parent The parent resolver's result
+      @param args An object containing the flight's ID and the new data to update
+      @param context An object containing the Prisma client
+      @returns The updated flight object
+      */
+    updateById: (
+      parent: any,
+      args: { id: string; data: FlightCreateInput },
+      context: Context
+    ) => {
+      return context.prisma.flights.update({
+        where: {
+          id: args.id,
+        },
+        data: {
+          flightNumber: args.data.flightNumber,
+          from: args.data.from,
+          via: args.data.via,
+          to: args.data.to,
+          pax: args.data.pax,
+          cargoPP: args.data.cargoPP,
+          hoistCycles: args.data.hoistCycles,
+          late: args.data.late,
+          delayCode: args.data.delayCode,
+          lateNote: args.data.lateNote,
+        },
+      });
+    },
+
+    /**
+        Update a flight by its flight number
+        This mutation allows updating a flight's details using its unique flight number.
+        The flight number is used to find the flight to update in the database, and the data argument
+        contains the new values for the flight's fields.
+      @param parent The parent resolver's result
+      @param args An object containing the flight's flight number and the new data to update
+      @param context An object containing the Prisma client
+      @returns The updated flight object
+      */
+    updateByFlightNumber: (
+      parent: any,
+      args: { flightNumber: string; data: FlightCreateInput },
+      context: Context
+    ) => {
+      return context.prisma.flights.update({
+        where: {
+          flightNumber: args.flightNumber,
+        },
+        data: {
+          from: args.data.from,
+          via: args.data.via,
+          to: args.data.to,
+          flightNumber: args.data.flightNumber,
+          pax: args.data.pax,
+          cargoPP: args.data.cargoPP,
+          hoistCycles: args.data.hoistCycles,
+          late: args.data.late,
+          delayCode: args.data.delayCode,
+          lateNote: args.data.lateNote,
+        },
+      });
     },
   },
 };
