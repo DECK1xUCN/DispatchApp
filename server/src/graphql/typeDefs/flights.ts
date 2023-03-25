@@ -8,10 +8,10 @@ const flightTypeDefs = gql`
   }
   type Mutation {
     createFlight(data: FlightCreateInput): Flight!
-    updateById(id: String!, data: FlightUpdateInput): Flight!
+    updateById(id: String!, data: FlightUpdateInput!): Flight!
     updateByFlightNumber(
       flightNumber: String!
-      data: FlightUpdateInput
+      data: FlightUpdateInput!
     ): Flight!
   }
 
@@ -46,15 +46,15 @@ const flightTypeDefs = gql`
   }
 
   input FlightUpdateInput {
-    from: String
-    flightNumber: String
-    via: String
-    to: String
-    etd: DateTime
-    pax: Int
-    cargoPP: Int
-    hoistCycles: Int
-    late: Boolean
+    from: String!
+    flightNumber: String!
+    via: String!
+    to: String!
+    etd: DateTime!
+    pax: Int!
+    cargoPP: Int!
+    hoistCycles: Int!
+    late: Boolean!
     lateNote: String
     delayCode: String
   }

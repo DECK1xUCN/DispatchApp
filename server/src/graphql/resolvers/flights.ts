@@ -1,106 +1,158 @@
 import { Context } from "@/utils/context";
 import { FlightCreateInput, FlightUpdateInput } from "@/types/flights";
 import moment from "moment";
+import { GraphQLError } from "graphql";
 
 const flightResolver: any = {
   Query: {
     /**
-     * Resolver function that returns all flights in the database.
+     * This function fetches all flights from the database using Prisma.
      *
-     * @param parent The parent object (unused in this case)
-     * @param args The arguments passed to the query (unused in this case)
-     * @param context The context object containing the Prisma client
-     * @returns {Promise} A promise that resolves to an array of flight objects.
+     * @async
+     * @function findAll
+     * @param {any} parent - The parent object.
+     * @param {any} args - The arguments passed into the function.
+     * @param {Context} context - The context object, which contains the Prisma client.
+     * @throws {Error} If there was an error finding all flights.
+     * @returns {Promise} A Promise that resolves to an array of flights.
      */
-    findAll: (parent: any, args: any, context: Context) => {
-      return context.prisma.flights.findMany();
+    findAll: async (parent: any, args: any, context: Context) => {
+      // Retrieve all flights from the database using Prisma.
+      const flights = await context.prisma.flights.findMany();
+      // If no flights were found, throw an error.
+      if (!flights) {
+        throw new Error(`Error finding all flights`);
+      }
+      // Return the array of flights.
+      return flights;
     },
 
     /**
-     * Resolver function that returns a single flight based on its ID.
+     * This function fetches a flight from the database by its ID using Prisma.
      *
-     * @param parent The parent object (unused in this case)
-     * @param args The arguments passed to the query, which should include the ID of the flight to retrieve
-     * @param context The context object containing the Prisma client
-     * @returns {Promise} A promise that resolves to a flight object.
+     * @async
+     * @function findById
+     * @param {any} parent - The parent object.
+     * @param {{ id: string }} args - An object containing the ID parameter.
+     * @param {Context} context - The context object, which contains the Prisma client.
+     * @throws {GraphQLError} If there was an error finding the flight by its ID.
+     * @returns {Promise} A Promise that resolves to a flight object.
      */
-    findById: (parent: any, args: { id: string }, context: Context) => {
-      return context.prisma.flights.findUnique({
+    findById: async (parent: any, args: { id: string }, context: Context) => {
+      // Retrieve the flight from the database using its ID and Prisma.
+      const flight = await context.prisma.flights.findUnique({
         where: {
-          id: args.id,
+          flightNumber: args.id,
         },
       });
+      // If no flight was found, throw an error.
+      if (!flight) {
+        throw new GraphQLError(
+          `Error finding flight by flight number: ${args.id}`
+        );
+      }
+
+      // Return the flight object.
+      return flight;
     },
 
     /**
-     * Resolver function that returns a single flight based on its flight number.
+     * This function fetches a flight from the database by its flight number using Prisma.
      *
-     * @param parent The parent object (unused in this case)
-     * @param args The arguments passed to the query, which should include the flight number of the flight to retrieve
-     * @param context The context object containing the Prisma client
-     * @returns {Promise} A promise that resolves to a flight object.
+     * @async
+     * @function findByFlightNumber
+     * @param {any} parent - The parent object.
+     * @param {{ flightNumber: string }} args - An object containing the flightNumber parameter.
+     * @param {Context} context - The context object, which contains the Prisma client.
+     * @throws {GraphQLError} If there was an error finding the flight by its flight number.
+     * @returns {Promise} A Promise that resolves to a flight object.
      */
-    findByFlightNumber: (
+    findByFlightNumber: async (
       parent: any,
       args: { flightNumber: string },
       context: Context
     ) => {
-      return context.prisma.flights.findUnique({
+      // Retrieve the flight from the database using its flight number and Prisma.
+      const flight = await context.prisma.flights.findUnique({
         where: {
           flightNumber: args.flightNumber,
         },
       });
+      // If no flight was found, throw an error.
+      if (!flight) {
+        throw new GraphQLError(
+          `Error finding flight by flight number: ${args.flightNumber}`
+        );
+      }
+      // Return the flight object.
+      return flight;
     },
   },
 
   Mutation: {
     /**
-     * Resolver function that creates a new flight in the database.
+     * This function creates a new flight in the database using Prisma.
      *
-     * @param parent The parent object (unused in this case)
-     * @param args The arguments passed to the mutation, which should include the flight data for the new flight
-     * @param context The context object containing the Prisma client
-     * @returns {Promise} A promise that resolves to the newly created flight object.
+     * @async
+     * @function createFlight
+     * @param {any} parent - The parent object.
+     * @param {{ data: FlightCreateInput }} args - An object containing the flight data to create.
+     * @param {Context} context - The context object, which contains the Prisma client.
+     * @throws {GraphQLError} If there was an error creating the flight in the database.
+     * @returns {Promise} A Promise that resolves to the created flight object.
      */
-    createFlight: (
+    createFlight: async (
       parent: any,
       args: { data: FlightCreateInput },
       context: Context
     ) => {
-      return context.prisma.flights.create({
-        data: {
-          flightNumber: args.data.flightNumber,
-          from: args.data.from,
-          via: args.data.via,
-          to: args.data.to,
-          etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
-          pax: args.data.pax,
-          cargoPP: args.data.cargoPP,
-          hoistCycles: args.data.hoistCycles,
-          late: args.data.late,
-          delayCode: args.data.delayCode,
-          lateNote: args.data.lateNote,
-        },
-      });
+      // Create the new flight in the database using Prisma.
+      const flight = await context.prisma.flights
+        .create({
+          data: {
+            flightNumber: args.data.flightNumber,
+            from: args.data.from,
+            via: args.data.via,
+            to: args.data.to,
+            etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            pax: args.data.pax,
+            cargoPP: args.data.cargoPP,
+            hoistCycles: args.data.hoistCycles,
+            late: args.data.late,
+            delayCode: args.data.delayCode,
+            lateNote: args.data.lateNote,
+          },
+        })
+        .catch((error: any) => {
+          // If there was an error creating the flight, log it to the console and throw an error.
+          console.error(error);
+          throw new GraphQLError(`Error creating flight`);
+        });
+      // If no flight was created, throw an error.
+      if (!flight) {
+        throw new GraphQLError(`Error creating flight`);
+      }
+      // Return the created flight object.
+      return flight;
     },
 
     /**
-      Update a flight by its ID
-      This mutation allows updating a flight's details using its unique ID.
-      The ID is used to find the flight to update in the database, and the data argument
-      contains the new values for the flight's fields.
-      @param parent The parent resolver's result
-      @param args An object containing the flight's ID and the new data to update
-      @param context An object containing the Prisma client
-      @returns The updated flight object
-      */
-    updateById: (
+     * Updates an existing flight with the given id and data.
+     * @param parent The parent resolver's result
+     * @param args An object containing the flight's ID and the new data to update
+     * @param {id: string} id of the flight to update
+     * @param {{ data: FlightUpdateInput }} args - An object containing the flight data to update.
+     * @param {Context} context - The context object, which contains the Prisma client.
+     * @throws {GraphQLError} If there was an error updating the flight in the database.
+     * @returns The updated flight object
+     */
+    updateById: async (
       parent: any,
       args: { id: string; data: FlightCreateInput },
       context: Context
     ) => {
-      if (args.data.etd) {
-        return context.prisma.flights.update({
+      const flight = await context.prisma.flights
+        .update({
           where: {
             id: args.id,
           },
@@ -117,45 +169,34 @@ const flightResolver: any = {
             delayCode: args.data.delayCode,
             lateNote: args.data.lateNote,
           },
+        })
+        .catch((error: any) => {
+          console.error(error);
+          throw new GraphQLError(`Error updaring flight`);
         });
-      } else {
-        return context.prisma.flights.update({
-          where: {
-            id: args.id,
-          },
-          data: {
-            from: args.data.from,
-            via: args.data.via,
-            to: args.data.to,
-            flightNumber: args.data.flightNumber,
-            pax: args.data.pax,
-            cargoPP: args.data.cargoPP,
-            hoistCycles: args.data.hoistCycles,
-            late: args.data.late,
-            delayCode: args.data.delayCode,
-            lateNote: args.data.lateNote,
-          },
-        });
+      if (!flight) {
+        throw new GraphQLError(`Error updating flight`);
       }
+      return flight;
     },
 
     /**
-        Update a flight by its flight number
-        This mutation allows updating a flight's details using its unique flight number.
-        The flight number is used to find the flight to update in the database, and the data argument
-        contains the new values for the flight's fields.
-      @param parent The parent resolver's result
-      @param args An object containing the flight's flight number and the new data to update
-      @param context An object containing the Prisma client
-      @returns The updated flight object
-      */
-    updateByFlightNumber: (
+     * Updates an existing flight with the given id and data.
+     * @param parent The parent resolver's result
+     * @param args An object containing the flight's flightNumber and the new data to update
+     * @param {flightNumber: string} flightNumber of the flight to update
+     * @param {{ data: FlightUpdateInput }} args - An object containing the flight data to update.
+     * @param {Context} context - The context object, which contains the Prisma client.
+     * @throws {GraphQLError} If there was an updating creating the flight in the database.
+     * @returns The updated flight object
+     */
+    updateByFlightNumber: async (
       parent: any,
       args: { flightNumber: string; data: FlightUpdateInput },
       context: Context
     ) => {
-      if (args.data.etd) {
-        return context.prisma.flights.update({
+      const flight = await context.prisma.flights
+        .update({
           where: {
             flightNumber: args.flightNumber,
           },
@@ -172,26 +213,15 @@ const flightResolver: any = {
             delayCode: args.data.delayCode,
             lateNote: args.data.lateNote,
           },
+        })
+        .catch((error: any) => {
+          console.error(error);
+          throw new GraphQLError(`Error updating flight`);
         });
-      } else {
-        return context.prisma.flights.update({
-          where: {
-            flightNumber: args.flightNumber,
-          },
-          data: {
-            from: args.data.from,
-            via: args.data.via,
-            to: args.data.to,
-            flightNumber: args.data.flightNumber,
-            pax: args.data.pax,
-            cargoPP: args.data.cargoPP,
-            hoistCycles: args.data.hoistCycles,
-            late: args.data.late,
-            delayCode: args.data.delayCode,
-            lateNote: args.data.lateNote,
-          },
-        });
+      if (!flight) {
+        throw new GraphQLError(`Error updating flight`);
       }
+      return flight;
     },
   },
 };
