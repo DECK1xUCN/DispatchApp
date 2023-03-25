@@ -22,6 +22,11 @@ const flightTypeDefs = gql`
     via: String!
     to: String!
     etd: DateTime!
+    rotorStart: DateTime!
+    atd: DateTime!
+    eta: DateTime!
+    rotorStop: DateTime!
+    ata: DateTime!
     pax: Int!
     cargoPP: Int!
     hoistCycles: Int!
@@ -37,6 +42,11 @@ const flightTypeDefs = gql`
     via: String!
     to: String!
     etd: DateTime!
+    rotorStart: DateTime!
+    atd: DateTime!
+    eta: DateTime!
+    rotorStop: DateTime!
+    ata: DateTime!
     pax: Int!
     cargoPP: Int!
     hoistCycles: Int!
@@ -51,6 +61,11 @@ const flightTypeDefs = gql`
     via: String!
     to: String!
     etd: DateTime!
+    rotorStart: DateTime!
+    atd: DateTime!
+    eta: DateTime!
+    rotorStop: DateTime!
+    ata: DateTime!
     pax: Int!
     cargoPP: Int!
     hoistCycles: Int!

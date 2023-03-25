@@ -4,6 +4,11 @@ export type FlightCreateInput = {
   via: string;
   to: string;
   etd: Date;
+  rotorStart: Date;
+  atd: Date;
+  eta: Date;
+  rotorStop: Date;
+  ata: Date;
   pax: number;
   cargoPP: number;
   hoistCycles: number;
@@ -18,6 +23,11 @@ export interface FlightUpdateInput {
   via: string;
   to: string;
   etd: Date;
+  rotorStart: Date;
+  atd: Date;
+  eta: Date;
+  rotorStop: Date;
+  ata: Date;
   pax: number;
   cargoPP: number;
   hoistCycles: number;

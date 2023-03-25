@@ -115,6 +115,17 @@ const flightResolver: any = {
             via: args.data.via,
             to: args.data.to,
             etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            rotorStart: moment(
+              args.data.rotorStart,
+              "DD-MM-YYYY HH:mm:ss"
+            ).toDate(),
+            atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
+            rotorStop: moment(
+              args.data.rotorStop,
+              "DD-MM-YYYY HH:mm:ss"
+            ).toDate(),
+            ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
             pax: args.data.pax,
             cargoPP: args.data.cargoPP,
             hoistCycles: args.data.hoistCycles,
@@ -161,6 +172,17 @@ const flightResolver: any = {
             via: args.data.via,
             to: args.data.to,
             etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            rotorStart: moment(
+              args.data.rotorStart,
+              "DD-MM-YYYY HH:mm:ss"
+            ).toDate(),
+            atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
+            rotorStop: moment(
+              args.data.rotorStop,
+              "DD-MM-YYYY HH:mm:ss"
+            ).toDate(),
+            ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
             flightNumber: args.data.flightNumber,
             pax: args.data.pax,
             cargoPP: args.data.cargoPP,
@@ -205,6 +227,17 @@ const flightResolver: any = {
             via: args.data.via,
             to: args.data.to,
             etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            rotorStart: moment(
+              args.data.rotorStart,
+              "DD-MM-YYYY HH:mm:ss"
+            ).toDate(),
+            atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
+            eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
+            rotorStop: moment(
+              args.data.rotorStop,
+              "DD-MM-YYYY HH:mm:ss"
+            ).toDate(),
+            ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
             flightNumber: args.data.flightNumber,
             pax: args.data.pax,
             cargoPP: args.data.cargoPP,
