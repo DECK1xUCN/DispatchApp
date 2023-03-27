@@ -3,7 +3,7 @@ import 'package:client/pages/noHome.dart';
 import 'package:client/pages/notimplemented.dart';
 import 'package:flutter/material.dart';
 
-import 'dashboard.dart';
+import 'stats.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({super.key});
@@ -31,29 +31,6 @@ class Sidebar extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(
-                  hoverColor: Colors.blue,
-                  tileColor: myColor,
-                  leading: SizedBox(
-                    width: width,
-                    height: width,
-                    child: Image.asset("assets/dashboard.png"),
-                  ),
-                  title: const Text(
-                    'Dashboard',
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 30,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home()),
-                    );
-                  },
-                ),
-                ListTile(
                   tileColor: myColor,
                   leading: SizedBox(
                     width: width,
@@ -61,7 +38,7 @@ class Sidebar extends StatelessWidget {
                     child: Image.asset("assets/dailyReports.png"),
                   ),
                   title: const Text(
-                    'Daily reports',
+                    'Flights',
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 30,
@@ -83,7 +60,7 @@ class Sidebar extends StatelessWidget {
                     child: Image.asset("assets/dailyUpdates.png"),
                   ),
                   title: const Text(
-                    'Daily updates',
+                    'DFRs',
                     style: TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 30,
@@ -120,6 +97,29 @@ class Sidebar extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const NoHome()),
                     );
                     // Handle the click on the Logout button
+                  },
+                ),
+                ListTile(
+                  hoverColor: Colors.blue,
+                  tileColor: myColor,
+                  leading: SizedBox(
+                    width: width,
+                    height: width,
+                    child: Image.asset("assets/dashboard.png"),
+                  ),
+                  title: const Text(
+                    'Stats',
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Home()),
+                    );
                   },
                 ),
               ],
