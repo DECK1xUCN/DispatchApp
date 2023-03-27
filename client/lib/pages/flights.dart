@@ -1,26 +1,15 @@
-import 'package:client/pages/stats.dart';
 import 'package:client/pages/notimplemented.dart';
 import 'package:client/pages/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-class NoHome extends StatefulWidget {
-  const NoHome({Key? key}) : super(key: key);
+class Flights extends StatefulWidget {
+  const Flights({Key? key}) : super(key: key);
 
   @override
-  State<NoHome> createState() => _NoHomeState();
+  State<Flights> createState() => _FlightsState();
 }
 
-class _NoHomeState extends State<NoHome> {
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
-  }
-
+class _FlightsState extends State<Flights> {
   @override
   Widget build(BuildContext context) {
     return Container(

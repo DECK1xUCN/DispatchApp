@@ -1,6 +1,7 @@
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
+import 'pages/flights.dart';
 
 void main() => runApp(MaterialApp(
         title: 'Deck1 Dispatch App',
@@ -25,4 +26,5 @@ void main() => runApp(MaterialApp(
         routes: {
           '/': (context) => Loading(),
           '/home': (context) => Home(),
+          '/flights': (context) => Flights(),
         }));
