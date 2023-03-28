@@ -24,13 +24,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue[200],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: const [
-          SizedBox(width: 300, child: Sidebar()),
-          Expanded(child: Dashboard())
-        ],
-      ),
+      child:
+          SizedBox(child: Sidebar()),
     );
   }
 }
