@@ -2,6 +2,7 @@ import 'package:client/pages/loading.dart';
 import 'package:client/pages/notimplemented.dart';
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
+import 'pages/flights.dart';
 
 void main() => runApp(MaterialApp(
         title: 'Deck1 Dispatch App',
@@ -28,4 +29,5 @@ void main() => runApp(MaterialApp(
           '/home': (context) => Home(),
           '/notimplemented': (context) => NotImplemented(),
 
+          '/flights': (context) => Flights(),
         }));
