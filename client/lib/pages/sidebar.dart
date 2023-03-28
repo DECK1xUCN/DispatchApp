@@ -1,3 +1,4 @@
+import 'package:client/pages/flightForm.dart';
 import 'package:client/pages/home.dart';
 import 'package:client/pages/noHome.dart';
 import 'package:client/pages/notimplemented.dart';
@@ -48,7 +49,7 @@ class Sidebar extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const NoHome()),
+                      MaterialPageRoute(builder: (context) => const Home()),
                     );
                   },
                 ),

@@ -1,3 +1,4 @@
+import 'package:client/pages/flightForm.dart';
 import 'package:client/pages/stats.dart';
 import 'package:client/pages/sidebar.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: const [
           SizedBox(width: 300, child: Sidebar()),
-          Expanded(child: Dashboard())
+          Expanded(child: FlightForm())
         ],
       ),
     );
