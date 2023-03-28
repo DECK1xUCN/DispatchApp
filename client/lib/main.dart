@@ -19,6 +19,7 @@ void main() => runApp(MaterialApp(
               borderSide: BorderSide(color: Colors.black),
             ),
             hintStyle: TextStyle(fontFamily: 'Hind', color: Colors.black),
+
           ),
 
           // Define the default `TextTheme`. Use this to specify the default

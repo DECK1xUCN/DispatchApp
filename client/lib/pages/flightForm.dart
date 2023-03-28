@@ -8,12 +8,29 @@ class FlightForm extends StatefulWidget {
 }
 
 class _FlightFormState extends State<FlightForm> {
+  TimeOfDay time = TimeOfDay(hour: 10, minute: 30);
   int id = 1;
   int sitesCount = 5;
-  int selected = -1;
+  int selectedFrom = -1;
+  //String textToDisplay = "${time.hour}:${time.minute}";
+
+  TextEditingController _controllerETD = new TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controllerETD.addListener(() {
+      setState(() {
+        String hours = time.hour.toString().padLeft(2, '0');
+        String minutes = time.minute.toString().padLeft(2, '0');
+        _controllerETD.text = "$hours:$minutes";
+      });
+    });
+  }
 
   Widget? createCards(int num) {
-    for(int i = 0; i < num; i++){
+    for (int i = 0; i < num; i++) {
       return CardWidget(false, i as String);
     }
   }
@@ -40,30 +57,89 @@ class _FlightFormState extends State<FlightForm> {
                   ),
                   Text(
                     "Flight Number",
-                    style: TextStyle(fontSize: 30, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors
+                            .black), //TODO: Store Text style in a variable to lessen code duplication or change it in main.dart
                   ),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Flight Number",
+                  Container(
+                    width: 150,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Flight Number",
+                        ),
+                        readOnly: true,
+                      ),
                     ),
-                    readOnly: true,
                   ),
                   const Text("From",
                       style: TextStyle(fontSize: 30, color: Colors.black)),
-                  Column( // TODO: Copy this part to have more selectable
+                  Column(
+                    // TODO: Copy this part to have more selectable
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List.generate(
+                            sitesCount,
+                            (index) => GestureDetector(
+                                onTap: () =>
+                                    setState(() => selectedFrom = index),
+                                child: CardWidget(
+                                    selectedFrom == index, '$index')),
+                          )),
+                    ],
+                  ),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                          sitesCount,
-                          (index) => GestureDetector(
-                              onTap: () => setState(() => selected = index),
-                              child: CardWidget(selected == index, '$index')
+                        children: [
+                          Text(
+                            "ETD",
+                            style: TextStyle(fontSize: 30, color: Colors.black),
                           ),
-                        )
+                          Text(
+                            "Rotor Start",
+                            style: TextStyle(fontSize: 30, color: Colors.black),
+                          ),
+                          Text(
+                            "ATD",
+                            style: TextStyle(fontSize: 30, color: Colors.black),
+                          ),
+                        ],
                       ),
+                      Row(children: [
+                        Container(
+                          width: 150,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: TextFormField(
+                                autofocus: false,
+                                controller: _controllerETD,
+                                style: TextStyle(color: Colors.black),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                                onTap: () async {
+                                  TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                  );
+
+                                  if(newTime == null) return;
+                                  setState(() => {
+                                    time = newTime,
+                                  });
+
+                                }),
+                          ),
+                        ),
+                      ]),
                     ],
                   ),
                 ],
@@ -87,8 +163,18 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: selected ? Colors.red : Colors.blue,
-      child: Text(index),
+      width: 50,
+      height: 30,
+      decoration: BoxDecoration(
+        border:
+            Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+            index), //TODO: Edit text (strangely enough index is a string by default)
+      ),
     );
   }
 }
