@@ -15,30 +15,35 @@ class _FlightsState extends State<Flights> {
       field: 'etd',
       type: PlutoColumnType.time(),
       width: 200,
+      enableEditingMode: false,
     ),
     PlutoColumn(
       title: 'Flightnumber',
       field: 'flightnumber',
       type: PlutoColumnType.text(),
       width: 100,
+      enableEditingMode: false,
     ),
     PlutoColumn(
       title: 'From',
       field: 'from',
       type: PlutoColumnType.text(),
       width: 100,
+      enableEditingMode: false,
     ),
     PlutoColumn(
       title: 'Via',
       field: 'via',
       type: PlutoColumnType.text(),
       width: 100,
+      enableEditingMode: false,
     ),
     PlutoColumn(
       title: 'To',
       field: 'to',
       type: PlutoColumnType.text(),
       width: 100,
+      enableEditingMode: false,
     ),
   ];
 
@@ -79,6 +84,7 @@ class _FlightsState extends State<Flights> {
                 configuration: const PlutoGridConfiguration(),
               ),
             ),
+            Text('space for generating dfr button')
           ],
         ),
       ),
