@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'dashboard.dart';
 import 'notimplemented.dart';
-import 'stats.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -234,29 +233,6 @@ class SidebarB extends State<Sidebar> {
                         fontWeight: FontWeight.bold),
                   ),
                   onTap: () {},
-                ),
-                ListTile(
-                  hoverColor: Colors.blue,
-                  tileColor: myColor,
-                  leading: SizedBox(
-                    width: width,
-                    height: width,
-                    child: Image.asset("assets/dashboard.png"),
-                  ),
-                  title: const Text(
-                    'Stats',
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 30,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Home()),
-                    );
-                  },
                 ),
               ],
             ),

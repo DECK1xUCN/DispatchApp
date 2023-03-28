@@ -10,9 +10,9 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-  void getStatsData() async {
+  void getDashboardData() async {
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, '/flights', arguments: {'test': true});
+    Navigator.pushReplacementNamed(context, '/home', arguments: {'test': true});
   }
 
   @override
@@ -22,7 +22,7 @@ class _LoadingState extends State<Loading> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-    getStatsData();
+    getDashboardData();
   }
 
   @override
