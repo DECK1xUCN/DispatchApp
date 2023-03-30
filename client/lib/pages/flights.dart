@@ -52,27 +52,56 @@ class _FlightsState extends State<Flights> {
                 Expanded(
                   child: Container(
                     child: Center(
-                        child: Text(DateFormat.Hm().format(element.etd))),
+                        child: Text(
+                      DateFormat.Hm().format(element.etd),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    child: Center(child: Text(element.flightnumber)),
+                    child: Center(
+                        child: Text(
+                      element.flightnumber,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    child: Center(child: Text(element.from)),
+                    child: Center(
+                        child: Text(
+                      element.from,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    child: Center(child: Text(element.via.toString())),
+                    child: Center(
+                        child: Text(
+                      element.via.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                 ),
                 Expanded(
                   child: Container(
-                    child: Center(child: Text(element.to)),
+                    child: Center(
+                        child: Text(
+                      element.to,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                 ),
               ],
@@ -137,12 +166,11 @@ class _FlightsState extends State<Flights> {
                       Expanded(
                         child: Container(
                           child: const Center(
-                              child: Text(
-                            'Via',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          )),
+                            child: Text('Via',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black)),
+                          ),
                         ),
                       ),
                       Expanded(
