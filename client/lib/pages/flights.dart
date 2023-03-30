@@ -59,9 +59,6 @@ class _FlightsState extends State<Flights> {
     ),
   ];
 
-
-  /// [PlutoGridStateManager] has many methods and properties to dynamically manipulate the grid.
-  /// You can manipulate the grid dynamically at runtime by passing this through the [onLoaded] callback.
   late final PlutoGridStateManager stateManager;
 
   @override
