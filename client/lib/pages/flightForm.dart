@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart'; //Multi select dropdown
 
 class FlightForm extends StatefulWidget {
   const FlightForm({Key? key}) : super(key: key);
@@ -7,19 +8,49 @@ class FlightForm extends StatefulWidget {
   State<FlightForm> createState() => _FlightFormState();
 }
 
+//Temp mock data
+class City {
+  final int id;
+  final String name;
+
+  City({required this.id, required this.name});
+}
+
 class _FlightFormState extends State<FlightForm> {
   TimeOfDay time = TimeOfDay(hour: 10, minute: 30);
   int id = 1;
+  bool isSwitched = false;
   int sitesCount = 5;
   int selectedFrom = -1;
-  //String textToDisplay = "${time.hour}:${time.minute}";
+  int selectedTo = -1;
+  static List<City> _cities = [
+    City(id: 0, name: "Aalborg"),
+    City(id: 1, name: "Coppenhagen"),
+    City(id: 2, name: "London"),
+    City(id: 3, name: "Dublin")
+  ];
+
+  List<City> _selectedCities = [];
 
   TextEditingController _controllerETD = new TextEditingController();
+  //TextEditingController _controllerDelay = new TextEditingController();
+
+  void toggleSwitch(bool value) {
+    setState(() {
+      isSwitched = !isSwitched;
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    // Set value of selected cities
+
+    // Set initial display time for time pickers
+    _controllerETD.text = "${time.hour}:${time.minute}";
+
     _controllerETD.addListener(() {
       setState(() {
         String hours = time.hour.toString().padLeft(2, '0');
@@ -27,12 +58,6 @@ class _FlightFormState extends State<FlightForm> {
         _controllerETD.text = "$hours:$minutes";
       });
     });
-  }
-
-  Widget? createCards(int num) {
-    for (int i = 0; i < num; i++) {
-      return CardWidget(false, i as String);
-    }
   }
 
   @override
@@ -64,6 +89,7 @@ class _FlightFormState extends State<FlightForm> {
                   ),
                   Container(
                     width: 150,
+                    height: 50,
                     child: Align(
                       alignment: Alignment.center,
                       child: TextFormField(
@@ -75,7 +101,7 @@ class _FlightFormState extends State<FlightForm> {
                       ),
                     ),
                   ),
-                  const Text("From",
+                  Text("From",
                       style: TextStyle(fontSize: 30, color: Colors.black)),
                   Column(
                     // TODO: Copy this part to have more selectable
@@ -84,16 +110,59 @@ class _FlightFormState extends State<FlightForm> {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: List.generate(
-                            sitesCount,
+                            _cities.length,
                             (index) => GestureDetector(
                                 onTap: () =>
                                     setState(() => selectedFrom = index),
-                                child: CardWidget(
-                                    selectedFrom == index, '$index')),
+                                child: CardWidget(selectedFrom == index,
+                                    "${_cities[index].name}")),
                           )),
                     ],
                   ),
+                  Text("Via",
+                      style: TextStyle(fontSize: 30, color: Colors.black)),
+                  MultiSelectDialogField(
+                    items:
+                        _cities.map((e) => MultiSelectItem(e, e.name)).toList(),
+                    searchable: true,
+                    listType: MultiSelectListType.CHIP,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.lightBlue, width: 2),
+                    ),
+                    itemsTextStyle: TextStyle(color: Colors.white),
+                    unselectedColor: Colors.lightBlueAccent,
+                    selectedColor: Colors.green,
+                    selectedItemsTextStyle: TextStyle(color: Colors.white),
+                    buttonText: Text("Select cities"),
+                    title: Text("Cities",
+                        style: TextStyle(fontSize: 30, color: Colors.black)),
+                    backgroundColor: Colors.white,
+
+                    //selectedItemsTextStyle: TextStyle(color: Colors.green),
+                    onConfirm: (values) {
+                      _selectedCities = values;
+                    },
+                  ),
+                  Text("From",
+                      style: TextStyle(fontSize: 30, color: Colors.black)),
                   Column(
+                    // TODO: Copy this part to have more selectable
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List.generate(
+                              _cities.length,
+                              (index) => GestureDetector(
+                                  onTap: () =>
+                                      setState(() => selectedTo = index),
+                                  child: CardWidget(
+                                    selectedTo == index,
+                                    "${_cities[index].name}",
+                                  )))),
+                    ],
+                  ),
+                  Column( //Start of ETD inputs
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Row(
@@ -113,35 +182,202 @@ class _FlightFormState extends State<FlightForm> {
                           ),
                         ],
                       ),
-                      Row(children: [
-                        Container(
-                          width: 150,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerETD,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                      context: context,
-                                      initialTime: time,
-                                  );
-
-                                  if(newTime == null) return;
-                                  setState(() => {
-                                    time = newTime,
-                                  });
-
-                                }),
-                          ),
-                        ),
-                      ]),
-                    ],
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 150,
+                              height: 50,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: TextFormField(
+                                    autofocus: false,
+                                    controller: _controllerETD,
+                                    style: TextStyle(color: Colors.black),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onTap: () async {
+                                      TimeOfDay? newTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: time,
+                                        builder: (BuildContext context,
+                                            Widget? child) {
+                                          return MediaQuery(
+                                            data: MediaQuery.of(context)
+                                                .copyWith(
+                                                    alwaysUse24HourFormat:
+                                                        true),
+                                            child: child!,
+                                          );
+                                        },
+                                      );
+                                      if (newTime == null) return;
+                                      setState(() => {
+                                            time = newTime,
+                                          });
+                                    }),
+                              ),
+                            ),
+                            Container(
+                              width: 150,
+                              height: 50,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: TextFormField(
+                                    autofocus: false,
+                                    controller: _controllerETD,
+                                    style: TextStyle(color: Colors.black),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onTap: () async {
+                                      TimeOfDay? newTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: time,
+                                        builder: (BuildContext context,
+                                            Widget? child) {
+                                          return MediaQuery(
+                                            data: MediaQuery.of(context)
+                                                .copyWith(
+                                                    alwaysUse24HourFormat:
+                                                        true),
+                                            child: child!,
+                                          );
+                                        },
+                                      );
+                                      if (newTime == null) return;
+                                      setState(() => {
+                                            time = newTime,
+                                          });
+                                    }),
+                              ),
+                            ),
+                            Container(
+                              width: 150,
+                              height: 50,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: TextFormField(
+                                    autofocus: false,
+                                    controller: _controllerETD,
+                                    style: TextStyle(color: Colors.black),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onTap: () async {
+                                      TimeOfDay? newTime = await showTimePicker(
+                                        context: context,
+                                        initialTime: time,
+                                        builder: (BuildContext context,
+                                            Widget? child) {
+                                          return MediaQuery(
+                                            data: MediaQuery.of(context)
+                                                .copyWith(
+                                                    alwaysUse24HourFormat:
+                                                        true),
+                                            child: child!,
+                                          );
+                                        },
+                                      );
+                                      if (newTime == null) return;
+                                      setState(() => {
+                                            time = newTime,
+                                          });
+                                    }),
+                              ),
+                            ),
+                          ]),
+                    ],),
+                  Text("Late stuff"),
+                  Switch(
+                    onChanged: toggleSwitch,
+                    value: isSwitched,
+                    activeColor: Colors.lightBlue,
+                    activeTrackColor: Colors.lightBlueAccent,
+                    inactiveThumbColor: Colors.grey[200],
+                    inactiveTrackColor: Colors.grey[400],
                   ),
+                  if (isSwitched)...[
+                    Column(
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 150,
+                                height: 50,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: TextFormField(
+                                      autofocus: false,
+                                      controller: _controllerETD,
+                                      style: TextStyle(color: Colors.black),
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      onTap: () async {
+                                        TimeOfDay? newTime = await showTimePicker(
+                                          context: context,
+                                          initialTime: time,
+                                          builder: (BuildContext context,
+                                              Widget? child) {
+                                            return MediaQuery(
+                                              data: MediaQuery.of(context)
+                                                  .copyWith(
+                                                  alwaysUse24HourFormat:
+                                                  true),
+                                              child: child!,
+                                            );
+                                          },
+                                        );
+                                        if (newTime == null) return;
+                                        setState(() => {
+                                          time = newTime,
+                                        });
+                                      }),
+                                ),
+                              ),
+                              Container(
+                                width: 150,
+                                height: 50,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: TextFormField(
+                                      autofocus: false,
+                                      controller: _controllerETD,
+                                      style: TextStyle(color: Colors.black),
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      onTap: () async {
+                                        TimeOfDay? newTime = await showTimePicker(
+                                          context: context,
+                                          initialTime: time,
+                                          builder: (BuildContext context,
+                                              Widget? child) {
+                                            return MediaQuery(
+                                              data: MediaQuery.of(context)
+                                                  .copyWith(
+                                                  alwaysUse24HourFormat:
+                                                  true),
+                                              child: child!,
+                                            );
+                                          },
+                                        );
+                                        if (newTime == null) return;
+                                        setState(() => {
+                                          time = newTime,
+                                        });
+                                      }),
+                                ),
+                              ),
+                            ]),
+                      ],
+                    ),
+                  ]
+
+
                 ],
               ),
             ),
@@ -163,7 +399,7 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
+      width: 100,
       height: 30,
       decoration: BoxDecoration(
         border:
@@ -172,8 +408,7 @@ class CardWidget extends StatelessWidget {
       ),
       child: Align(
         alignment: Alignment.center,
-        child: Text(
-            index), //TODO: Edit text (strangely enough index is a string by default)
+        child: Text(index),
       ),
     );
   }
