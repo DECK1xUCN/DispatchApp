@@ -114,7 +114,7 @@ class _FlightsState extends State<Flights> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
