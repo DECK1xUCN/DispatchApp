@@ -40,46 +40,44 @@ class _FlightsState extends State<Flights> {
   List<Widget> generateRows() {
     List<Widget> rows = [];
     for (var element in flights) {
-      rows.add(
-          GestureDetector(
-            onTap: (){
-              print('tapped' + element.flightnumber.toString());
-            },
-            child: Container(
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: Center(child: Text(DateFormat.Hm().format(element.etd))),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Center(child: Text(element.flightnumber)),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Center(child: Text(element.from)),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Center(child: Text(element.via.toString())),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        child: Center(child: Text(element.to)),
-                      ),
-                    ),
-                  ],
-                )
-            ),
-          )
-      );
+      rows.add(GestureDetector(
+        onTap: () {
+          print('tapped' + element.flightnumber.toString());
+        },
+        child: Container(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Container(
+                    child: Center(
+                        child: Text(DateFormat.Hm().format(element.etd))),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Center(child: Text(element.flightnumber)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Center(child: Text(element.from)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Center(child: Text(element.via.toString())),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Center(child: Text(element.to)),
+                  ),
+                ),
+              ],
+            )),
+      ));
     }
     return rows;
   }
@@ -87,7 +85,7 @@ class _FlightsState extends State<Flights> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
+      backgroundColor: Color.fromRGBO(240, 240, 240, 1.0),
       body: SafeArea(
         child: Column(
           children: [
@@ -105,27 +103,57 @@ class _FlightsState extends State<Flights> {
                     children: [
                       Expanded(
                         child: Container(
-                          child: const Center(child: Text('ETD', style: TextStyle(fontWeight: FontWeight.bold),)),
+                          child: const Center(
+                              child: Text(
+                            'ETD',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )),
                         ),
                       ),
                       Expanded(
                         child: Container(
-                          child: const Center(child: Text('Flight number', style: TextStyle(fontWeight: FontWeight.bold),)),
+                          child: const Center(
+                              child: Text(
+                            'Flight number',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )),
                         ),
                       ),
                       Expanded(
                         child: Container(
-                          child: const Center(child: Text('From', style: TextStyle(fontWeight: FontWeight.bold),)),
+                          child: const Center(
+                              child: Text(
+                            'From',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )),
                         ),
                       ),
                       Expanded(
                         child: Container(
-                          child: const Center(child: Text('Via', style: TextStyle(fontWeight: FontWeight.bold),)),
+                          child: const Center(
+                              child: Text(
+                            'Via',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )),
                         ),
                       ),
                       Expanded(
                         child: Container(
-                          child: const Center(child: Text('To', style: TextStyle(fontWeight: FontWeight.bold),)),
+                          child: const Center(
+                              child: Text(
+                            'To',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )),
                         ),
                       ),
                     ],
