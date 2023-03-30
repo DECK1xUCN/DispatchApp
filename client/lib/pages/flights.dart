@@ -45,7 +45,12 @@ class _FlightsState extends State<Flights> {
           print('tapped' + element.flightnumber.toString());
         },
         child: Container(
-            height: 30,
+            height: 50,
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(width: 0.5, color: Colors.grey),
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -124,7 +129,7 @@ class _FlightsState extends State<Flights> {
                   height: 30,
                   decoration: const BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(width: 1.0, color: Colors.black),
+                      bottom: BorderSide(width: 1.5, color: Colors.black),
                     ),
                   ),
                   child: Row(
