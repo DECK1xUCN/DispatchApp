@@ -8,22 +8,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Flights {
-  id           String   @id @unique @default(uuid()) @db.Uuid
+model Flight {
+  id           Int      @id @unique @default(autoincrement())
   flightNumber String   @unique
-  from         String
-  via          String
-  to           String
+  from         Heliport @relation("from", fields: [fromId], references: [id])
+  fromId       Int
+  via          Site[]
+  to           Heliport @relation("to", fields: [toId], references: [id])
+  toId         Int
   etd          DateTime
   rotorStart   DateTime
   atd          DateTime
   eta          DateTime
   rotorStop    DateTime
   ata          DateTime
+  blockTime    Int
+  flightTime   Int
+  delay        Boolean
+  delayMin     Int      @default(0)
+  delayReason  String   @default("N/A")
+  delayDesc    String   @default("N/A")
   pax          Int
+  payTax       Int
   cargoPP      Int
   hoistCycles  Int
-  late         Boolean
-  lateNote     String   @default("N/A")
-  delayCode    String   @default("N/A")
+  notes        String   @default("")
+}
+
+model Heliport {
+  id   Int      @id @unique @default(autoincrement())
+  name String   @unique
+  from Flight[] @relation("from")
+  to   Flight[] @relation("to")
+}
+
+model Site {
+  id   Int      @id @unique @default(autoincrement())
+  name String   @unique
+  via  Flight[]
 }
