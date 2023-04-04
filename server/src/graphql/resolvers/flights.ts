@@ -1,7 +1,7 @@
 import { Context } from "@/utils/context";
 import { FlightCreateInput, FlightUpdateInput } from "@/types/flights";
 import moment from "moment";
-import { GraphQLError } from "graphql";
+import { createGraphQLError } from "graphql-yoga";
 
 const flightResolver: any = {
   Query: {
@@ -21,7 +21,11 @@ const flightResolver: any = {
       const flights = await context.prisma.flights.findMany();
       // If no flights were found, throw an error.
       if (!flights) {
-        throw new Error(`Error finding all flights`);
+        throw createGraphQLError(`Error finding all flights`, {
+          extensions: {
+            code: "404",
+          },
+        });
       }
       // Return the array of flights.
       return flights;
@@ -47,8 +51,13 @@ const flightResolver: any = {
       });
       // If no flight was found, throw an error.
       if (!flight) {
-        throw new GraphQLError(
-          `Error finding flight by flight number: ${args.id}`
+        throw createGraphQLError(
+          `Error finding flight by flight number: ${args.id}`,
+          {
+            extensions: {
+              code: "404",
+            },
+          }
         );
       }
 
@@ -80,8 +89,13 @@ const flightResolver: any = {
       });
       // If no flight was found, throw an error.
       if (!flight) {
-        throw new GraphQLError(
-          `Error finding flight by flight number: ${args.flightNumber}`
+        throw createGraphQLError(
+          `Error finding flight by flight number: ${args.flightNumber}`,
+          {
+            extensions: {
+              code: "404",
+            },
+          }
         );
       }
       // Return the flight object.
@@ -137,11 +151,19 @@ const flightResolver: any = {
         .catch((error: any) => {
           // If there was an error creating the flight, log it to the console and throw an error.
           console.error(error);
-          throw new GraphQLError(`Error creating flight`);
+          throw createGraphQLError(`Error creating flight`, {
+            extensions: {
+              code: "415",
+            },
+          });
         });
       // If no flight was created, throw an error.
       if (!flight) {
-        throw new GraphQLError(`Error creating flight`);
+        throw createGraphQLError(`Error creating flight`, {
+          extensions: {
+            code: "415",
+          },
+        });
       }
       // Return the created flight object.
       return flight;
@@ -194,10 +216,18 @@ const flightResolver: any = {
         })
         .catch((error: any) => {
           console.error(error);
-          throw new GraphQLError(`Error updaring flight`);
+          throw createGraphQLError(`Error updating flight`, {
+            extensions: {
+              code: "415",
+            },
+          });
         });
       if (!flight) {
-        throw new GraphQLError(`Error updating flight`);
+        throw createGraphQLError(`Error updating flight`, {
+          extensions: {
+            code: "415",
+          },
+        });
       }
       return flight;
     },
@@ -249,10 +279,18 @@ const flightResolver: any = {
         })
         .catch((error: any) => {
           console.error(error);
-          throw new GraphQLError(`Error updating flight`);
+          throw createGraphQLError(`Error updating flight`, {
+            extensions: {
+              code: "415",
+            },
+          });
         });
       if (!flight) {
-        throw new GraphQLError(`Error updating flight`);
+        throw createGraphQLError(`Error updating flight`, {
+          extensions: {
+            code: "415",
+          },
+        });
       }
       return flight;
     },
