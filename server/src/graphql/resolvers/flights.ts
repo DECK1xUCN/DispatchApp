@@ -16,7 +16,7 @@ const flightResolver: any = {
      * @throws {Error} If there was an error finding all flights.
      * @returns {Promise} A Promise that resolves to an array of flights.
      */
-    findAll: async (parent: any, args: any, context: Context) => {
+    findAllFlights: async (parent: any, args: any, context: Context) => {
       // Retrieve all flights from the database using Prisma.
       const flights = await context.prisma.flights.findMany();
       // If no flights were found, throw an error.
@@ -42,7 +42,11 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an error finding the flight by its ID.
      * @returns {Promise} A Promise that resolves to a flight object.
      */
-    findById: async (parent: any, args: { id: string }, context: Context) => {
+    findFlightById: async (
+      parent: any,
+      args: { id: string },
+      context: Context
+    ) => {
       // Retrieve the flight from the database using its ID and Prisma.
       const flight = await context.prisma.flights.findUnique({
         where: {
@@ -76,7 +80,7 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an error finding the flight by its flight number.
      * @returns {Promise} A Promise that resolves to a flight object.
      */
-    findByFlightNumber: async (
+    findFlightByFlightNumber: async (
       parent: any,
       args: { flightNumber: string },
       context: Context
@@ -179,7 +183,7 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an error updating the flight in the database.
      * @returns The updated flight object
      */
-    updateById: async (
+    updateFlightById: async (
       parent: any,
       args: { id: string; data: FlightCreateInput },
       context: Context
@@ -242,7 +246,7 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an updating creating the flight in the database.
      * @returns The updated flight object
      */
-    updateByFlightNumber: async (
+    updateFlightByFlightNumber: async (
       parent: any,
       args: { flightNumber: string; data: FlightUpdateInput },
       context: Context

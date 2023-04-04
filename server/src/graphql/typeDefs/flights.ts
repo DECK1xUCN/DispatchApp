@@ -2,14 +2,14 @@ import gql from "graphql-tag";
 
 const flightTypeDefs = gql`
   type Query {
-    findAll: [Flight!]!
-    findById(id: String!): Flight!
-    findByFlightNumber(flightNumber: String!): Flight!
+    findAllFlights: [Flight!]!
+    findFlightById(id: String!): Flight!
+    findFlightByFlightNumber(flightNumber: String!): Flight!
   }
   type Mutation {
     createFlight(data: FlightCreateInput): Flight!
-    updateById(id: String!, data: FlightUpdateInput!): Flight!
-    updateByFlightNumber(
+    updateFlightById(id: String!, data: FlightUpdateInput!): Flight!
+    updateFlightByFlightNumber(
       flightNumber: String!
       data: FlightUpdateInput!
     ): Flight!
