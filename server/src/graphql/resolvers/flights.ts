@@ -18,7 +18,7 @@ const flightResolver: any = {
      */
     findAllFlights: async (parent: any, args: any, context: Context) => {
       // Retrieve all flights from the database using Prisma.
-      const flights = await context.prisma.flights.findMany();
+      const flights = await context.prisma.flight.findMany();
       // If no flights were found, throw an error.
       if (!flights) {
         throw createGraphQLError(`Error finding all flights`, {
@@ -48,7 +48,7 @@ const flightResolver: any = {
       context: Context
     ) => {
       // Retrieve the flight from the database using its ID and Prisma.
-      const flight = await context.prisma.flights.findUnique({
+      const flight = await context.prisma.flight.findUnique({
         where: {
           flightNumber: args.id,
         },
@@ -86,7 +86,7 @@ const flightResolver: any = {
       context: Context
     ) => {
       // Retrieve the flight from the database using its flight number and Prisma.
-      const flight = await context.prisma.flights.findUnique({
+      const flight = await context.prisma.flight.findUnique({
         where: {
           flightNumber: args.flightNumber,
         },
@@ -119,60 +119,59 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an error creating the flight in the database.
      * @returns {Promise} A Promise that resolves to the created flight object.
      */
-    createFlight: async (
-      parent: any,
-      args: { data: FlightCreateInput },
-      context: Context
-    ) => {
-      // Create the new flight in the database using Prisma.
-      const flight = await context.prisma.flights
-        .create({
-          data: {
-            flightNumber: args.data.flightNumber,
-            from: args.data.from,
-            via: args.data.via,
-            to: args.data.to,
-            etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
-            rotorStart: moment(
-              args.data.rotorStart,
-              "DD-MM-YYYY HH:mm:ss"
-            ).toDate(),
-            atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
-            eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
-            rotorStop: moment(
-              args.data.rotorStop,
-              "DD-MM-YYYY HH:mm:ss"
-            ).toDate(),
-            ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
-            pax: args.data.pax,
-            cargoPP: args.data.cargoPP,
-            hoistCycles: args.data.hoistCycles,
-            late: args.data.late,
-            delayCode: args.data.delayCode,
-            lateNote: args.data.lateNote,
-          },
-        })
-        .catch((error: any) => {
-          // If there was an error creating the flight, log it to the console and throw an error.
-          console.error(error);
-          throw createGraphQLError(`Error creating flight`, {
-            extensions: {
-              code: "415",
-            },
-          });
-        });
-      // If no flight was created, throw an error.
-      if (!flight) {
-        throw createGraphQLError(`Error creating flight`, {
-          extensions: {
-            code: "415",
-          },
-        });
-      }
-      // Return the created flight object.
-      return flight;
-    },
-
+    // createFlight: async (
+    //   parent: any,
+    //   args: { data: FlightCreateInput },
+    //   context: Context
+    // ) => {
+    //   // Create the new flight in the database using Prisma.
+    //   const flight = await context.prisma.flight
+    //     .create({
+    //       data: {
+    //         flightNumber: args.data.flightNumber,
+    //         from: args.data.from,
+    //         via: args.data.via,
+    //         to: args.data.to,
+    //         etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         rotorStart: moment(
+    //           args.data.rotorStart,
+    //           "DD-MM-YYYY HH:mm:ss"
+    //         ).toDate(),
+    //         atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         rotorStop: moment(
+    //           args.data.rotorStop,
+    //           "DD-MM-YYYY HH:mm:ss"
+    //         ).toDate(),
+    //         ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         pax: args.data.pax,
+    //         cargoPP: args.data.cargoPP,
+    //         hoistCycles: args.data.hoistCycles,
+    //         late: args.data.late,
+    //         delayCode: args.data.delayCode,
+    //         lateNote: args.data.lateNote,
+    //       },
+    //     })
+    //     .catch((error: any) => {
+    //       // If there was an error creating the flight, log it to the console and throw an error.
+    //       console.error(error);
+    //       throw createGraphQLError(`Error creating flight`, {
+    //         extensions: {
+    //           code: "415",
+    //         },
+    //       });
+    //     });
+    //   // If no flight was created, throw an error.
+    //   if (!flight) {
+    //     throw createGraphQLError(`Error creating flight`, {
+    //       extensions: {
+    //         code: "415",
+    //       },
+    //     });
+    //   }
+    //   // Return the created flight object.
+    //   return flight;
+    // },
     /**
      * Updates an existing flight with the given id and data.
      * @param parent The parent resolver's result
@@ -183,59 +182,58 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an error updating the flight in the database.
      * @returns The updated flight object
      */
-    updateFlightById: async (
-      parent: any,
-      args: { id: string; data: FlightCreateInput },
-      context: Context
-    ) => {
-      const flight = await context.prisma.flights
-        .update({
-          where: {
-            id: args.id,
-          },
-          data: {
-            from: args.data.from,
-            via: args.data.via,
-            to: args.data.to,
-            etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
-            rotorStart: moment(
-              args.data.rotorStart,
-              "DD-MM-YYYY HH:mm:ss"
-            ).toDate(),
-            atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
-            eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
-            rotorStop: moment(
-              args.data.rotorStop,
-              "DD-MM-YYYY HH:mm:ss"
-            ).toDate(),
-            ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
-            flightNumber: args.data.flightNumber,
-            pax: args.data.pax,
-            cargoPP: args.data.cargoPP,
-            hoistCycles: args.data.hoistCycles,
-            late: args.data.late,
-            delayCode: args.data.delayCode,
-            lateNote: args.data.lateNote,
-          },
-        })
-        .catch((error: any) => {
-          console.error(error);
-          throw createGraphQLError(`Error updating flight`, {
-            extensions: {
-              code: "415",
-            },
-          });
-        });
-      if (!flight) {
-        throw createGraphQLError(`Error updating flight`, {
-          extensions: {
-            code: "415",
-          },
-        });
-      }
-      return flight;
-    },
-
+    // updateFlightById: async (
+    //   parent: any,
+    //   args: { id: string; data: FlightCreateInput },
+    //   context: Context
+    // ) => {
+    //   const flight = await context.prisma.flight
+    //     .update({
+    //       where: {
+    //         id: args.id,
+    //       },
+    //       data: {
+    //         from: args.data.from,
+    //         via: args.data.via,
+    //         to: args.data.to,
+    //         etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         rotorStart: moment(
+    //           args.data.rotorStart,
+    //           "DD-MM-YYYY HH:mm:ss"
+    //         ).toDate(),
+    //         atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         rotorStop: moment(
+    //           args.data.rotorStop,
+    //           "DD-MM-YYYY HH:mm:ss"
+    //         ).toDate(),
+    //         ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         flightNumber: args.data.flightNumber,
+    //         pax: args.data.pax,
+    //         cargoPP: args.data.cargoPP,
+    //         hoistCycles: args.data.hoistCycles,
+    //         late: args.data.late,
+    //         delayCode: args.data.delayCode,
+    //         lateNote: args.data.lateNote,
+    //       },
+    //     })
+    //     .catch((error: any) => {
+    //       console.error(error);
+    //       throw createGraphQLError(`Error updating flight`, {
+    //         extensions: {
+    //           code: "415",
+    //         },
+    //       });
+    //     });
+    //   if (!flight) {
+    //     throw createGraphQLError(`Error updating flight`, {
+    //       extensions: {
+    //         code: "415",
+    //       },
+    //     });
+    //   }
+    //   return flight;
+    // },
     /**
      * Updates an existing flight with the given id and data.
      * @param parent The parent resolver's result
@@ -246,58 +244,58 @@ const flightResolver: any = {
      * @throws {GraphQLError} If there was an updating creating the flight in the database.
      * @returns The updated flight object
      */
-    updateFlightByFlightNumber: async (
-      parent: any,
-      args: { flightNumber: string; data: FlightUpdateInput },
-      context: Context
-    ) => {
-      const flight = await context.prisma.flights
-        .update({
-          where: {
-            flightNumber: args.flightNumber,
-          },
-          data: {
-            from: args.data.from,
-            via: args.data.via,
-            to: args.data.to,
-            etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
-            rotorStart: moment(
-              args.data.rotorStart,
-              "DD-MM-YYYY HH:mm:ss"
-            ).toDate(),
-            atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
-            eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
-            rotorStop: moment(
-              args.data.rotorStop,
-              "DD-MM-YYYY HH:mm:ss"
-            ).toDate(),
-            ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
-            flightNumber: args.data.flightNumber,
-            pax: args.data.pax,
-            cargoPP: args.data.cargoPP,
-            hoistCycles: args.data.hoistCycles,
-            late: args.data.late,
-            delayCode: args.data.delayCode,
-            lateNote: args.data.lateNote,
-          },
-        })
-        .catch((error: any) => {
-          console.error(error);
-          throw createGraphQLError(`Error updating flight`, {
-            extensions: {
-              code: "415",
-            },
-          });
-        });
-      if (!flight) {
-        throw createGraphQLError(`Error updating flight`, {
-          extensions: {
-            code: "415",
-          },
-        });
-      }
-      return flight;
-    },
+    // updateFlightByFlightNumber: async (
+    //   parent: any,
+    //   args: { flightNumber: string; data: FlightUpdateInput },
+    //   context: Context
+    // ) => {
+    //   const flight = await context.prisma.flight
+    //     .update({
+    //       where: {
+    //         flightNumber: args.flightNumber,
+    //       },
+    //       data: {
+    //         from: args.data.from,
+    //         via: args.data.via,
+    //         to: args.data.to,
+    //         etd: moment(args.data.etd, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         rotorStart: moment(
+    //           args.data.rotorStart,
+    //           "DD-MM-YYYY HH:mm:ss"
+    //         ).toDate(),
+    //         atd: moment(args.data.atd, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         eta: moment(args.data.eta, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         rotorStop: moment(
+    //           args.data.rotorStop,
+    //           "DD-MM-YYYY HH:mm:ss"
+    //         ).toDate(),
+    //         ata: moment(args.data.ata, "DD-MM-YYYY HH:mm:ss").toDate(),
+    //         flightNumber: args.data.flightNumber,
+    //         pax: args.data.pax,
+    //         cargoPP: args.data.cargoPP,
+    //         hoistCycles: args.data.hoistCycles,
+    //         late: args.data.late,
+    //         delayCode: args.data.delayCode,
+    //         lateNote: args.data.lateNote,
+    //       },
+    //     })
+    //     .catch((error: any) => {
+    //       console.error(error);
+    //       throw createGraphQLError(`Error updating flight`, {
+    //         extensions: {
+    //           code: "415",
+    //         },
+    //       });
+    //     });
+    //   if (!flight) {
+    //     throw createGraphQLError(`Error updating flight`, {
+    //       extensions: {
+    //         code: "415",
+    //       },
+    //     });
+    //   }
+    //   return flight;
+    // },
   },
 };
 
