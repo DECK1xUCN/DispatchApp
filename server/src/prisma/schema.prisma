@@ -29,7 +29,7 @@ model Flight {
   delayReason  String   @default("N/A")
   delayDesc    String   @default("N/A")
   pax          Int
-  payTax       Int
+  paxTax       Int
   cargoPP      Int
   hoistCycles  Int
   notes        String   @default("")

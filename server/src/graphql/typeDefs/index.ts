@@ -1,6 +1,7 @@
-import merge from "lodash.merge";
-import flightResolver from "./flights";
+import sitesTypeDefs from "./sites";
+import heliportsTypeDefs from "./heliports";
+import flightsTypeDefs from "./flights";
 
-const resolvers = merge({}, flightResolver);
+const typeDefs = [flightsTypeDefs, sitesTypeDefs, heliportsTypeDefs];
 
-export default resolvers;
+export default typeDefs;
