@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'home.dart';
+import 'notimplemented.dart';
+
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
 
@@ -10,9 +13,9 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-  void getStatsData() async {
+  void getDashboardData() async {
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, '/flights', arguments: {'test': true});
+    Navigator.pushReplacementNamed(context, '/home', arguments: {'test': true});
   }
 
   @override
@@ -22,7 +25,7 @@ class _LoadingState extends State<Loading> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
-    getStatsData();
+    getDashboardData();
   }
 
   @override
@@ -38,3 +41,4 @@ class _LoadingState extends State<Loading> {
     );
   }
 }
+

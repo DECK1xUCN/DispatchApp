@@ -1,0 +1,29 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin", "darwin-arm64"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Flights {
+  id           String   @id @unique @default(uuid()) @db.Uuid
+  flightNumber String   @unique
+  from         String
+  via          String
+  to           String
+  etd          DateTime
+  rotorStart   DateTime
+  atd          DateTime
+  eta          DateTime
+  rotorStop    DateTime
+  ata          DateTime
+  pax          Int
+  cargoPP      Int
+  hoistCycles  Int
+  late         Boolean
+  lateNote     String   @default("N/A")
+  delayCode    String   @default("N/A")
+}

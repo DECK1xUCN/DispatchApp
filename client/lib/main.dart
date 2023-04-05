@@ -1,7 +1,6 @@
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
-import 'pages/flights.dart';
 
 void main() => runApp(MaterialApp(
         title: 'Deck1 Dispatch App',
@@ -11,7 +10,7 @@ void main() => runApp(MaterialApp(
           primaryColor: Colors.lightBlue[800],
           
           // Define the default font family.
-          fontFamily: 'Georgia',
+          fontFamily: 'Roboto',
 
           // Define the default `decoration` for the Input fields
           inputDecorationTheme: const InputDecorationTheme( // TODO: Further designing choices are needed
@@ -39,5 +38,4 @@ void main() => runApp(MaterialApp(
         routes: {
           '/': (context) => Loading(),
           '/home': (context) => Home(),
-          '/flights': (context) => Flights(),
         }));
