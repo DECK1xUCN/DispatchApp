@@ -121,7 +121,7 @@ class _FlightsState extends State<Flights> {
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                'DFRS',
+                'Flights',
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'Roboto',

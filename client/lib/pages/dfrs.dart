@@ -168,7 +168,7 @@ class _DFRsState extends State<DFRs> {
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                'DFRS',
+                'DFRs',
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'Roboto',
