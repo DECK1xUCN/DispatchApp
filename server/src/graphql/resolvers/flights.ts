@@ -69,6 +69,16 @@ const flightResolvers = {
             cargoPP: args.data.cargoPP,
             hoistCycles: args.data.hoistCycles,
             notes: args.data.notes,
+            dailyReport: {
+              connect: args.data.dailyReportId && {
+                id: args.data.dailyReportId,
+              },
+            },
+            dailyUpdate: {
+              connect: args.data.dailyUpdateId && {
+                id: args.data.dailyUpdateId,
+              },
+            },
           },
         })
         .catch((err: any) => {
@@ -127,6 +137,16 @@ const flightResolvers = {
             cargoPP: args.data.cargoPP,
             hoistCycles: args.data.hoistCycles,
             notes: args.data.notes,
+            dailyReport: {
+              connect: args.data.dailyReportId && {
+                id: args.data.dailyReportId,
+              },
+            },
+            dailyUpdate: {
+              connect: args.data.dailyUpdateId && {
+                id: args.data.dailyUpdateId,
+              },
+            },
           },
         })
         .catch((err: any) => {
@@ -162,6 +182,16 @@ const flightResolvers = {
     to: async (parent: any, args: any, context: Context) => {
       return await context.prisma.heliport.findUnique({
         where: { id: parent.toId },
+      });
+    },
+    dailyReport: async (parent: any, args: any, context: Context) => {
+      return await context.prisma.dailyReport.findUnique({
+        where: { id: parent.dailyReportId },
+      });
+    },
+    dailyUpdate: async (parent: any, args: any, context: Context) => {
+      return await context.prisma.dailyUpdate.findUnique({
+        where: { id: parent.dailyUpdateId },
       });
     },
   },

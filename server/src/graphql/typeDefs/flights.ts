@@ -32,6 +32,8 @@ const flightTypeDefs = gql`
     cargoPP: Int!
     hoistCycles: Int!
     notes: String!
+    dailyReport: DailyReport!
+    dailyUpdate: DailyUpdate
   }
 
   # Input types
@@ -40,14 +42,14 @@ const flightTypeDefs = gql`
     fromId: Int!
     viaId: Int!
     toId: Int!
-    etd: DateTime
+    etd: DateTime!
     rotorStart: DateTime
-    atd: DateTime
-    eta: DateTime
+    atd: DateTime!
+    eta: DateTime!
     rotorStop: DateTime
     ata: DateTime
-    blockTime: Int!
-    flightTime: Int!
+    blockTime: Int
+    flightTime: Int
     delay: Boolean!
     delayMin: Int
     delayCode: String
@@ -57,6 +59,8 @@ const flightTypeDefs = gql`
     cargoPP: Int!
     hoistCycles: Int!
     notes: String
+    dailyReportId: Int!
+    dailyUpdateId: Int
   }
   input UpdateFlightInput {
     flightNumber: String
@@ -79,6 +83,8 @@ const flightTypeDefs = gql`
     cargoPP: Int
     hoistCycles: Int
     notes: String
+    dailyReportId: Int!
+    dailyUpdateId: Int
   }
   scalar DateTime
 `;

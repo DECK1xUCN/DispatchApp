@@ -9,30 +9,33 @@ datasource db {
 }
 
 model Flight {
-  id           Int      @id @unique @default(autoincrement())
-  flightNumber String   @unique
-  from         Heliport @relation("from", fields: [fromId], references: [id])
-  fromId       Int
-  via          Site[]
-  to           Heliport @relation("to", fields: [toId], references: [id])
-  toId         Int
-  etd          DateTime
-  rotorStart   DateTime
-  atd          DateTime
-  eta          DateTime
-  rotorStop    DateTime
-  ata          DateTime
-  blockTime    Int
-  flightTime   Int
-  delay        Boolean
-  delayMin     Int      @default(0)
-  delayCode    String   @default("N/A")
-  delayDesc    String   @default("N/A")
-  pax          Int
-  paxTax       Int
-  cargoPP      Int
-  hoistCycles  Int
-  notes        String   @default("")
+  id            Int          @id @unique @default(autoincrement())
+  flightNumber  String       @unique
+  from          Heliport     @relation("from", fields: [fromId], references: [id])
+  fromId        Int
+  via           Site[]
+  to            Heliport     @relation("to", fields: [toId], references: [id])
+  toId          Int
+  etd           DateTime
+  rotorStart    DateTime
+  atd           DateTime
+  eta           DateTime
+  rotorStop     DateTime
+  ata           DateTime
+  blockTime     Int
+  flightTime    Int
+  delay         Boolean
+  delayMin      Int?         @default(0)
+  delayCode     String?      @default("N/A")
+  delayDesc     String?      @default("N/A")
+  pax           Int
+  paxTax        Int
+  cargoPP       Int
+  hoistCycles   Int
+  notes         String?      @default("N/A")
+  dailyReport   DailyReport  @relation(fields: [dailyReportId], references: [id])
+  dailyReportId Int
+  dailyUpdate   DailyUpdate?
 }
 
 model Heliport {
@@ -46,4 +49,50 @@ model Site {
   id   Int      @id @unique @default(autoincrement())
   name String   @unique
   via  Flight[]
+}
+
+model DailyReport {
+  id      Int           @id @unique @default(autoincrement())
+  date    DateTime
+  pilot   Pilot         @relation(fields: [pilotId], references: [id])
+  pilotId Int
+  hoist   HoistOperator @relation(fields: [hoistId], references: [id])
+  hoistId Int
+  flights Flight[]
+}
+
+model Helicopter {
+  id    Int    @id @unique @default(autoincrement())
+  reg   String @unique
+  model String
+}
+
+model Pilot {
+  id           Int           @id @unique @default(autoincrement())
+  name         String
+  dailyReports DailyReport[]
+}
+
+model HoistOperator {
+  id           Int           @id @unique @default(autoincrement())
+  name         String
+  dailyReports DailyReport[]
+}
+
+model DailyUpdate {
+  id                   Int      @id @unique @default(autoincrement())
+  flight               Flight   @relation(fields: [flightId], references: [id])
+  flightId             Int      @unique
+  date                 DateTime
+  wasFlight            Boolean
+  delay                Boolean
+  delayReason          String?  @default("N/A")
+  delayDesc            String?  @default("N/A")
+  maintenace           Boolean
+  plannedMaintenance   Boolean? @default(false)
+  unplannedMaintenance Boolean? @default(false)
+  otherMaintenance     Boolean? @default(false)
+  maintenanceDesc      String?  @default("N/A")
+  baseAndEquipment     Boolean
+  note                 String?
 }

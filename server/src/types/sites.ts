@@ -5,6 +5,6 @@ export type Site = {
   name: string;
 };
 
-export type SiteInput = {
+export interface SiteInput {
   name: string;
-};
+}

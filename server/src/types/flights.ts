@@ -1,3 +1,5 @@
+import { DailyReport } from "./dailyReports";
+import { DailyUpdate } from "./dailyUpdates";
 import { Heliport } from "./heliports";
 import { Site } from "./sites";
 
@@ -24,6 +26,8 @@ export type Flight = {
   cargoPP: number;
   hoistCycles: number;
   notes: string;
+  dailyReport: DailyReport;
+  dailyUpdate?: DailyUpdate;
 };
 
 export interface CreateFlightInput {
@@ -48,6 +52,8 @@ export interface CreateFlightInput {
   cargoPP: number;
   hoistCycles: number;
   notes: string;
+  dailyReportId: number;
+  dailyUpdateId?: number;
 }
 
 export interface UpdateFlightInput {
@@ -72,6 +78,8 @@ export interface UpdateFlightInput {
   cargoPP?: number;
   hoistCycles?: number;
   notes?: string;
+  dailyReportId?: number;
+  dailyUpdateId?: number;
 }
 
 export type DelayCode = {
