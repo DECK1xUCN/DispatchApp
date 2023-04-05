@@ -1,59 +1,88 @@
-import 'package:client/classes/Flight.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Flights extends StatefulWidget {
-  const Flights({Key? key}) : super(key: key);
+import '../classes/Dfr.dart';
+
+class DFRs extends StatefulWidget {
+  const DFRs({Key? key}) : super(key: key);
 
   @override
-  State<Flights> createState() => _FlightsState();
+  _DFRsState createState() => _DFRsState();
 }
 
-class _FlightsState extends State<Flights> {
-  List<Flight> flights = [
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 1)),
-        flightnumber: 'ABC-1',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 2)),
-        flightnumber: 'ABC-2',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 3)),
-        flightnumber: 'ABC-3',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 4)),
-        flightnumber: 'ABC-4',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 4)),
-        flightnumber: 'ABC-4',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
+class _DFRsState extends State<DFRs> {
+  List<Dfr> dfrs = [
+    Dfr(
+      id: 123,
+      model: 'EC 145',
+      registration: 'D-HTMK',
+      date: DateTime(2023, 1, 14),
+      pilot: 'SRO',
+      hoistOperator: 'BRA',
+      dailyUpdate: true,
+    ),
+    Dfr(
+      id: 124,
+      model: 'EC 145',
+      registration: 'D-HTMK',
+      date: DateTime.now(),
+      pilot: 'SRO',
+      hoistOperator: 'BRA',
+      dailyUpdate: true,
+    ),
+    Dfr(
+      id: 125,
+      model: 'EC 145',
+      registration: 'D-HOTT',
+      date: DateTime.now(),
+      pilot: 'SRO',
+      hoistOperator: 'BRA',
+      dailyUpdate: false,
+    ),
+    Dfr(
+      id: 126,
+      model: 'AS 332 L1',
+      registration: 'D-HPIA',
+      date: DateTime.now(),
+      pilot: 'MHO',
+      hoistOperator: 'MBO',
+      dailyUpdate: true,
+    ),
+    Dfr(
+      id: 127,
+      model: 'AS 332 L1',
+      registration: 'D-HPIA',
+      date: DateTime.now(),
+      pilot: 'MHO',
+      hoistOperator: 'MBO',
+      dailyUpdate: false,
+    ),
+    Dfr(
+      id: 128,
+      model: 'EC 135',
+      registration: 'D-HBWV',
+      date: DateTime.now(),
+      pilot: 'SRO',
+      hoistOperator: 'BRA',
+      dailyUpdate: true,
+    ),
+
+
   ];
 
   List<Widget> generateRows() {
     List<Widget> rows = [];
-    for (var element in flights) {
+    for (var element in dfrs) {
       rows.add(GestureDetector(
         onTap: () {
-          print('tapped' + element.flightnumber.toString());
+          //do something
         },
         child: Container(
             height: 50,
             decoration: const BoxDecoration(
-
+              border: Border(
+                bottom: BorderSide(width: 0.5, color: Colors.white),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -61,47 +90,65 @@ class _FlightsState extends State<Flights> {
                 Expanded(
                   child: Center(
                       child: Text(
-                    DateFormat.Hm().format(element.etd),
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
+                        element.id.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                    element.flightnumber,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
+                        element.model,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                    element.from,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
+                        element.registration,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                    element.via.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
+                        DateFormat.yMd().format(element.date),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                    element.to,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
+                        element.pilot,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                        element.hoistOperator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                        element.dailyUpdate.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
               ],
             )),
@@ -121,7 +168,7 @@ class _FlightsState extends State<Flights> {
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                'Flights',
+                'DFRs',
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'Roboto',
@@ -138,7 +185,7 @@ class _FlightsState extends State<Flights> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
                 ),
-                child: const Text('New Flight'),
+                child: const Text('New Report'),
                 onPressed: () {
                   // do something when button is pressed
                 },
@@ -178,7 +225,7 @@ class _FlightsState extends State<Flights> {
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'ETD',
+                                    'Id',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
@@ -189,7 +236,7 @@ class _FlightsState extends State<Flights> {
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'Flight number',
+                                    'A/C Model',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
@@ -200,7 +247,7 @@ class _FlightsState extends State<Flights> {
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'From',
+                                    'A/C Registration',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
@@ -211,7 +258,7 @@ class _FlightsState extends State<Flights> {
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'Via',
+                                    'Date',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
@@ -222,7 +269,29 @@ class _FlightsState extends State<Flights> {
                               Expanded(
                                 child: Center(
                                   child: Text(
-                                    'To',
+                                    'Pilot',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Hoist Operator',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Daily Update',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,

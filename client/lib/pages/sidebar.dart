@@ -6,8 +6,9 @@ import 'package:client/pages/notimplemented.dart';
 import 'package:flutter/material.dart';
 
 import 'dashboard.dart';
-import 'notimplemented.dart';
+import 'dfrs.dart';
 import 'flights.dart';
+import 'notimplemented.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -248,9 +249,10 @@ class SidebarB extends State<Sidebar> {
               index: _selectedIndex,
               children: const <Widget>[
                 Flights(),
-                NotImplemented(),
+                DFRs(),
                 NotImplemented(),
                 Dashboard(),
+
               ],
             ),
           )
