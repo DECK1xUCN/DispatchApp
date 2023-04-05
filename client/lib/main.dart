@@ -12,15 +12,28 @@ void main() => runApp(MaterialApp(
           // Define the default font family.
           fontFamily: 'Roboto',
 
+          // Define the default `decoration` for the Input fields
+          inputDecorationTheme: const InputDecorationTheme( // TODO: Further designing choices are needed
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black),
+            ),
+            hintStyle: TextStyle(fontFamily: 'Hind', color: Colors.black),
+
+          ),
+
           // Define the default `TextTheme`. Use this to specify the default
           // text styling for headlines, titles, bodies of text, and more.
           textTheme: const TextTheme(
             displayLarge:
                 TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            titleLarge: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-            bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+            titleLarge: TextStyle(fontSize: 25.0, fontFamily: 'Hind', color: Colors.black),
+            bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind', color: Colors.black),
+
+
           ),
         ),
+
+
         initialRoute: '/',
         routes: {
           '/': (context) => Loading(),

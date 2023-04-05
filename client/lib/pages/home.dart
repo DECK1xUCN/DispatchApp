@@ -1,4 +1,5 @@
-import 'package:client/pages/dashboard.dart';
+import 'package:client/pages/flightForm.dart';
+import 'package:client/pages/stats.dart';
 import 'package:client/pages/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
