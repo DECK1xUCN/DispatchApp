@@ -62,7 +62,7 @@ const flightResolvers = {
             flightTime: args.data.flightTime,
             delay: args.data.delay,
             delayMin: args.data.delayMin,
-            delayReason: args.data.delayReason,
+            delayCode: args.data.delayCode,
             delayDesc: args.data.delayDesc,
             pax: args.data.pax,
             paxTax: args.data.paxTax,
@@ -72,11 +72,14 @@ const flightResolvers = {
           },
         })
         .catch((err: any) => {
-          throw createGraphQLError(err.message, {
-            extensions: {
-              code: "500",
-            },
-          });
+          throw createGraphQLError(
+            `Unable to update. Please check if flight with id ${args.id} exists`,
+            {
+              extensions: {
+                code: "500",
+              },
+            }
+          );
         });
       if (!flight) {
         throw createGraphQLError(`No flight found with id ${args.id}`, {
@@ -117,7 +120,7 @@ const flightResolvers = {
             flightTime: args.data.flightTime,
             delay: args.data.delay,
             delayMin: args.data.delayMin,
-            delayReason: args.data.delayReason,
+            delayCode: args.data.delayCode,
             delayDesc: args.data.delayDesc,
             pax: args.data.pax,
             paxTax: args.data.paxTax,

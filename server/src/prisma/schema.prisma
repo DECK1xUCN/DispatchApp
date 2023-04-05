@@ -26,7 +26,7 @@ model Flight {
   flightTime   Int
   delay        Boolean
   delayMin     Int      @default(0)
-  delayReason  String   @default("N/A")
+  delayCode    String   @default("N/A")
   delayDesc    String   @default("N/A")
   pax          Int
   paxTax       Int

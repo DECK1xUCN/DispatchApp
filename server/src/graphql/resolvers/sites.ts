@@ -72,40 +72,6 @@ const siteResolver = {
       return site;
     },
   },
-
-  // Mutation: {
-  //   createSite: async (parent: any, args: any, context: Context) => {
-  //     const site = await context.prisma.site.create({
-  //       data: {
-  //         name: args.data.name,
-  //       },
-  //     });
-  //     if (!site) {
-  //       throw createGraphQLError(`Site could not be created`, {
-  //         extensions: {
-  //           code: "500",
-  //         },
-  //       });
-  //     }
-  //     return site;
-  //   },
-  //   updateSite: async (parent: any, args: any, context: Context) => {
-  //     const site = await context.prisma.site.update({
-  //       where: { id: args.id },
-  //       data: {
-  //         name: args.data.name,
-  //       },
-  //     });
-  //     if (!site) {
-  //       throw createGraphQLError(`Site could not be updated`, {
-  //         extensions: {
-  //           code: "500",
-  //         },
-  //       });
-  //     }
-  //     return site;
-  //   },
-  // },
 };
 
 export default siteResolver;

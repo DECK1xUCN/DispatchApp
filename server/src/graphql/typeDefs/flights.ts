@@ -25,7 +25,7 @@ const flightTypeDefs = gql`
     flightTime: Int!
     delay: Boolean!
     delayMin: Int!
-    delayReason: String!
+    delayCode: String!
     delayDesc: String!
     pax: Int!
     paxTax: Int!
@@ -50,7 +50,7 @@ const flightTypeDefs = gql`
     flightTime: Int!
     delay: Boolean!
     delayMin: Int
-    delayReason: String
+    delayCode: String
     delayDesc: String
     pax: Int!
     paxTax: Int!
@@ -59,7 +59,6 @@ const flightTypeDefs = gql`
     notes: String
   }
   input UpdateFlightInput {
-    id: Int!
     flightNumber: String
     fromId: Int
     toId: Int
@@ -73,7 +72,7 @@ const flightTypeDefs = gql`
     flightTime: Int
     delay: Boolean
     delayMin: Int
-    delayReason: String
+    delayCode: String
     delayDesc: String
     pax: Int
     paxTax: Int

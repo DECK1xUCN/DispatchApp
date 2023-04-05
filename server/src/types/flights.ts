@@ -17,7 +17,7 @@ export type Flight = {
   flightTime: number;
   delay: boolean;
   delayMin: number;
-  delayReason: string;
+  delayCode: DelayCode;
   delayDesc: string;
   pax: number;
   paxTax: number;
@@ -41,7 +41,7 @@ export interface CreateFlightInput {
   flightTime: number;
   delay: boolean;
   delayMin: number;
-  delayReason: string;
+  delayCode: DelayCode;
   delayDesc: string;
   pax: number;
   paxTax: number;
@@ -65,7 +65,7 @@ export interface UpdateFlightInput {
   flightTime?: number;
   delay?: boolean;
   delayMin?: number;
-  delayReason?: string;
+  delayCode?: DelayCode;
   delayDesc?: string;
   pax?: number;
   paxTax?: number;
@@ -73,3 +73,7 @@ export interface UpdateFlightInput {
   hoistCycles?: number;
   notes?: string;
 }
+
+export type DelayCode = {
+  code: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J";
+};
