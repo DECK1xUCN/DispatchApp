@@ -35,6 +35,12 @@ class _FlightsState extends State<Flights> {
         from: 'A',
         via: ['B', 'C'],
         to: 'D'),
+    Flight(
+        etd: DateTime.now().add(const Duration(hours: 4)),
+        flightnumber: 'ABC-4',
+        from: 'A',
+        via: ['B', 'C'],
+        to: 'D'),
   ];
 
   List<Widget> generateRows() {
@@ -47,67 +53,55 @@ class _FlightsState extends State<Flights> {
         child: Container(
             height: 50,
             decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(width: 0.5, color: Colors.grey),
-              ),
+
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                      DateFormat.Hm().format(element.etd),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
+                  child: Center(
+                      child: Text(
+                    DateFormat.Hm().format(element.etd),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                      element.flightnumber,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
+                  child: Center(
+                      child: Text(
+                    element.flightnumber,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                      element.from,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
+                  child: Center(
+                      child: Text(
+                    element.from,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                      element.via.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
+                  child: Center(
+                      child: Text(
+                    element.via.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                      element.to,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
+                  child: Center(
+                      child: Text(
+                    element.to,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
               ],
             )),
@@ -122,80 +116,130 @@ class _FlightsState extends State<Flights> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ListView(children: <Widget>[
-                Container(
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(width: 1.5, color: Colors.black),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'DFRS',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Roboto',
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Container(
+              alignment: Alignment.topRight,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 30.0, vertical: 10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
+                ),
+                child: const Text('New Flight'),
+                onPressed: () {
+                  // do something when button is pressed
+                },
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 5,
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          child: const Center(
-                              child: Text(
-                            'ETD',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          )),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: const Center(
-                              child: Text(
-                            'Flight number',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          )),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: const Center(
-                              child: Text(
-                            'From',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          )),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: const Center(
-                            child: Text('Via',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    color: Colors.white,
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        Container(
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                  width: 1.5, color: Colors.white),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'ETD',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Flight number',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'From',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Via',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'To',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: const Center(
-                              child: Text(
-                            'To',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          )),
-                        ),
-                      ),
-                    ],
+                        ...generateRows(),
+                      ],
+                    ),
                   ),
                 ),
-                ...generateRows()
-              ]),
+              ),
             ),
-            const Text('space for generating dfr button')
           ],
         ),
       ),

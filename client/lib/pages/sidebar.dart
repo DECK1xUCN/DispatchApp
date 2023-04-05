@@ -244,7 +244,7 @@ class SidebarB extends State<Sidebar> {
               index: _selectedIndex,
               children: const <Widget>[
                 Flights(),
-                Dfrs(),
+                DFRs(),
                 NotImplemented(),
                 Dashboard(),
 

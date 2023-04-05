@@ -3,14 +3,14 @@ import 'package:intl/intl.dart';
 
 import '../classes/Dfr.dart';
 
-class Dfrs extends StatefulWidget {
-  const Dfrs({Key? key}) : super(key: key);
+class DFRs extends StatefulWidget {
+  const DFRs({Key? key}) : super(key: key);
 
   @override
-  _DfrsState createState() => _DfrsState();
+  _DFRsState createState() => _DFRsState();
 }
 
-class _DfrsState extends State<Dfrs> {
+class _DFRsState extends State<DFRs> {
   List<Dfr> dfrs = [
     Dfr(
       id: 123,
@@ -66,6 +66,8 @@ class _DfrsState extends State<Dfrs> {
       hoistOperator: 'BRA',
       dailyUpdate: true,
     ),
+
+
   ];
 
   List<Widget> generateRows() {
@@ -73,7 +75,7 @@ class _DfrsState extends State<Dfrs> {
     for (var element in dfrs) {
       rows.add(GestureDetector(
         onTap: () {
-          print('tapped' + element.id.toString());
+          //do something
         },
         child: Container(
             height: 50,
@@ -86,81 +88,67 @@ class _DfrsState extends State<Dfrs> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          element.id.toString(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        element.id.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          element.model,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        element.model,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          element.registration,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        element.registration,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          DateFormat.yMd().format(element.date),
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        DateFormat.yMd().format(element.date),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          element.pilot,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        element.pilot,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          element.hoistOperator,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        element.hoistOperator,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    child: Center(
-                        child: Text(
-                          element.dailyUpdate.toString(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
-                  ),
+                  child: Center(
+                      child: Text(
+                        element.dailyUpdate.toString(),
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
                 ),
               ],
             )),
@@ -178,14 +166,14 @@ class _DfrsState extends State<Dfrs> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.all(16.0), // add padding
+              padding: EdgeInsets.all(16.0),
               child: Text(
                 'DFRS',
                 style: TextStyle(
                   color: Colors.black,
                   fontFamily: 'Roboto',
                   fontSize: 30,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -195,7 +183,7 @@ class _DfrsState extends State<Dfrs> {
                   horizontal: 30.0, vertical: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                   backgroundColor: Color.fromRGBO(163, 160, 251, 1),
+                  backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
                 ),
                 child: const Text('New Report'),
                 onPressed: () {
@@ -205,132 +193,122 @@ class _DfrsState extends State<Dfrs> {
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(16, 3),
-                  ),
-                ],
-              ),
               child: Container(
-                color: Colors.white,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    Container(
-                      height: 50,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(width: 1.5, color: Colors.white),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'Id',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'A/C Model',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'A/C Registration',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'Date',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'Pilot',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'Hoist Operator',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: const Center(
-                                child: Text(
-                                  'Daily Update',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 5,
                     ),
-                    ...generateRows(),
                   ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    color: Colors.white,
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        Container(
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                  width: 1.5, color: Colors.white),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Id',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'A/C Model',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'A/C Registration',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Date',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Pilot',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Hoist Operator',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'Daily Update',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        ...generateRows(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 16),
           ],
         ),
       ),
