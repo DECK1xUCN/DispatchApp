@@ -5,9 +5,17 @@ import { createGraphQLError } from "graphql-yoga";
 const hoistOperatorResolver = {
   Query: {
     hoistOperator: async (parent: any, args: any, context: Context) => {
-      const operator = await context.prisma.hoistOperator.findUnique({
-        where: { id: parseInt(args.id) },
-      });
+      const operator = await context.prisma.hoistOperator
+        .findUnique({
+          where: { id: parseInt(args.id) },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`No operator found with id ${args.id}`, {
+            extensions: {
+              code: "404",
+            },
+          });
+        });
       if (!operator) {
         throw createGraphQLError(`No operator found with id ${args.id}`, {
           extensions: {
@@ -18,7 +26,15 @@ const hoistOperatorResolver = {
       return operator;
     },
     hoistOperators: async (parent: any, args: any, context: Context) => {
-      const operators = await context.prisma.hoistOperator.findMany();
+      const operators = await context.prisma.hoistOperator
+        .findMany()
+        .catch((err: any) => {
+          throw createGraphQLError(`No operators found`, {
+            extensions: {
+              code: "404",
+            },
+          });
+        });
       if (!operators) {
         throw createGraphQLError(`No operators found`, {
           extensions: {
@@ -35,11 +51,19 @@ const hoistOperatorResolver = {
       args: { data: HoistOperatorInput },
       context: Context
     ) => {
-      const operator = await context.prisma.hoistOperator.create({
-        data: {
-          name: args.data.name,
-        },
-      });
+      const operator = await context.prisma.hoistOperator
+        .create({
+          data: {
+            name: args.data.name,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Operator could not be created`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!operator) {
         throw createGraphQLError(`Operator could not be created`, {
           extensions: {
@@ -54,12 +78,20 @@ const hoistOperatorResolver = {
       args: { id: string; data: HoistOperatorInput },
       context: Context
     ) => {
-      const operator = await context.prisma.hoistOperator.update({
-        where: { id: parseInt(args.id) },
-        data: {
-          name: args.data.name,
-        },
-      });
+      const operator = await context.prisma.hoistOperator
+        .update({
+          where: { id: parseInt(args.id) },
+          data: {
+            name: args.data.name,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Operator could not be updated`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!operator) {
         throw createGraphQLError(`Operator could not be updated`, {
           extensions: {

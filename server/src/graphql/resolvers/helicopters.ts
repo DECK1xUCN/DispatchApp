@@ -36,12 +36,20 @@ const helicopterResolver = {
       args: { data: CreateHelicopterInput },
       context: Context
     ) => {
-      const helicopter = await context.prisma.helicopter.create({
-        data: {
-          reg: args.data.reg,
-          model: args.data.model,
-        },
-      });
+      const helicopter = await context.prisma.helicopter
+        .create({
+          data: {
+            reg: args.data.reg,
+            model: args.data.model,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Helicopter could not be created`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!helicopter) {
         throw createGraphQLError(`Helicopter could not be created`, {
           extensions: {
@@ -56,13 +64,21 @@ const helicopterResolver = {
       args: { id: string; data: UpdateHelicopterInput },
       context: Context
     ) => {
-      const helicopter = await context.prisma.helicopter.update({
-        where: { id: parseInt(args.id) },
-        data: {
-          reg: args.data.reg && args.data.reg,
-          model: args.data.model && args.data.model,
-        },
-      });
+      const helicopter = await context.prisma.helicopter
+        .update({
+          where: { id: parseInt(args.id) },
+          data: {
+            reg: args.data.reg && args.data.reg,
+            model: args.data.model && args.data.model,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Helicopter could not be updated`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!helicopter) {
         throw createGraphQLError(`Helicopter could not be updated`, {
           extensions: {

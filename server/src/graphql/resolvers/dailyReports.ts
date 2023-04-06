@@ -9,7 +9,15 @@ import moment from "moment";
 const dailyReportResolver = {
   Query: {
     dailyReports: async (parent: any, args: any, context: Context) => {
-      const dailyReports = await context.prisma.dailyReport.findMany();
+      const dailyReports = await context.prisma.dailyReport
+        .findMany()
+        .catch((err: any) => {
+          throw createGraphQLError(`No dailyReports found`, {
+            extensions: {
+              code: "404",
+            },
+          });
+        });
       if (!dailyReports) {
         throw createGraphQLError(`No dailyReports found`, {
           extensions: {
@@ -51,16 +59,24 @@ const dailyReportResolver = {
       args: { data: CreateDailyReportInput },
       context: Context
     ) => {
-      const dailyReport = await context.prisma.dailyReport.create({
-        data: {
-          date: formatDate(args.data.date),
-          helicopterId: args.data.helicopterId,
-          pilotId: args.data.pilotId,
-          hoistId: args.data.hoistOperatorId,
-        },
-      });
+      const dailyReport = await context.prisma.dailyReport
+        .create({
+          data: {
+            date: formatDate(args.data.date),
+            helicopterId: args.data.helicopterId,
+            pilotId: args.data.pilotId,
+            hoistId: args.data.hoistOperatorId,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Daily Report could not be created`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!dailyReport) {
-        throw createGraphQLError(`No dailyReport created`, {
+        throw createGraphQLError(`Daily Report could not be created`, {
           extensions: {
             code: "500",
           },
@@ -73,19 +89,27 @@ const dailyReportResolver = {
       args: { id: string; data: UpdateDailyReportInput },
       context: Context
     ) => {
-      const dailyReport = await context.prisma.dailyReport.update({
-        where: { id: parseInt(args.id) },
-        data: {
-          date: formatDate(args.data.date),
-          helicopterId: args.data.helicopterId,
-          pilotId: args.data.pilotId,
-          hoistId: args.data.hoistOperatorId,
-        },
-      });
+      const dailyReport = await context.prisma.dailyReport
+        .update({
+          where: { id: parseInt(args.id) },
+          data: {
+            date: formatDate(args.data.date),
+            helicopterId: args.data.helicopterId,
+            pilotId: args.data.pilotId,
+            hoistId: args.data.hoistOperatorId,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Daily Report could not be updated`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!dailyReport) {
-        throw createGraphQLError(`No dailyReport found with id ${args.id}`, {
+        throw createGraphQLError(`Daily Report could not be updated`, {
           extensions: {
-            code: "404",
+            code: "500",
           },
         });
       }

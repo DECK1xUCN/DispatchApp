@@ -6,7 +6,15 @@ import moment from "moment";
 const flightResolvers = {
   Query: {
     flights: async (_parent: any, args: any, context: Context) => {
-      const flights = await context.prisma.flight.findMany();
+      const flights = await context.prisma.flight
+        .findMany()
+        .catch((err: any) => {
+          throw createGraphQLError(`No flights found`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!flights) {
         throw createGraphQLError(`No flights found`, {
           extensions: {
@@ -17,9 +25,17 @@ const flightResolvers = {
       return flights;
     },
     flight: async (parent: any, args: { id: string }, context: Context) => {
-      const flight = await context.prisma.flight.findUnique({
-        where: { id: parseInt(args.id) },
-      });
+      const flight = await context.prisma.flight
+        .findUnique({
+          where: { id: parseInt(args.id) },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`No flight found with id ${args.id}`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!flight) {
         throw createGraphQLError(`No flight found with id ${args.id}`, {
           extensions: {
@@ -168,31 +184,87 @@ const flightResolvers = {
   },
   Flight: {
     from: async (parent: any, args: any, context: Context) => {
-      return await context.prisma.heliport.findUnique({
-        where: { id: parent.fromId },
-      });
+      const heliport = await context.prisma.heliport
+        .findUnique({
+          where: { id: parent.fromId },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Heliport could not be found`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
+      return heliport;
     },
     via: async (parent: any, args: any, context: Context) => {
-      return await context.prisma.flight
+      const sites = await context.prisma.flight
         .findUnique({
           where: { id: parent.id },
         })
-        .via();
+        .via()
+        .catch((err: any) => {
+          throw createGraphQLError(
+            `Heliport with id ${parent.id} could not be found`,
+            {
+              extensions: {
+                code: "500",
+              },
+            }
+          );
+        });
+      return sites;
     },
     to: async (parent: any, args: any, context: Context) => {
-      return await context.prisma.heliport.findUnique({
-        where: { id: parent.toId },
-      });
+      const heliport = await context.prisma.heliport
+        .findUnique({
+          where: { id: parent.toId },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(
+            `Heliport with id ${parent.id} could not be found`,
+            {
+              extensions: {
+                code: "500",
+              },
+            }
+          );
+        });
+      return heliport;
     },
     dailyReport: async (parent: any, args: any, context: Context) => {
-      return await context.prisma.dailyReport.findUnique({
-        where: { id: parent.dailyReportId },
-      });
+      const dailyReport = await context.prisma.dailyReport
+        .findUnique({
+          where: { id: parent.dailyReportId },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(
+            `Daily report with id ${parent.id} could not be found`,
+            {
+              extensions: {
+                code: "500",
+              },
+            }
+          );
+        });
+      return dailyReport;
     },
     dailyUpdate: async (parent: any, args: any, context: Context) => {
-      return await context.prisma.dailyUpdate.findUnique({
-        where: { id: parent.dailyUpdateId },
-      });
+      const dailyUpdate = await context.prisma.dailyUpdate
+        .findUnique({
+          where: { id: parent.dailyUpdateId },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(
+            `Daily update with id ${parent.id} could not be found`,
+            {
+              extensions: {
+                code: "500",
+              },
+            }
+          );
+        });
+      return dailyUpdate;
     },
   },
 };

@@ -5,7 +5,15 @@ import { createGraphQLError } from "graphql-yoga";
 const heliportResolver = {
   Query: {
     heliports: async (parent: any, args: any, context: Context) => {
-      const heliports = await context.prisma.heliport.findMany();
+      const heliports = await context.prisma.heliport
+        .findMany()
+        .catch((err: any) => {
+          throw createGraphQLError(`No heliports found`, {
+            extensions: {
+              code: "404",
+            },
+          });
+        });
       if (!heliports) {
         throw createGraphQLError(`No heliports found`, {
           extensions: {
@@ -16,9 +24,17 @@ const heliportResolver = {
       return heliports;
     },
     heliport: async (parent: any, args: { id: string }, context: Context) => {
-      const heliport = await context.prisma.heliport.findUnique({
-        where: { id: parseInt(args.id) },
-      });
+      const heliport = await context.prisma.heliport
+        .findUnique({
+          where: { id: parseInt(args.id) },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`No heliport found with id ${args.id}`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!heliport) {
         throw createGraphQLError(`No heliport found with id ${args.id}`, {
           extensions: {
@@ -36,11 +52,19 @@ const heliportResolver = {
       args: { data: HeliportInput },
       context: Context
     ) => {
-      const heliport = await context.prisma.heliport.create({
-        data: {
-          name: args.data.name,
-        },
-      });
+      const heliport = await context.prisma.heliport
+        .create({
+          data: {
+            name: args.data.name,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Heliport could not be created`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!heliport) {
         throw createGraphQLError(`Heliport could not be created`, {
           extensions: {
@@ -56,12 +80,20 @@ const heliportResolver = {
       args: { id: string; data: HeliportInput },
       context: Context
     ) => {
-      const heliport = await context.prisma.heliport.update({
-        where: { id: parseInt(args.id) },
-        data: {
-          name: args.data.name,
-        },
-      });
+      const heliport = await context.prisma.heliport
+        .update({
+          where: { id: parseInt(args.id) },
+          data: {
+            name: args.data.name,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`Heliport could not be updated`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
       if (!heliport) {
         throw createGraphQLError(`Heliport could not be updated`, {
           extensions: {
