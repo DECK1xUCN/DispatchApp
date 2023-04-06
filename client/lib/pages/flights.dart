@@ -140,7 +140,7 @@ class _FlightsState extends State<Flights> {
                 ),
                 child: const Text('New Flight'),
                 onPressed: () {
-                  // do something when button is pressed
+
                 },
               ),
             ),
