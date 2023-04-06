@@ -1,4 +1,4 @@
-import { Helicopter } from "@prisma/client";
+import { Helicopter } from "./helicopters";
 import { HoistOperator } from "./hoistOperators";
 import { Pilot } from "./pilots";
 
