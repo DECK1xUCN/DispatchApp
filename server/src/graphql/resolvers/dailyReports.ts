@@ -8,6 +8,17 @@ import moment from "moment";
 
 const dailyReportResolver = {
   Query: {
+    /**
+     * Returns an array of all daily reports.
+     *
+     * @async
+     * @function
+     * @param {Object} parent - The parent object.
+     * @param {Object} args - The arguments object.
+     * @param {Context} context - The context object.
+     * @throws {GraphQLError} If no daily reports are found.
+     * @returns {Promise<DailyReport[]>} An array of daily reports.
+     */
     dailyReports: async (parent: any, args: any, context: Context) => {
       const dailyReports = await context.prisma.dailyReport
         .findMany()
@@ -27,6 +38,19 @@ const dailyReportResolver = {
       }
       return dailyReports;
     },
+
+    /**
+     * Retrieves a single daily report by its ID.
+     * @async
+     * @function dailyReport
+     * @param {object} parent - The parent object.
+     * @param {object} args - The arguments for the query.
+     * @param {string} args.id - The ID of the daily report to retrieve.
+     * @param {object} context - The context object.
+     * @param {object} context.prisma - The Prisma client object.
+     * @returns {Promise<object>} - The daily report object.
+     * @throws {Error} - Throws an error if the daily report cannot be found.
+     */
     dailyReport: async (
       parent: any,
       args: { id: string },
@@ -54,6 +78,18 @@ const dailyReportResolver = {
     },
   },
   Mutation: {
+    /**
+     * Creates a new daily report.
+     *
+     * @param {object} parent - The parent object.
+     * @param {object} args - The arguments object.
+     * @param {CreateDailyReportInput} args.data - The data to create the daily report.
+     * @param {Context} context - The context object.
+     *
+     * @returns {Promise<DailyReport>} The created daily report.
+     *
+     * @throws {GraphQLError} If the daily report could not be created.
+     */
     createDailyReport: async (
       parent: any,
       args: { data: CreateDailyReportInput },
