@@ -6,8 +6,8 @@ const dailyUpdatesTypeDefs = gql`
     dailyUpdate(id: Int!): DailyUpdate!
   }
   type Mutation {
-    createDailyUpdate(data: DailyUpdateInput): DailyUpdate!
-    updateDailyUpdate(id: String!, data: DailyUpdateInput!): DailyUpdate!
+    createDailyUpdate(data: CreateDailyUpdateInput): DailyUpdate!
+    updateDailyUpdate(id: String!, data: UpdateDailyUpdateInput!): DailyUpdate!
   }
   type DailyUpdate {
     id: Int!
@@ -16,7 +16,7 @@ const dailyUpdatesTypeDefs = gql`
     wasFlight: Boolean!
     delay: Boolean!
     delayReason: String!
-    delayReasonDesc: String!
+    delayDesc: String!
     maintenace: Boolean!
     plannedMaintenance: Boolean!
     unplannedMaintenance: Boolean!
@@ -26,19 +26,34 @@ const dailyUpdatesTypeDefs = gql`
     note: String!
   }
   # Input types
-  input DailyUpdateInput {
-    flight: Int!
+  input CreateDailyUpdateInput {
+    flightId: Int!
     date: DateTime!
     wasFlight: Boolean!
     delay: Boolean!
     delayReason: String
-    delayReasonDesc: String
+    delayDesc: String
     maintenace: Boolean!
     plannedMaintenance: Boolean
     unplannedMaintenance: Boolean
     otherMaintenance: Boolean
     maintenanceDesc: String
     baseAndEquipment: Boolean!
+    note: String
+  }
+  input UpdateDailyUpdateInput {
+    flightId: Int
+    date: DateTime
+    wasFlight: Boolean
+    delay: Boolean
+    delayReason: String
+    delayDesc: String
+    maintenace: Boolean
+    plannedMaintenance: Boolean
+    unplannedMaintenance: Boolean
+    otherMaintenance: Boolean
+    maintenanceDesc: String
+    baseAndEquipment: Boolean
     note: String
   }
 `;

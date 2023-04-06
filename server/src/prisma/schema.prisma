@@ -94,5 +94,5 @@ model DailyUpdate {
   otherMaintenance     Boolean? @default(false)
   maintenanceDesc      String?  @default("N/A")
   baseAndEquipment     Boolean
-  note                 String?
+  note                 String?  @default("N/A")
 }

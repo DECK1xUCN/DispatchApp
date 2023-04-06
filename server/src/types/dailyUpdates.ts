@@ -36,6 +36,7 @@ export interface UpdateDailyUpdateInput {
   flightId?: number;
   date?: Date;
   wasFlight?: boolean;
+  delay?: boolean;
   delayReason?: string;
   delayReasonDesc?: string;
   maintenace?: boolean;
