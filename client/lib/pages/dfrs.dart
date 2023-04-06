@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../classes/Dfr.dart';
+import 'dfrsWithId.dart';
 
 class DFRs extends StatefulWidget {
   const DFRs({Key? key}) : super(key: key);
@@ -75,7 +76,10 @@ class _DFRsState extends State<DFRs> {
     for (var element in dfrs) {
       rows.add(GestureDetector(
         onTap: () {
-          //do something
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const DFRsWithId()),
+          );
         },
         child: Container(
             height: 50,
@@ -117,7 +121,7 @@ class _DFRsState extends State<DFRs> {
                 Expanded(
                   child: Center(
                       child: Text(
-                        DateFormat.yMd().format(element.date),
+                        DateFormat.yMMMMd().format(element.date),
                         style: const TextStyle(
                           color: Colors.black,
                         ),
@@ -187,7 +191,6 @@ class _DFRsState extends State<DFRs> {
                 ),
                 child: const Text('New Report'),
                 onPressed: () {
-                  // do something when button is pressed
                 },
               ),
             ),
