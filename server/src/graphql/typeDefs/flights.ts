@@ -2,78 +2,90 @@ import gql from "graphql-tag";
 
 const flightTypeDefs = gql`
   type Query {
-    findAll: [Flight!]!
-    findById(id: String!): Flight!
-    findByFlightNumber(flightNumber: String!): Flight!
+    flights: [Flight!]!
+    flight(id: Int!): Flight!
   }
   type Mutation {
-    createFlight(data: FlightCreateInput): Flight!
-    updateById(id: String!, data: FlightUpdateInput!): Flight!
-    updateByFlightNumber(
-      flightNumber: String!
-      data: FlightUpdateInput!
-    ): Flight!
+    createFlight(data: CreateFlightInput): Flight!
+    updateFlight(id: Int!, data: UpdateFlightInput!): Flight!
   }
-
   type Flight {
-    id: String!
+    id: Int!
     flightNumber: String!
-    from: String!
-    via: String!
-    to: String!
+    from: Heliport!
+    via: [Site!]!
+    to: Heliport!
     etd: DateTime!
     rotorStart: DateTime!
     atd: DateTime!
     eta: DateTime!
     rotorStop: DateTime!
     ata: DateTime!
+    blockTime: Int!
+    flightTime: Int!
+    delay: Boolean!
+    delayMin: Int!
+    delayCode: String!
+    delayDesc: String!
     pax: Int!
+    paxTax: Int!
     cargoPP: Int!
     hoistCycles: Int!
-    late: Boolean!
-    latenote: String
-    delayCode: String
+    notes: String!
+    dailyReport: DailyReport!
+    dailyUpdate: DailyUpdate
   }
 
   # Input types
-  input FlightCreateInput {
-    from: String!
+  input CreateFlightInput {
     flightNumber: String!
-    via: String!
-    to: String!
+    fromId: Int!
+    viaId: Int!
+    toId: Int!
     etd: DateTime!
-    rotorStart: DateTime!
+    rotorStart: DateTime
     atd: DateTime!
     eta: DateTime!
-    rotorStop: DateTime!
-    ata: DateTime!
+    rotorStop: DateTime
+    ata: DateTime
+    blockTime: Int
+    flightTime: Int
+    delay: Boolean!
+    delayMin: Int
+    delayCode: String
+    delayDesc: String
     pax: Int!
+    paxTax: Int!
     cargoPP: Int!
     hoistCycles: Int!
-    late: Boolean!
-    latenote: String
-    delayCode: String
+    notes: String
+    dailyReportId: Int!
+    dailyUpdateId: Int
   }
-
-  input FlightUpdateInput {
-    from: String!
-    flightNumber: String!
-    via: String!
-    to: String!
-    etd: DateTime!
-    rotorStart: DateTime!
-    atd: DateTime!
-    eta: DateTime!
-    rotorStop: DateTime!
-    ata: DateTime!
-    pax: Int!
-    cargoPP: Int!
-    hoistCycles: Int!
-    late: Boolean!
-    lateNote: String
+  input UpdateFlightInput {
+    flightNumber: String
+    fromId: Int
+    toId: Int
+    etd: DateTime
+    rotorStart: DateTime
+    atd: DateTime
+    eta: DateTime
+    rotorStop: DateTime
+    ata: DateTime
+    blockTime: Int
+    flightTime: Int
+    delay: Boolean
+    delayMin: Int
     delayCode: String
+    delayDesc: String
+    pax: Int
+    paxTax: Int
+    cargoPP: Int
+    hoistCycles: Int
+    notes: String
+    dailyReportId: Int!
+    dailyUpdateId: Int
   }
-
   scalar DateTime
 `;
 
