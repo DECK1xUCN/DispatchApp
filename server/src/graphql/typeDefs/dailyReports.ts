@@ -12,17 +12,20 @@ const dailyReportTypeDefs = gql`
   type DailyReport {
     id: Int!
     date: DateTime!
+    helicopter: Helicopter!
     pilot: Pilot!
-    hoist: HoistOperator!
+    hoistOperator: HoistOperator!
   }
   # Input types
   input CreateDailyReportInput {
     date: DateTime!
+    helicopterId: Int!
     pilotId: Int!
     hoistOperatorId: Int!
   }
   input UpdateDailyReportInput {
     date: DateTime
+    helicopter: Int
     pilot: Int
     hoistOperator: Int
   }

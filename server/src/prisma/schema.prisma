@@ -52,19 +52,22 @@ model Site {
 }
 
 model DailyReport {
-  id      Int           @id @unique @default(autoincrement())
-  date    DateTime
-  pilot   Pilot         @relation(fields: [pilotId], references: [id])
-  pilotId Int
-  hoist   HoistOperator @relation(fields: [hoistId], references: [id])
-  hoistId Int
-  flights Flight[]
+  id           Int           @id @unique @default(autoincrement())
+  date         DateTime
+  helicopter   Helicopter    @relation(fields: [helicopterId], references: [id])
+  helicopterId Int
+  pilot        Pilot         @relation(fields: [pilotId], references: [id])
+  pilotId      Int
+  hoist        HoistOperator @relation(fields: [hoistId], references: [id])
+  hoistId      Int
+  flights      Flight[]
 }
 
 model Helicopter {
-  id    Int    @id @unique @default(autoincrement())
-  reg   String @unique
-  model String
+  id          Int           @id @unique @default(autoincrement())
+  reg         String        @unique
+  model       String
+  DailyReport DailyReport[]
 }
 
 model Pilot {
