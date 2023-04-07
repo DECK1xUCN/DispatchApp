@@ -1,9 +1,11 @@
+import 'package:client/classes/Location.dart';
+
 class Flight {
   DateTime etd;
   String flightnumber;
-  String from;
-  List<String> via;
-  String to;
+  Location from;
+  List<Location> via;
+  Location to;
 
   Flight({
     required this.etd,
@@ -13,4 +15,3 @@ class Flight {
     required this.to,
   });
 }
-
