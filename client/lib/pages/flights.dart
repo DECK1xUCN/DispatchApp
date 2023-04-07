@@ -48,13 +48,11 @@ class _FlightsState extends State<Flights> {
     for (var element in flights) {
       rows.add(GestureDetector(
         onTap: () {
-          print('tapped' + element.flightnumber.toString());
+          Navigator.pushNamed(context, '/flightform', arguments: element);
         },
         child: Container(
             height: 50,
-            decoration: const BoxDecoration(
-
-            ),
+            decoration: const BoxDecoration(),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -120,16 +118,14 @@ class _FlightsState extends State<Flights> {
           children: [
             Container(
               alignment: Alignment.topRight,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 30.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
                 ),
                 child: const Text('New Flight'),
-                onPressed: () {
-
-                },
+                onPressed: () {},
               ),
             ),
             Container(
@@ -156,8 +152,8 @@ class _FlightsState extends State<Flights> {
                           height: 50,
                           decoration: const BoxDecoration(
                             border: Border(
-                              bottom: BorderSide(
-                                  width: 1.5, color: Colors.white),
+                              bottom:
+                                  BorderSide(width: 1.5, color: Colors.white),
                             ),
                           ),
                           child: Row(
