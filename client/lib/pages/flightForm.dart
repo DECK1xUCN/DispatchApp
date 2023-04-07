@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart'; //Multi select dropdown
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+
+import '../classes/Flight.dart';
 
 class FlightForm extends StatefulWidget {
   const FlightForm({Key? key}) : super(key: key);
@@ -17,8 +19,11 @@ class City {
 }
 
 class _FlightFormState extends State<FlightForm> {
-  TimeOfDay timeETA = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
-  TimeOfDay time = TimeOfDay(hour: 10, minute: 30);
+  final _formKey = GlobalKey<FormState>();
+
+  TimeOfDay timeETA =
+      TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+  TimeOfDay time = const TimeOfDay(hour: 10, minute: 30);
   int id = 1;
   bool isSwitched = false;
   int sitesCount = 5;
@@ -27,36 +32,48 @@ class _FlightFormState extends State<FlightForm> {
   int selectedFrom = -1;
   int selectedTo = -1;
 
-  static List<City> _cities = [
+  static final List<City> _cities = [
     City(id: 0, name: "Aalborg"),
-    City(id: 1, name: "Coppenhagen"),
+    City(id: 1, name: "Copenhagen"),
     City(id: 2, name: "London"),
     City(id: 3, name: "Dublin")
   ];
 
-  static List<String> _delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  static final List<String> _delayCodes = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H"
+  ];
   String dropdownValue = _delayCodes.first;
 
   // Data for the Via Sites
   List<City> _selectedCities = [];
 
   // TextEditingControllers are used to set initial data in the TextFormFields and then get those data later
-  TextEditingController _controllerFlightNumber = new TextEditingController(); //This might be unnecessary
-  TextEditingController _controllerETD = new TextEditingController();
-  TextEditingController _controllerRotorStart = new TextEditingController();
-  TextEditingController _controllerATD = new TextEditingController();
-  TextEditingController _controllerETA = new TextEditingController();
-  TextEditingController _controllerRotorStop = new TextEditingController();
-  TextEditingController _controllerATA = new TextEditingController();
-  TextEditingController _controllerBlockTime = new TextEditingController();
-  TextEditingController _controllerFlightTime = new TextEditingController();
-  TextEditingController _controllerDelayAmount = new TextEditingController();
-  TextEditingController _controllerDelayReason = new TextEditingController(); //This might also be unnecessary
-  TextEditingController _controllerDelayDescription = new TextEditingController();
-  TextEditingController _controllerPAX = new TextEditingController();
-  TextEditingController _controllerPAXTax = new TextEditingController();
-  TextEditingController _controllerCargo = new TextEditingController();
-  TextEditingController _controllerHoistCycles = new TextEditingController();
+  final TextEditingController _controllerFlightNumber =
+      TextEditingController(); //This might be unnecessary
+  final TextEditingController _controllerETD = TextEditingController();
+  final TextEditingController _controllerRotorStart = TextEditingController();
+  final TextEditingController _controllerATD = TextEditingController();
+  final TextEditingController _controllerETA = TextEditingController();
+  final TextEditingController _controllerRotorStop = TextEditingController();
+  final TextEditingController _controllerATA = TextEditingController();
+  final TextEditingController _controllerBlockTime = TextEditingController();
+  final TextEditingController _controllerFlightTime = TextEditingController();
+  final TextEditingController _controllerDelayAmount = TextEditingController();
+  final TextEditingController _controllerDelayReason =
+      TextEditingController(); //This might also be unnecessary
+  final TextEditingController _controllerDelayDescription =
+      TextEditingController();
+  final TextEditingController _controllerPAX = TextEditingController();
+  final TextEditingController _controllerPAXTax = TextEditingController();
+  final TextEditingController _controllerCargo = TextEditingController();
+  final TextEditingController _controllerHoistCycles = TextEditingController();
 
   void toggleSwitch(bool value) {
     setState(() {
@@ -64,12 +81,12 @@ class _FlightFormState extends State<FlightForm> {
     });
   }
 
-  void setTime(TextEditingController _controller, TimeOfDay newTime) {
-    _controller.addListener(() {
+  void setTime(TextEditingController controller, TimeOfDay newTime) {
+    controller.addListener(() {
       setState(() {
         String hours = newTime.hour.toString().padLeft(2, '0');
         String minutes = newTime.minute.toString().padLeft(2, '0');
-        _controller.text = "$hours:$minutes";
+        controller.text = "$hours:$minutes";
       });
     });
   }
@@ -80,57 +97,35 @@ class _FlightFormState extends State<FlightForm> {
     super.initState();
 
     // Set initial display time for time pickers
-    setTime(_controllerETD, time);
+    _controllerETD.text = "${time.hour}:${time.minute}";
     _controllerRotorStart.text = _controllerETD.text;
     _controllerATD.text = _controllerETD.text;
     _controllerETA.text = "${time.hour + 1}:${time.minute}";
     _controllerRotorStop.text = _controllerETA.text;
     _controllerATA.text = _controllerETA.text;
-
-
   }
 
   @override
   Widget build(BuildContext context) {
+    Flight flight = ModalRoute.of(context)!.settings.arguments as Flight;
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Flight Form ${flight.flightnumber}"),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(50, 20, 50, 20),
           child: SingleChildScrollView(
             child: Form(
+              key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "ID, $id",
-                    style: const TextStyle(
-                        fontSize: 40,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Flight Number",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge, //TODO: Store Text style in a variable to lessen code duplication or change it in main.dart
-                  ),
-                  Container(
-                    width: 150,
-                    height: 50,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Flight Number",
-                        ),
-                        readOnly: true,
-                      ),
-                    ),
-                  ),
                   Text("From", style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
@@ -138,28 +133,37 @@ class _FlightFormState extends State<FlightForm> {
                       (index) => GestureDetector(
                           onTap: () => setState(() => selectedFrom = index),
                           child: CardWidget(
-                              selectedFrom == index, "${_cities[index].name}")),
+                              selectedFrom == index, _cities[index].name)),
                     ),
                   ),
+                  const SizedBox(height: 20),
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 10),
                   MultiSelectDialogField(
                     items:
                         _cities.map((e) => MultiSelectItem(e, e.name)).toList(),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "You must select at least one site!";
+                      }
+                      return null;
+                    },
                     searchable: true,
                     listType: MultiSelectListType.CHIP,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.lightBlue, width: 2),
                     ),
-                    cancelText:
-                        Text("Cancel", style: TextStyle(color: Colors.black)),
-                    confirmText:
-                        Text("Select", style: TextStyle(color: Colors.black)),
-                    itemsTextStyle: TextStyle(color: Colors.white),
+                    cancelText: const Text("Cancel",
+                        style: TextStyle(color: Colors.black)),
+                    confirmText: const Text("Select",
+                        style: TextStyle(color: Colors.black)),
+                    itemsTextStyle: const TextStyle(color: Colors.white),
                     unselectedColor: Colors.lightBlueAccent,
                     selectedColor: Colors.greenAccent,
-                    selectedItemsTextStyle: TextStyle(color: Colors.white),
+                    selectedItemsTextStyle:
+                        const TextStyle(color: Colors.white),
                     separateSelectedItems: true,
-                    buttonText: Text("Select cities"),
+                    buttonText: const Text("Select cities"),
                     title: Text("Cities",
                         style: Theme.of(context).textTheme.titleLarge),
                     backgroundColor: Colors.white,
@@ -169,7 +173,9 @@ class _FlightFormState extends State<FlightForm> {
                       _selectedCities = values;
                     },
                   ),
-                  Text("From", style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 20),
+                  Text("To", style: Theme.of(context).textTheme.titleLarge),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
@@ -183,373 +189,591 @@ class _FlightFormState extends State<FlightForm> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("ETD",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("Rotor Start",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("ATD",
-                          style: Theme.of(context).textTheme.titleLarge),
-                    ],
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container( //ETD
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerETD,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerETD, newTime);
-                                }),
-                          ),
-                        ),
-                        Container( //Rotor Start
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerRotorStart,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerRotorStart, newTime);
-                                }),
-                          ),
-                        ),
-                        Container( //ATD
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerATD,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerATD, newTime);
-                                }),
-                          ),
-                        ),
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("ETA",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("Rotor Stop",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("ATA",
-                          style: Theme.of(context).textTheme.titleLarge),
-                    ],
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container( //ETA
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerETA,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerETA, newTime);
-                                }),
-                          ),
-                        ),
-                        Container( // Rotor Stop
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerRotorStop,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerRotorStop, newTime);
-                                }),
-                          ),
-                        ),
-                        Container( // ATA
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerATA,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerATA, newTime);
-                                }),
-                          ),
-                        ),
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Block Time",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("Flight Time",
-                          style: Theme.of(context).textTheme.titleLarge),
-                    ],
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container( // Block Time
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerBlockTime,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerETD, newTime);
-                                }),
-                          ),
-                        ),
-                        Container( // Flight Time
-                          width: 150,
-                          height: 50,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerFlightTime,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                onTap: () async {
-                                  TimeOfDay? newTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: time,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return MediaQuery(
-                                        data: MediaQuery.of(context).copyWith(
-                                            alwaysUse24HourFormat: true),
-                                        child: child!,
-                                      );
-                                    },
-                                  );
-                                  if (newTime == null) return;
-                                  setTime(_controllerATD, newTime);
-                                }),
-                          ),
-                        ),
-                      ]),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(children: [
-                            Text("Delay",
-                                style: Theme.of(context).textTheme.titleLarge),
-                            Switch(
-                              onChanged: toggleSwitch,
-                              value: isSwitched,
-                              activeColor: Colors.lightBlue,
-                              activeTrackColor: Colors.lightBlueAccent,
-                              inactiveThumbColor: Colors.grey[200],
-                              inactiveTrackColor: Colors.grey[400],
+                          Text("ETD",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            //ETD
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerETD,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerETD.text = "$hours:$minutes";
+                                    }
+                                  }),
                             ),
-                          ]),
+                          ),
                         ],
                       ),
-                      if (isSwitched) ...[
-                        Column(
-                          children: [
-                            Text("Delay Reason",
-                                style: Theme.of(context).textTheme.titleLarge),
-                          ],
-                        ),
-                      ],
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Rotor Start",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            //Rotor Start
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerRotorStart,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerRotorStart.text =
+                                          "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("ATD",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            //ATD
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerATD,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerATD.text = "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("ETA",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            //ETA
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerETA,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerETA.text = "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Rotor Stop",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // Rotor Stop
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerRotorStop,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerRotorStop.text =
+                                          "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("ATA",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // ATA
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerATA,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerATA.text = "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Block Time",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // Block Time
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerBlockTime,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerBlockTime.text =
+                                          "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Flight Time",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // Flight Time
+                            width: 150,
+                            height: 50,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "This field cannot be empty";
+                                    }
+                                    if (!value.contains(':')) {
+                                      return "This field must contain this ':' character";
+                                    }
+                                    return null;
+                                  },
+                                  autofocus: false,
+                                  controller: _controllerFlightTime,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onTap: () async {
+                                    TimeOfDay? newTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: time,
+                                      builder: (BuildContext context,
+                                          Widget? child) {
+                                        return MediaQuery(
+                                          data: MediaQuery.of(context).copyWith(
+                                              alwaysUse24HourFormat: true),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                    if (newTime == null) {
+                                      return;
+                                    } else {
+                                      String hours = newTime.hour
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      String minutes = newTime.minute
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      _controllerFlightTime.text =
+                                          "$hours:$minutes";
+                                    }
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        width: 150,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Delay",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      Switch(
+                        onChanged: toggleSwitch,
+                        value: isSwitched,
+                        activeColor: Colors.lightBlue,
+                        activeTrackColor: Colors.lightBlueAccent,
+                        inactiveThumbColor: Colors.grey[200],
+                        inactiveTrackColor: Colors.grey[400],
+                      ),
                     ],
                   ),
                   if (isSwitched) ...[
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container( // Delay amount
-                            width: 150,
-                            height: 50,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: TextFormField(
-                                autofocus: false,
-                                controller: _controllerDelayAmount,
-                                style: TextStyle(color: Colors.black),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Minutes",
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                // Delay amount
+                                width: 150,
+                                height: 50,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "This field must not be empty";
+                                      }
+                                      try {
+                                        int.parse(value);
+                                      } catch (e) {
+                                        return "Filed must be a number";
+                                      }
+                                      return null;
+                                    },
+                                    autofocus: false,
+                                    controller: _controllerDelayAmount,
+                                    style: const TextStyle(color: Colors.black),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                          Container( // Delay Reason
-                            width: 150,
-                            height: 60,
-                            child: DropdownButtonFormField<String>(
-                              value: dropdownValue,
-                              icon: const Icon(Icons.arrow_downward),
-                              dropdownColor: Colors.white,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Delay Reason",
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                // Delay Reason
+                                width: 150,
+                                height: 60,
+                                child: DropdownButtonFormField<String>(
+                                  value: dropdownValue,
+                                  icon: const Icon(Icons.arrow_downward),
+                                  dropdownColor: Colors.white,
+                                  style: const TextStyle(color: Colors.black),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (String? value) {
+                                    // This is called when the user selects an item.
+                                    setState(() {
+                                      dropdownValue = value!;
+                                    });
+                                  },
+                                  items: _delayCodes
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
-                              onChanged: (String? value) {
-                                // This is called when the user selects an item.
-                                setState(() {
-                                  dropdownValue = value!;
-                                });
-                              },
-                              items: _delayCodes.map<DropdownMenuItem<String>>(
-                                  (String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
+                            ],
                           ),
+                          const SizedBox(width: 150)
                         ]),
-                    Row(
+                    const SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Delay Description",
                             style: Theme.of(context).textTheme.titleLarge),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Scrollbar( // Delay desc
+                        const SizedBox(height: 10),
+                        Scrollbar(
+                          // Delay desc
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
                             reverse: true,
@@ -557,92 +781,179 @@ class _FlightFormState extends State<FlightForm> {
                               width: 400,
                               height: 200,
                               child: TextFormField(
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "This field must not be empty";
+                                  }
+                                  return null;
+                                },
                                 controller: _controllerDelayReason,
                                 maxLines: 100,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                 ),
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                               ),
                             ),
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    const SizedBox(height: 20),
                   ],
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("PAX",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("PAX Tax",
-                          style: Theme.of(context).textTheme.titleLarge),
-                      Text("Cargo (per person)",
-                          style: Theme.of(context).textTheme.titleLarge),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("PAX",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // PAX
+                            width: 150,
+                            height: 50,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field must not be empty";
+                                }
+                                try {
+                                  int.parse(value);
+                                } catch (e) {
+                                  return "Filed must be a number";
+                                }
+                                return null;
+                              },
+                              controller: _controllerPAX,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("PAX Tax",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // PAX Tax
+                            width: 150,
+                            height: 50,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field must not be empty";
+                                }
+                                try {
+                                  int.parse(value);
+                                } catch (e) {
+                                  return "Filed must be a number";
+                                }
+                                return null;
+                              },
+                              controller: _controllerPAXTax,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Cargo (PP)",
+                              style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 10),
+                          SizedBox(
+                            // Cargo
+                            width: 150,
+                            height: 50,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field must not be empty";
+                                }
+                                try {
+                                  int.parse(value);
+                                } catch (e) {
+                                  return "Filed must be a number";
+                                }
+                                return null;
+                              },
+                              controller: _controllerCargo,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container( // PAX
-                        width: 150,
-                        height: 50,
-                        child: TextFormField(
-                          controller: _controllerPAX,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.black),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      Container( // PAX Tax
-                        width: 150,
-                        height: 50,
-                        child: TextFormField(
-                          controller: _controllerPAXTax,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.black),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      Container( // Cargo
-                        width: 150,
-                        height: 50,
-                        child: TextFormField(
-                          controller: _controllerCargo,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.black),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row( //Prob delete this later
+                  const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Hoist Cycles",
                           style: Theme.of(context).textTheme.titleLarge),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Container( // Hoist cycles
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        // Hoist cycles
                         width: 150,
                         height: 50,
                         child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "This field must not be empty";
+                            }
+                            try {
+                              int.parse(value);
+                            } catch (e) {
+                              return "Filed must be a number";
+                            }
+                            return null;
+                          },
                           controller: _controllerHoistCycles,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                           ),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           keyboardType: TextInputType.number,
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Validate returns true if the form is valid, or false otherwise.
+                        if (_formKey.currentState!.validate() &&
+                            selectedFrom != -1 &&
+                            selectedTo != -1) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
+                        }
+                      },
+                      child: const Text('Submit'),
+                    ),
                   ),
                 ],
               ),
@@ -670,7 +981,7 @@ class CardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         border:
             Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Align(
         alignment: Alignment.center,
