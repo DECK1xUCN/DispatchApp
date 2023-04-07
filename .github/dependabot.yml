@@ -4,8 +4,13 @@ updates:
     directory: "/server"
     schedule:
       interval: "weekly"
-      
+
   - package-ecosystem: "pub"
     directory: "/client"
     schedule:
-      interval: "weekly"  
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/server"
+    schedule:
+      interval: "weekly"
