@@ -118,18 +118,6 @@ class _FlightsState extends State<Flights> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Flights',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Roboto',
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             Container(
               alignment: Alignment.topRight,
               padding: const EdgeInsets.symmetric(
