@@ -8,7 +8,7 @@ void main() async {
   await initHiveForFlutter();
 
   final HttpLink httpLink = HttpLink(
-    'http://deck1.sk:4000/graphql',
+    'https://deck1.sk:4000',
   );
 
   ValueNotifier<GraphQLClient> client = ValueNotifier(
