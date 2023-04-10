@@ -4,16 +4,29 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 import express from "express";
+import https from "https";
+import fs from "fs";
 import * as Sentry from "@sentry/node";
 
 function main() {
+  // Create an instance of Express
   const app = express();
 
-  // Create GraphQL schema
+  // Create the GraphQL schema
   const schema = makeExecutableSchema({
     resolvers: [resolvers],
     typeDefs: [typeDefs],
   });
+
+  // Start the https server
+  const httpsServer = https.createServer(
+    {
+      key: fs.readFileSync("./src/ssl/private.key"),
+      cert: fs.readFileSync("./src/ssl/certificate.crt"),
+      ca: fs.readFileSync("./src/ssl/ca_bundle.crt"),
+    },
+    app
+  );
 
   // Initialize Sentry
   Sentry.init({
@@ -21,10 +34,11 @@ function main() {
     tracesSampleRate: 1.0,
   });
 
-  const yoga = createYoga({ schema, context });
-  app.use("/graphql", yoga);
-  app.listen(4000, () => {
-    console.info("🚀 Server is running on http://localhost:4000/graphql");
+  const yoga = createYoga({ schema, context, graphqlEndpoint: "/" });
+  app.use(yoga);
+
+  httpsServer.listen(443, () => {
+    console.log(`🚀 Server is running on https://localhost`);
   });
 }
 

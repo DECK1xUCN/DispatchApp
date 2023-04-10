@@ -146,3 +146,5 @@ node_modules/
 .env
 *.env
 migrations/
+server/src/ssl/private.key
+server/src/ssl/ca_bundle.crt
