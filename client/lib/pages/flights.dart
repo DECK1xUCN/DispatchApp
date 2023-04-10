@@ -125,7 +125,9 @@ query MyQuery {
         builder: (QueryResult result, {fetchMore, refetch}) {
           if (result.hasException) {
             print(result.exception.toString());
-            return SafeArea(child: Text(result.exception.toString()));
+            return const SafeArea(
+                child: Center(
+                    child: Text("An error occurred, check the console :(")));
           }
           if (result.isLoading) {
             return const Center(
