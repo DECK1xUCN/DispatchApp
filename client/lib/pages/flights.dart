@@ -162,7 +162,8 @@ query MyQuery {
                             )),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
+                            backgroundColor:
+                                const Color.fromRGBO(163, 160, 251, 1),
                           ),
                           child: const Text('New Flight'),
                           onPressed: () {},

@@ -68,8 +68,6 @@ class _FlightFormState extends State<FlightForm> {
   final TextEditingController _controllerDelayAmount = TextEditingController();
   final TextEditingController _controllerDelayReason =
       TextEditingController(); //This might also be unnecessary
-  final TextEditingController _controllerDelayDescription =
-      TextEditingController();
   final TextEditingController _controllerPAX = TextEditingController();
   final TextEditingController _controllerPAXTax = TextEditingController();
   final TextEditingController _controllerCargo = TextEditingController();
