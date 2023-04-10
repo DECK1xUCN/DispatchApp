@@ -13,95 +13,87 @@ class Flights extends StatefulWidget {
 
 class _FlightsState extends State<Flights> {
   List<Widget> generateRows(list) {
-    for (var flight in list) {
-      print(flight);
-      print(flight['etd']);
-      print(flight['flightNumber']);
-      print(flight['from']);
-      print(flight['via']);
-      print(flight['to']);
+    List<Flight> flights = [];
 
+    for (var flight in list) {
       List<Location> via = [];
 
       for (var location in flight['via']) {
         via.add(Location(id: location['id'], name: location['name']));
       }
 
-      Flight(
-        etd: DateTime.parse(flight['etd']),
-        flightnumber: flight['flightNumber'],
-        from: Location(id: flight['from']['id'], name: flight['from']['name']),
-        via: via,
-        to: Location(id: flight['to']['id'], name: flight['to']['name'])
-      );
+      flights.add(Flight(
+          etd: DateTime.parse(flight['etd']),
+          flightnumber: flight['flightNumber'],
+          from:
+              Location(id: flight['from']['id'], name: flight['from']['name']),
+          via: via,
+          to: Location(id: flight['to']['id'], name: flight['to']['name'])));
     }
-    return [Text('test1'), Text('test1')];
-  }
 
-  // List<Widget> generateRows() {
-  //   List<Widget> rows = [];
-  //   for (var element in flights) {
-  //     rows.add(GestureDetector(
-  //       onTap: () {
-  //         Navigator.pushNamed(context, '/flightform', arguments: element);
-  //       },
-  //       child: Container(
-  //           height: 50,
-  //           decoration: const BoxDecoration(),
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //             children: [
-  //               Expanded(
-  //                 child: Center(
-  //                     child: Text(
-  //                   DateFormat.Hm().format(element.etd),
-  //                   style: const TextStyle(
-  //                     color: Colors.black,
-  //                   ),
-  //                 )),
-  //               ),
-  //               Expanded(
-  //                 child: Center(
-  //                     child: Text(
-  //                   element.flightnumber,
-  //                   style: const TextStyle(
-  //                     color: Colors.black,
-  //                   ),
-  //                 )),
-  //               ),
-  //               Expanded(
-  //                 child: Center(
-  //                     child: Text(
-  //                   element.from,
-  //                   style: const TextStyle(
-  //                     color: Colors.black,
-  //                   ),
-  //                 )),
-  //               ),
-  //               Expanded(
-  //                 child: Center(
-  //                     child: Text(
-  //                   element.via.toString(),
-  //                   style: const TextStyle(
-  //                     color: Colors.black,
-  //                   ),
-  //                 )),
-  //               ),
-  //               Expanded(
-  //                 child: Center(
-  //                     child: Text(
-  //                   element.to,
-  //                   style: const TextStyle(
-  //                     color: Colors.black,
-  //                   ),
-  //                 )),
-  //               ),
-  //             ],
-  //           )),
-  //     ));
-  //   }
-  //   return rows;
-  // }
+    List<Widget> rows = [];
+    for (var flight in flights) {
+      rows.add(GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, '/flightform', arguments: flight);
+        },
+        child: Container(
+            height: 50,
+            decoration: const BoxDecoration(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Center(
+                      child: Text(
+                    DateFormat.Hm().format(flight.etd),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                    flight.flightnumber,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                    flight.from.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                    flight.via.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
+                ),
+                Expanded(
+                  child: Center(
+                      child: Text(
+                    flight.to.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
+                ),
+              ],
+            )),
+      ));
+    }
+    return rows;
+  }
 
   String flightsQuery = """
 query MyQuery {
@@ -142,7 +134,7 @@ query MyQuery {
           }
 
           List? flightList = result.data?["flights"];
-
+          print(flightList?.length);
           return Scaffold(
             backgroundColor: Colors.white,
             body: SafeArea(
