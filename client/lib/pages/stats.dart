@@ -6,14 +6,14 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../widgets/card_widget.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+class Stats extends StatefulWidget {
+  const Stats({Key? key}) : super(key: key);
 
   @override
-  State<Dashboard> createState() => _SidebarState();
+  State<Stats> createState() => _SidebarState();
 }
 
-class _SidebarState extends State<Dashboard> {
+class _SidebarState extends State<Stats> {
   String user = 'John Doe';
   String title = 'Airport Flight Officer';
   final List<FlSpot> dummyData1 = List.generate(8, (index) {

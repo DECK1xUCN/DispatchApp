@@ -2,7 +2,7 @@ import 'package:client/pages/notimplemented.dart';
 
 import 'package:flutter/material.dart';
 
-import 'dashboard.dart';
+import 'stats.dart';
 import 'dfrs.dart';
 import 'flights.dart';
 
@@ -278,7 +278,7 @@ class SidebarB extends State<Sidebar> {
                 Flights(),
                 DFRs(),
                 NotImplemented(),
-                Dashboard(),
+                Stats(),
               ],
             ),
           )
