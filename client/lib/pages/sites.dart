@@ -1,5 +1,6 @@
 import 'package:client/classes/Location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class Sites extends StatefulWidget {
@@ -68,6 +69,28 @@ query MyQuery {
 }
   """;
 
+  String createSite(String siteName) {
+    return """   
+mutation MyMutation {
+  createSite(data: {name: "$siteName"}) {
+    id
+    name
+  }
+}
+    """;
+  }
+
+  String updateSite(int siteId, String siteName) {
+    return """   
+mutation MyMutation {
+  updateSite(data: {name: "$siteName"}, id: $siteId) {
+    id
+    name
+  }
+}
+    """;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Query(
@@ -82,8 +105,14 @@ query MyQuery {
                     child: Text("An error occurred, check the console :(")));
           }
           if (result.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return const Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                child: SpinKitFoldingCube(
+                  color: Color.fromRGBO(163, 160, 251, 1),
+                  size: 50.0,
+                ),
+              ),
             );
           }
 
@@ -104,12 +133,9 @@ query MyQuery {
                           child: Column(
                             children: <Widget>[
                               TextFormField(
-                                style: const TextStyle(
-                                  color: Colors.black
-                                ),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: const InputDecoration(
                                   labelText: 'Name',
-
                                   labelStyle: TextStyle(color: Colors.black),
                                   icon: Icon(Icons.flight_takeoff,
                                       color: Colors.black),
@@ -148,7 +174,18 @@ query MyQuery {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 65),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+                    child: IconButton(
+                        onPressed: () {
+                          refetch!();
+                        },
+                        icon: const Icon(
+                          Icons.refresh,
+                          size: 42,
+                          color: Color.fromRGBO(163, 160, 251, 1),
+                        )),
+                  ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Container(
