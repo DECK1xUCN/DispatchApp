@@ -138,6 +138,12 @@ query MyQuery {
           List? flightList = result.data?["flights"];
           return Scaffold(
             backgroundColor: Colors.white,
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {},
+              backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
+              label: const Text('Generate DFR'),
+              icon: const Icon(Icons.add_chart),
+            ),
             body: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
