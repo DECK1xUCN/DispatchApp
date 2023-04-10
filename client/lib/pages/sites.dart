@@ -92,7 +92,54 @@ query MyQuery {
             backgroundColor: Colors.white,
             floatingActionButton: FloatingActionButton.extended(
               heroTag: 'sitesButton',
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Colors.white,
+                        scrollable: true,
+                        title: const Text('Add site'),
+                        content: Form(
+                          child: Column(
+                            children: <Widget>[
+                              TextFormField(
+                                style: const TextStyle(
+                                  color: Colors.black
+                                ),
+                                decoration: const InputDecoration(
+                                  labelText: 'Name',
+
+                                  labelStyle: TextStyle(color: Colors.black),
+                                  icon: Icon(Icons.flight_takeoff,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton.icon(
+                                  label: const Text("Cancel"),
+                                  icon: const Icon(Icons.cancel),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                              ElevatedButton.icon(
+                                  label: const Text("Add"),
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () {})
+                            ],
+                          )
+                        ],
+                      );
+                    });
+              },
               backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
               label: const Text('Add site'),
               icon: const Icon(Icons.add),
