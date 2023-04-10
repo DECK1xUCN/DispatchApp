@@ -14,7 +14,7 @@ const helicopterResolver = {
         .findMany({
           where: { model: args.model },
         })
-        .catch((err) => {
+        .catch((err: any) => {
           throw createGraphQLError(
             `No helicopters found with model ${args.model}`,
             {
