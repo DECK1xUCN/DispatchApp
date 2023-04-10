@@ -142,16 +142,26 @@ query MyQuery {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    alignment: Alignment.topRight,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30.0, vertical: 10),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
-                      ),
-                      child: const Text('New Flight'),
-                      onPressed: () {},
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.refresh,
+                              size: 42,
+                              color: Color.fromRGBO(163, 160, 251, 1),
+                            )),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
+                          ),
+                          child: const Text('New Flight'),
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
                   ),
                   Container(
