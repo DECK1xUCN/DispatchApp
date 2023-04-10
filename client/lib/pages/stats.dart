@@ -3,18 +3,17 @@ import 'dart:math';
 import 'package:client/classes/CardContent.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/src/rendering/box.dart';
 
 import '../widgets/card_widget.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+class Stats extends StatefulWidget {
+  const Stats({Key? key}) : super(key: key);
 
   @override
-  State<Dashboard> createState() => _SidebarState();
+  State<Stats> createState() => _SidebarState();
 }
 
-class _SidebarState extends State<Dashboard> {
+class _SidebarState extends State<Stats> {
   String user = 'John Doe';
   String title = 'Airport Flight Officer';
   final List<FlSpot> dummyData1 = List.generate(8, (index) {
@@ -25,15 +24,15 @@ class _SidebarState extends State<Dashboard> {
       title: 'Dispatched flights',
       subtitle: '7',
       icon: Icons.airplanemode_active,
-      onTap: () => print('test'));
+      onTap: () => {});
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
         color: Color(0xff72719b), fontWeight: FontWeight.w400, fontSize: 16);
 
-    Widget text = Text('');
-    for(int i = 1; i <32; i++) {
-      if(value == i) {
+    Widget text = const Text('');
+    for (int i = 1; i < 32; i++) {
+      if (value == i) {
         text = Text('$i', style: style);
       }
     }
@@ -68,14 +67,15 @@ class _SidebarState extends State<Dashboard> {
                         children: [
                           Text(
                             "Welcome, $user",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 40,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
                             title,
-                            style: TextStyle(fontSize: 20, color: Colors.black),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.black),
                           ),
                         ],
                       ),

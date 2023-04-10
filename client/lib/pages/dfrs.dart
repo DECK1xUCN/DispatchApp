@@ -67,8 +67,6 @@ class _DFRsState extends State<DFRs> {
       hoistOperator: 'BRA',
       dailyUpdate: true,
     ),
-
-
   ];
 
   List<Widget> generateRows() {
@@ -94,65 +92,65 @@ class _DFRsState extends State<DFRs> {
                 Expanded(
                   child: Center(
                       child: Text(
-                        element.id.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    element.id.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                        element.model,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    element.model,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                        element.registration,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    element.registration,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                        DateFormat.yMMMMd().format(element.date),
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    DateFormat.yMMMMd().format(element.date),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                        element.pilot,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    element.pilot,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                        element.hoistOperator,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    element.hoistOperator,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
                 Expanded(
                   child: Center(
                       child: Text(
-                        element.dailyUpdate.toString(),
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                      )),
+                    element.dailyUpdate.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  )),
                 ),
               ],
             )),
@@ -183,15 +181,14 @@ class _DFRsState extends State<DFRs> {
             ),
             Container(
               alignment: Alignment.topRight,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 30.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
                 ),
                 child: const Text('New Report'),
-                onPressed: () {
-                },
+                onPressed: () {},
               ),
             ),
             Container(
@@ -218,8 +215,8 @@ class _DFRsState extends State<DFRs> {
                           height: 50,
                           decoration: const BoxDecoration(
                             border: Border(
-                              bottom: BorderSide(
-                                  width: 1.5, color: Colors.white),
+                              bottom:
+                                  BorderSide(width: 1.5, color: Colors.white),
                             ),
                           ),
                           child: Row(
