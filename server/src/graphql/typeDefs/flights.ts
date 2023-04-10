@@ -4,9 +4,10 @@ const flightTypeDefs = gql`
   type Query {
     flights: [Flight!]!
     flight(id: Int!): Flight!
+    flightWhereDailyReportId(dailyReportId: Int!): [Flight!]!
   }
   type Mutation {
-    createFlight(data: CreateFlightInput): Flight!
+    createFlight(data: CreateFlightInput!): Flight!
     updateFlight(id: Int!, data: UpdateFlightInput!): Flight!
   }
   type Flight {
@@ -40,7 +41,7 @@ const flightTypeDefs = gql`
   input CreateFlightInput {
     flightNumber: String!
     fromId: Int!
-    viaId: Int!
+    viaId: [Int!]!
     toId: Int!
     etd: DateTime!
     rotorStart: DateTime

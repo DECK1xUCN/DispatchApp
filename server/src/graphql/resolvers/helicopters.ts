@@ -5,6 +5,37 @@ import { createGraphQLError } from "graphql-yoga";
 
 const helicopterResolver = {
   Query: {
+    helicoptersWhereModel: async (
+      _parent: any,
+      args: { model: string },
+      context: Context
+    ) => {
+      const helicopters = await context.prisma.helicopter
+        .findMany({
+          where: { model: args.model },
+        })
+        .catch((err) => {
+          throw createGraphQLError(
+            `No helicopters found with model ${args.model}`,
+            {
+              extensions: {
+                code: "500",
+              },
+            }
+          );
+        });
+      if (!helicopters) {
+        throw createGraphQLError(
+          `No helicopters found with model ${args.model}`,
+          {
+            extensions: {
+              code: "404",
+            },
+          }
+        );
+      }
+      return helicopters;
+    },
     /**
      * Retrieves a list of all helicopters.
      *
