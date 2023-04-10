@@ -139,6 +139,7 @@ query MyQuery {
           return Scaffold(
             backgroundColor: Colors.white,
             floatingActionButton: FloatingActionButton.extended(
+              heroTag: 'flightsButton',
               onPressed: () {},
               backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
               label: const Text('Generate DFR'),
