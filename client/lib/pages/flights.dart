@@ -134,7 +134,6 @@ query MyQuery {
           }
 
           List? flightList = result.data?["flights"];
-          print(flightList?.length);
           return Scaffold(
             backgroundColor: Colors.white,
             body: SafeArea(
