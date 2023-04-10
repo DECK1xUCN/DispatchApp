@@ -14,7 +14,7 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
   void getDashboardData() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     Navigator.pushReplacementNamed(context, '/home', arguments: {'test': true});
   }
 
