@@ -244,7 +244,7 @@ query MyQuery {
                                   ],
                                 ),
                               ),
-                              ...?generateRows(flightList)
+                              ...generateRows(flightList)
                             ],
                           ),
                         ),
