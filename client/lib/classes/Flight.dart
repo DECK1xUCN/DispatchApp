@@ -14,4 +14,11 @@ class Flight {
     required this.via,
     required this.to,
   });
+
+  viaToString(){
+    var returnString = '';
+    for (var location in via) {
+      returnString += '${location.toString()} ';
+    }
+  }
 }
