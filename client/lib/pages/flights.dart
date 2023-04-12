@@ -1,6 +1,7 @@
 import 'package:client/classes/Flight.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -130,8 +131,14 @@ query MyQuery {
                     child: Text("An error occurred, check the console :(")));
           }
           if (result.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return const Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                child: SpinKitFoldingCube(
+                  color: Color.fromRGBO(163, 160, 251, 1),
+                  size: 50.0,
+                ),
+              ),
             );
           }
 
@@ -155,7 +162,9 @@ query MyQuery {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              refetch!();
+                            },
                             icon: const Icon(
                               Icons.refresh,
                               size: 42,
