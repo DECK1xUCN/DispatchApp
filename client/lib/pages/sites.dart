@@ -22,7 +22,7 @@ query MyQuery {
   """;
 
     String createSite = """   
-mutation MyMutation {
+mutation MyMutation(\$siteName: String!) {
   createSite(data: {name: \$siteName}) {
     id
     name
@@ -60,11 +60,7 @@ mutation MyMutation {
 
     final addSite = useMutation(
       MutationOptions(
-        document: gql(createSite), // this is the mutation string you just created
-        // or do something with the result.data on completion
-        onCompleted: (dynamic resultData) {
-          print(resultData);
-        },
+        document: gql(createSite),
       ),
     );
 
@@ -134,6 +130,7 @@ mutation MyMutation {
                         TextFormField(
                           onSaved: (value) {
                             addSite.runMutation({'siteName': value});
+                            Navigator.pop(context);
                           },
                           style: const TextStyle(color: Colors.black),
                           decoration: const InputDecoration(
