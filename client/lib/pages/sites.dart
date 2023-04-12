@@ -72,8 +72,6 @@ mutation MyMutation {
       List<Location> sites = [];
 
       for (var site in list) {
-        List<Location> via = [];
-
         sites.add(Location(
           id: site['id'],
           name: site['name'],
