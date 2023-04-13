@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:client/classes/Location.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../classes/Flight.dart';
 
@@ -33,6 +34,7 @@ class _FlightFormState extends State<FlightForm> {
     "H"
   ];
   String dropdownValue = _delayCodes.first;
+
   // Data for the Via Sites
   List<Location> _selectedLocations = [];
 
@@ -60,8 +62,6 @@ class _FlightFormState extends State<FlightForm> {
       isSwitched = !isSwitched;
     });
   }
-
-
 
   @override
   void dispose() {
@@ -130,8 +130,6 @@ query MyQuery {
             );
           }
 
-
-
           List<Location> _locations = [];
 
           List? list = result.data?["heliports"];
@@ -150,34 +148,40 @@ query MyQuery {
           flight.notes = result.data?["flight"]["notes"];
           flight.pax = result.data?["flight"]["pax"];
           flight.paxTax = result.data?["flight"]["paxTax"];
-          flight.rotorStart = DateTime.parse(result.data?["flight"]["rotorStart"]);
-          flight.rotorStop = DateTime.parse(result.data?["flight"]["rotorStop"]);
-
+          flight.rotorStart =
+              DateTime.parse(result.data?["flight"]["rotorStart"]);
+          flight.rotorStop =
+              DateTime.parse(result.data?["flight"]["rotorStop"]);
 
           // Load the data from the query into the _locations list
           for (var location in list!) {
             print(location);
-            _locations.add(Location(id: location["id"], name: location["name"]));
+            _locations
+                .add(Location(id: location["id"], name: location["name"]));
             print(_locations.length);
           }
           // Set the initial data for the TextFormFields
           _controllerFlightNumber.text = flight.flightnumber;
-          _controllerETD.text = ("${flight.etd.hour.toString().padLeft(2, '0')}:${flight.etd.minute.toString().padLeft(2, '0')}");
+          _controllerETD.text =
+              ("${flight.etd.hour.toString().padLeft(2, '0')}:${flight.etd.minute.toString().padLeft(2, '0')}");
           _controllerRotorStart.text = flight.rotorStart == null
               ? _controllerETD.text
               : ("${flight.rotorStart?.hour.toString().padLeft(2, '0')}:${flight.rotorStart?.minute.toString().padLeft(2, '0')}");
           _controllerATD.text = flight.atd == null
               ? _controllerETD.text
               : ("${flight.atd?.hour.toString().padLeft(2, '0')}:${flight.atd?.minute.toString().padLeft(2, '0')}");
-          _controllerETA.text = ("${flight.eta?.hour.toString().padLeft(2, '0')}:${flight.eta?.minute.toString().padLeft(2, '0')}");
+          _controllerETA.text =
+              ("${flight.eta?.hour.toString().padLeft(2, '0')}:${flight.eta?.minute.toString().padLeft(2, '0')}");
           _controllerRotorStop.text = flight.rotorStop == null
               ? _controllerETA.text
               : ("${flight.rotorStop?.hour.toString().padLeft(2, '0')}:${flight.rotorStop?.minute.toString().padLeft(2, '0')}");
           _controllerATA.text = flight.ata == null
               ? _controllerETA.text
               : ("${flight.ata?.hour.toString().padLeft(2, '0')}:${flight.ata?.minute.toString().padLeft(2, '0')}");
-          _controllerBlockTime.text = "${flight.rotorStop?.difference(flight.rotorStart!).inMinutes.toString()}";
-          _controllerFlightTime.text = "${flight.ata?.difference(flight.etd).inMinutes.toString()}";
+          _controllerBlockTime.text =
+              "${flight.rotorStop?.difference(flight.rotorStart!).inMinutes.toString()}";
+          _controllerFlightTime.text =
+              "${flight.ata?.difference(flight.etd).inMinutes.toString()}";
           _controllerDelayAmount.text = flight.delayMin.toString();
           _controllerDelayReason.text = flight.delayDesc.toString();
           _controllerPAX.text = flight.pax.toString();
@@ -199,18 +203,19 @@ query MyQuery {
 
           if (flight.delay == true) {
             isSwitched = true;
-            _controllerDelayAmount.text = "${flight.ata?.difference(flight.etd!).inMinutes.toString()}";
+            _controllerDelayAmount.text =
+                "${flight.ata?.difference(flight.etd!).inMinutes.toString()}";
             _controllerDelayReason.text = flight.delayDesc.toString();
           }
 
-
-
           if (flight.from != null) {
-            selectedFrom = _locations.indexWhere((element) => element.id == flight.from.id);
+            selectedFrom = _locations
+                .indexWhere((element) => element.id == flight.from.id);
           }
 
           if (flight.to != null) {
-            selectedTo = _locations.indexWhere((element) => element.id == flight.to.id);
+            selectedTo =
+                _locations.indexWhere((element) => element.id == flight.to.id);
           }
 
           return Scaffold(
