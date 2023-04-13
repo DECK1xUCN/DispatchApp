@@ -23,6 +23,7 @@ class _FlightsState extends State<Flights> {
       }
 
       flights.add(Flight(
+          id: flight['id'],
           etd: DateTime.parse(flight['etd']),
           flightnumber: flight['flightNumber'],
           from:
@@ -98,6 +99,7 @@ class _FlightsState extends State<Flights> {
   String flightsQuery = """
 query MyQuery {
   flights {
+    id
     etd
     flightNumber
     from {
