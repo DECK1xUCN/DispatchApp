@@ -118,11 +118,11 @@ query MyQuery(\$flightId: Int!) {
     }
 
     TextEditingController controllerETD = TextEditingController(text: DateFormat('HH:mm').format(formState.value['etd']));
-    TextEditingController controllerRotorStart = TextEditingController();
-    TextEditingController controllerATD = TextEditingController();
-    TextEditingController controllerETA = TextEditingController();
-    TextEditingController controllerRotorStop = TextEditingController();
-    TextEditingController controllerATA = TextEditingController();
+    TextEditingController controllerRotorStart = TextEditingController(text: DateFormat('HH:mm').format(formState.value['rotorStart']));
+    TextEditingController controllerATD = TextEditingController(text: DateFormat('HH:mm').format(formState.value['atd']));
+    TextEditingController controllerETA = TextEditingController(text: DateFormat('HH:mm').format(formState.value['eta']));
+    TextEditingController controllerRotorStop = TextEditingController(text: DateFormat('HH:mm').format(formState.value['rotorStop']));
+    TextEditingController controllerATA = TextEditingController(text: DateFormat('HH:mm').format(formState.value['ata']));
     TextEditingController controllerDelayReason = TextEditingController();
     TextEditingController controllerPAX = TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax = TextEditingController(text: formState.value['paxTax'].toString());
