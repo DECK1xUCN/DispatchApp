@@ -295,6 +295,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                  readOnly: true,
                                   // initialValue: formState.value['etd'].toString(),
                                   validator: (value) {
                                     if (value!.isEmpty) {
@@ -355,7 +356,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
-                                readOnly: true,
+                                  readOnly: true,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
@@ -414,6 +415,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                  readOnly: true,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
@@ -477,6 +479,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                  readOnly: true,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
@@ -534,6 +537,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                  readOnly: true,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
@@ -592,6 +596,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                  readOnly: true,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
@@ -658,6 +663,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                readOnly: true,
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "This field cannot be empty";
@@ -694,6 +700,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                readOnly: true,
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "This field cannot be empty";
@@ -753,6 +760,7 @@ query MyQuery(\$flightId: Int!) {
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: TextFormField(
+                                    readOnly: true,
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return "This field must not be empty";
