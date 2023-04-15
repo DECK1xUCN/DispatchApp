@@ -18,9 +18,6 @@ class FlightForm extends HookWidget {
 
     TimeOfDay time = const TimeOfDay(hour: 24, minute: 00);
 
-    // Data for the Via Sites
-    List<Location> selectedLocations = [];
-
     String flightQuery = """
 query MyQuery(\$flightId: Int!) {
   flight(id: \$flightId) {
@@ -41,8 +38,22 @@ query MyQuery(\$flightId: Int!) {
     paxTax
     rotorStart
     rotorStop
+    from {
+      id
+    }
+    via {
+      id
+      name
+    }
+    to {
+      id
+    }
   }
   heliports {
+    name
+    id
+  }
+  sites {
     name
     id
   }
@@ -51,9 +62,7 @@ query MyQuery(\$flightId: Int!) {
 
     final readFlight = useQuery(
       QueryOptions(
-        document: gql(flightQuery),
-        variables: {'flightId': flight.id}
-      ),
+          document: gql(flightQuery), variables: {'flightId': flight.id}),
     );
     final result = readFlight.result;
 
@@ -76,19 +85,34 @@ query MyQuery(\$flightId: Int!) {
     }
 
     List<Location> locations = [];
+    List<Location> sites = [];
 
-    List? list = result.data?["heliports"];
+    List? listHeliports = result.data?["heliports"];
+    List? listSites = result.data?["sites"];
 
     // Load the data from the query into the _locations list
-    for (var location in list!) {
+    for (var location in listHeliports!) {
       locations.add(Location(id: location["id"], name: location["name"]));
+    }
+
+    for (var site in listSites!) {
+      sites.add(Location(id: site["id"], name: site["name"]));
     }
 
     final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
+    List<Location> viaLocations = [];
+
+    for (var via in result.data?["flight"]["via"]) {
+      viaLocations.add(Location(id: via["id"], name: via["name"]));
+    }
+
     final formState = useState({
-      'selectedFrom': locations.indexWhere((element) => element.id == flight.from.id),
-      'selectedTo': locations.indexWhere((element) => element.id == flight.to.id),
+      'selectedFrom': locations
+          .indexWhere((obj) => obj.id == result.data?['flight']['from']['id']),
+      'selectedTo': locations
+          .indexWhere((obj) => obj.id == result.data?['flight']['to']['id']),
+      'via': viaLocations,
       'dropdownValue': delayCodes.first,
       'ata': DateTime.parse(result.data?["flight"]["ata"]),
       'atd': DateTime.parse(result.data?["flight"]["atd"]),
@@ -109,24 +133,32 @@ query MyQuery(\$flightId: Int!) {
       'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
     });
 
-    print(formState.value['ata']);
-
     final isDelayed = useState(false);
     void toggleDelay(value) {
       isDelayed.value = !isDelayed.value;
     }
 
-    TextEditingController controllerETD = TextEditingController(text: DateFormat('HH:mm').format(formState.value['etd']));
-    TextEditingController controllerRotorStart = TextEditingController(text: DateFormat('HH:mm').format(formState.value['rotorStart']));
-    TextEditingController controllerATD = TextEditingController(text: DateFormat('HH:mm').format(formState.value['atd']));
-    TextEditingController controllerETA = TextEditingController(text: DateFormat('HH:mm').format(formState.value['eta']));
-    TextEditingController controllerRotorStop = TextEditingController(text: DateFormat('HH:mm').format(formState.value['rotorStop']));
-    TextEditingController controllerATA = TextEditingController(text: DateFormat('HH:mm').format(formState.value['ata']));
+    TextEditingController controllerETD = TextEditingController(
+        text: DateFormat('HH:mm').format(formState.value['etd']));
+    TextEditingController controllerRotorStart = TextEditingController(
+        text: DateFormat('HH:mm').format(formState.value['rotorStart']));
+    TextEditingController controllerATD = TextEditingController(
+        text: DateFormat('HH:mm').format(formState.value['atd']));
+    TextEditingController controllerETA = TextEditingController(
+        text: DateFormat('HH:mm').format(formState.value['eta']));
+    TextEditingController controllerRotorStop = TextEditingController(
+        text: DateFormat('HH:mm').format(formState.value['rotorStop']));
+    TextEditingController controllerATA = TextEditingController(
+        text: DateFormat('HH:mm').format(formState.value['ata']));
     TextEditingController controllerDelayReason = TextEditingController();
-    TextEditingController controllerPAX = TextEditingController(text: formState.value['pax'].toString());
-    TextEditingController controllerPAXTax = TextEditingController(text: formState.value['paxTax'].toString());
-    TextEditingController controllerCargo = TextEditingController(text: formState.value['cargoPP'].toString());
-    TextEditingController controllerHoistCycles = TextEditingController(text: formState.value['hoistCycles'].toString());
+    TextEditingController controllerPAX =
+        TextEditingController(text: formState.value['pax'].toString());
+    TextEditingController controllerPAXTax =
+        TextEditingController(text: formState.value['paxTax'].toString());
+    TextEditingController controllerCargo =
+        TextEditingController(text: formState.value['cargoPP'].toString());
+    TextEditingController controllerHoistCycles =
+        TextEditingController(text: formState.value['hoistCycles'].toString());
 
     useEffect(() {
       return () {
@@ -179,17 +211,16 @@ query MyQuery(\$flightId: Int!) {
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
                   MultiSelectDialogField(
-                    initialValue: flight.via,
-                    items: locations
+                    initialValue: formState.value['via'],
+                    items: sites
                         .map((e) => MultiSelectItem(e, e.toString()))
                         .toList(),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "You must select at least one site!";
+                        return "You must select at least one location!";
                       }
                       return null;
                     },
-
                     searchable: true,
                     listType: MultiSelectListType.CHIP,
                     decoration: BoxDecoration(
@@ -213,7 +244,9 @@ query MyQuery(\$flightId: Int!) {
 
                     //selectedItemsTextStyle: TextStyle(color: Colors.green),
                     onConfirm: (values) {
-                      selectedLocations = values;
+                      print(values);
+                      formState.value['via'] = values;
+                      formState.value = {...formState.value};
                     },
                   ),
                   const SizedBox(height: 20),
@@ -252,7 +285,7 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
-                                // initialValue: formState.value['etd'].toString(),
+                                  // initialValue: formState.value['etd'].toString(),
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
@@ -599,6 +632,9 @@ query MyQuery(\$flightId: Int!) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      const SizedBox(
+                        width: 150,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -671,9 +707,6 @@ query MyQuery(\$flightId: Int!) {
                             ),
                           ),
                         ],
-                      ),
-                      const SizedBox(
-                        width: 150,
                       )
                     ],
                   ),
