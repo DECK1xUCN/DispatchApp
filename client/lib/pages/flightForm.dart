@@ -329,13 +329,13 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      controllerETD.text = "$hours:$minutes";
+                                      formState.value['etd'] = DateTime(
+                                          formState.value['etd'].year,
+                                          formState.value['etd'].month,
+                                          formState.value['etd'].day,
+                                          newTime.hour,
+                                          newTime.minute);
+                                      formState.value = {...formState.value};
                                     }
                                   }),
                             ),
@@ -388,14 +388,13 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      controllerRotorStart.text =
-                                          "$hours:$minutes";
+                                      formState.value['rotorStart'] = DateTime(
+                                          formState.value['rotorStart'].year,
+                                          formState.value['rotorStart'].month,
+                                          formState.value['rotorStart'].day,
+                                          newTime.hour,
+                                          newTime.minute);
+                                      formState.value = {...formState.value};
                                     }
                                   }),
                             ),
@@ -448,13 +447,13 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      controllerATD.text = "$hours:$minutes";
+                                      formState.value['atd'] = DateTime(
+                                          formState.value['atd'].year,
+                                          formState.value['atd'].month,
+                                          formState.value['atd'].day,
+                                          newTime.hour,
+                                          newTime.minute);
+                                      formState.value = {...formState.value};
                                     }
                                   }),
                             ),
@@ -513,13 +512,13 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      controllerETA.text = "$hours:$minutes";
+                                      formState.value['eta'] = DateTime(
+                                          formState.value['eta'].year,
+                                          formState.value['eta'].month,
+                                          formState.value['eta'].day,
+                                          newTime.hour,
+                                          newTime.minute);
+                                      formState.value = {...formState.value};
                                     }
                                   }),
                             ),
@@ -572,13 +571,13 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      controllerATA.text = "$hours:$minutes";
+                                      formState.value['rotorStop'] = DateTime(
+                                          formState.value['rotorStop'].year,
+                                          formState.value['rotorStop'].month,
+                                          formState.value['rotorStop'].day,
+                                          newTime.hour,
+                                          newTime.minute);
+                                      formState.value = {...formState.value};
                                     }
                                   }),
                             ),
@@ -631,13 +630,13 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      controllerATA.text = "$hours:$minutes";
+                                      formState.value['ata'] = DateTime(
+                                          formState.value['ata'].year,
+                                          formState.value['ata'].month,
+                                          formState.value['ata'].day,
+                                          newTime.hour,
+                                          newTime.minute);
+                                      formState.value = {...formState.value};
                                     }
                                   }),
                             ),
