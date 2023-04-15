@@ -329,12 +329,25 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      formState.value['etd'] = DateTime(
+                                      DateTime newDateTime = DateTime(
                                           formState.value['etd'].year,
                                           formState.value['etd'].month,
                                           formState.value['etd'].day,
                                           newTime.hour,
                                           newTime.minute);
+                                      formState.value['etd'] = newDateTime;
+
+                                      TimeOfDay etd =
+                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay atd = TimeOfDay.fromDateTime(
+                                          formState.value['atd']);
+
+                                      int difference = etd.hour * 60 +
+                                          etd.minute -
+                                          atd.hour * 60 -
+                                          atd.minute;
+
+                                      formState.value['delayMin'] = difference;
                                       formState.value = {...formState.value};
                                     }
                                   }),
@@ -388,12 +401,27 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      formState.value['rotorStart'] = DateTime(
+                                      DateTime newDateTime = DateTime(
                                           formState.value['rotorStart'].year,
                                           formState.value['rotorStart'].month,
                                           formState.value['rotorStart'].day,
                                           newTime.hour,
                                           newTime.minute);
+                                      formState.value['rotorStart'] =
+                                          newDateTime;
+
+                                      TimeOfDay rotorStart =
+                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay rotorStopTime =
+                                          TimeOfDay.fromDateTime(
+                                              formState.value['rotorStop']);
+
+                                      int difference = rotorStopTime.hour * 60 +
+                                          rotorStopTime.minute -
+                                          rotorStart.hour * 60 -
+                                          rotorStart.minute;
+
+                                      formState.value['blockTime'] = difference;
                                       formState.value = {...formState.value};
                                     }
                                   }),
@@ -447,12 +475,37 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      formState.value['atd'] = DateTime(
+                                      DateTime newDateTime = DateTime(
                                           formState.value['atd'].year,
                                           formState.value['atd'].month,
                                           formState.value['atd'].day,
                                           newTime.hour,
                                           newTime.minute);
+                                      formState.value['atd'] = newDateTime;
+
+                                      TimeOfDay atd =
+                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay ata = TimeOfDay.fromDateTime(
+                                          formState.value['ata']);
+
+                                      int difference = ata.hour * 60 +
+                                          ata.minute -
+                                          atd.hour * 60 -
+                                          atd.minute;
+
+                                      formState.value['flightTime'] =
+                                          difference;
+
+                                      TimeOfDay etd = TimeOfDay.fromDateTime(
+                                          formState.value['etd']);
+
+                                      int difference2 = atd.hour * 60 +
+                                          atd.minute -
+                                          etd.hour * 60 -
+                                          etd.minute;
+
+                                      formState.value['delayMin'] = difference2;
+
                                       formState.value = {...formState.value};
                                     }
                                   }),
@@ -571,12 +624,27 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      formState.value['rotorStop'] = DateTime(
+                                      DateTime newDateTime = DateTime(
                                           formState.value['rotorStop'].year,
                                           formState.value['rotorStop'].month,
                                           formState.value['rotorStop'].day,
                                           newTime.hour,
                                           newTime.minute);
+                                      formState.value['rotorStop'] =
+                                          newDateTime;
+
+                                      TimeOfDay rotorStart =
+                                          TimeOfDay.fromDateTime(
+                                              formState.value['rotorStart']);
+                                      TimeOfDay rotorStopTime =
+                                          TimeOfDay.fromDateTime(newDateTime);
+
+                                      int difference = rotorStopTime.hour * 60 +
+                                          rotorStopTime.minute -
+                                          rotorStart.hour * 60 -
+                                          rotorStart.minute;
+
+                                      formState.value['blockTime'] = difference;
                                       formState.value = {...formState.value};
                                     }
                                   }),
@@ -630,12 +698,26 @@ query MyQuery(\$flightId: Int!) {
                                     if (newTime == null) {
                                       return;
                                     } else {
-                                      formState.value['ata'] = DateTime(
+                                      DateTime newDateTime = DateTime(
                                           formState.value['ata'].year,
                                           formState.value['ata'].month,
                                           formState.value['ata'].day,
                                           newTime.hour,
                                           newTime.minute);
+                                      formState.value['ata'] = newDateTime;
+
+                                      TimeOfDay atd = TimeOfDay.fromDateTime(
+                                          formState.value['atd']);
+                                      TimeOfDay ata =
+                                          TimeOfDay.fromDateTime(newDateTime);
+
+                                      int difference = ata.hour * 60 +
+                                          ata.minute -
+                                          atd.hour * 60 -
+                                          atd.minute;
+
+                                      formState.value['flightTime'] =
+                                          difference;
                                       formState.value = {...formState.value};
                                     }
                                   }),
