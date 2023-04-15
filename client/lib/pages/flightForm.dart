@@ -150,7 +150,8 @@ query MyQuery(\$flightId: Int!) {
         text: DateFormat('HH:mm').format(formState.value['rotorStop']));
     TextEditingController controllerATA = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['ata']));
-    TextEditingController controllerDelayReason = TextEditingController();
+    TextEditingController controllerDelayReason =
+        TextEditingController(text: formState.value['delayDesc']);
     TextEditingController controllerPAX =
         TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
