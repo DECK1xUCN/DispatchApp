@@ -16,8 +16,6 @@ class FlightForm extends HookWidget {
     Flight flight = ModalRoute.of(context)!.settings.arguments as Flight;
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
-    TimeOfDay time = const TimeOfDay(hour: 24, minute: 00);
-
     String flightQuery = """
 query MyQuery(\$flightId: Int!) {
   flight(id: \$flightId) {
@@ -317,7 +315,8 @@ query MyQuery(\$flightId: Int!) {
                                   onTap: () async {
                                     TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: time,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          formState.value['etd']),
                                       builder: (BuildContext context,
                                           Widget? child) {
                                         return MediaQuery(
@@ -375,7 +374,8 @@ query MyQuery(\$flightId: Int!) {
                                   onTap: () async {
                                     TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: time,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          formState.value['rotorStart']),
                                       builder: (BuildContext context,
                                           Widget? child) {
                                         return MediaQuery(
@@ -434,7 +434,8 @@ query MyQuery(\$flightId: Int!) {
                                   onTap: () async {
                                     TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: time,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          formState.value['atd']),
                                       builder: (BuildContext context,
                                           Widget? child) {
                                         return MediaQuery(
@@ -498,7 +499,8 @@ query MyQuery(\$flightId: Int!) {
                                   onTap: () async {
                                     TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: time,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          formState.value['eta']),
                                       builder: (BuildContext context,
                                           Widget? child) {
                                         return MediaQuery(
@@ -556,7 +558,8 @@ query MyQuery(\$flightId: Int!) {
                                   onTap: () async {
                                     TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: time,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          formState.value['rotorStop']),
                                       builder: (BuildContext context,
                                           Widget? child) {
                                         return MediaQuery(
@@ -575,12 +578,11 @@ query MyQuery(\$flightId: Int!) {
                                       String minutes = newTime.minute
                                           .toString()
                                           .padLeft(2, '0');
-                                      controllerRotorStop.text =
-                                          "$hours:$minutes";
+                                      controllerATA.text = "$hours:$minutes";
                                     }
                                   }),
                             ),
-                          ),
+                          )
                         ],
                       ),
                       Column(
@@ -615,7 +617,8 @@ query MyQuery(\$flightId: Int!) {
                                   onTap: () async {
                                     TimeOfDay? newTime = await showTimePicker(
                                       context: context,
-                                      initialTime: time,
+                                      initialTime: TimeOfDay.fromDateTime(
+                                          formState.value['ata']),
                                       builder: (BuildContext context,
                                           Widget? child) {
                                         return MediaQuery(
