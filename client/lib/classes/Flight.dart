@@ -4,14 +4,12 @@ class Flight {
   DateTime etd;
   String flightnumber;
   Location from;
-  List<Location> via;
   Location to;
 
   Flight({
     required this.etd,
     required this.flightnumber,
     required this.from,
-    required this.via,
     required this.to,
   });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../classes/Flight.dart';
+import 'delayCodes.dart';
 
 class FlightForm extends StatefulWidget {
   const FlightForm({Key? key}) : super(key: key);
@@ -39,20 +40,10 @@ class _FlightFormState extends State<FlightForm> {
     City(id: 3, name: "Dublin")
   ];
 
-  static final List<String> _delayCodes = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H"
-  ];
-  String dropdownValue = _delayCodes.first;
+  DelayCode dropdownValue = DelayCode.A_HeliWeather;
 
   // Data for the Via Sites
-  List<City> _selectedCities = [];
+  List<City> _selectedCities = [_cities[0]];
 
   // TextEditingControllers are used to set initial data in the TextFormFields and then get those data later
   final TextEditingController _controllerFlightNumber =
@@ -138,6 +129,7 @@ class _FlightFormState extends State<FlightForm> {
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
                   MultiSelectDialogField(
+                    initialValue: _selectedCities,
                     items:
                         _cities.map((e) => MultiSelectItem(e, e.name)).toList(),
                     validator: (value) {
@@ -735,7 +727,7 @@ class _FlightFormState extends State<FlightForm> {
                                 // Delay Reason
                                 width: 150,
                                 height: 60,
-                                child: DropdownButtonFormField<String>(
+                                child: DropdownButtonFormField<DelayCode>(
                                   value: dropdownValue,
                                   icon: const Icon(Icons.arrow_downward),
                                   dropdownColor: Colors.white,
@@ -743,18 +735,24 @@ class _FlightFormState extends State<FlightForm> {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (String? value) {
+                                  onChanged: (DelayCode? value) {
                                     // This is called when the user selects an item.
                                     setState(() {
                                       dropdownValue = value!;
                                     });
                                   },
-                                  items: _delayCodes
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
+                                  items: DelayCode.values
+                                      .map<DropdownMenuItem<DelayCode>>(
+                                          (DelayCode value) {
+                                    return DropdownMenuItem<DelayCode>(
                                       value: value,
-                                      child: Text(value),
+                                      child: Text(
+                                          value
+                                              .toString()
+                                              .split('.')
+                                              .last
+                                              .replaceAll('_',
+                                              ' ')),
                                     );
                                   }).toList(),
                                 ),
@@ -939,6 +937,7 @@ class _FlightFormState extends State<FlightForm> {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
+                        print(_selectedCities);
                         // Validate returns true if the form is valid, or false otherwise.
                         if (_formKey.currentState!.validate() &&
                             selectedFrom != -1 &&
