@@ -14,6 +14,17 @@ model Flight {
 }
 
 model Site {
-  id      Int      @id @default(autoincrement())
-  flights Flight[]
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  flights   Flight[]
+  locations Location[]
+}
+
+model Location {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  lat   Decimal
+  long  Decimal
+  type  String
+  sites Site[]
 }

@@ -1,5 +1,8 @@
 import flightsTypeDefs from "./flights";
+import locationsTypeDefs from "./locations";
 
-const typeDefs = [flightsTypeDefs];
+import siteTypeDefs from "./sites";
+
+const typeDefs = [flightsTypeDefs, siteTypeDefs, locationsTypeDefs];
 
 export default typeDefs;

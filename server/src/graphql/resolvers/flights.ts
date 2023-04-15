@@ -10,10 +10,6 @@ const flightResolver = {
       });
       return flights;
     },
-    sites: async (parent: any, args: any, context: Context) => {
-      const sites = await context.prisma.site.findMany();
-      return sites;
-    },
   },
   Mutation: {
     createFlight: async (parent: any, { input }: any, context: Context) => {
