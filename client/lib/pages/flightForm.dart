@@ -99,10 +99,10 @@ query MyQuery(\$flightId: Int!) {
 
     final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
-    List<Location> viaLocations = [];
+    List<String> viaLocations = [];
 
     for (var via in result.data?["flight"]["via"]) {
-      viaLocations.add(Location(id: via["id"], name: via["name"]));
+      viaLocations.add(via["name"]);
     }
 
     final formState = useState({
@@ -218,10 +218,10 @@ query MyQuery(\$flightId: Int!) {
                   const SizedBox(height: 20),
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
-                  MultiSelectDialogField(
+                  MultiSelectDialogField<String>(
                     initialValue: formState.value['via'],
                     items: sites
-                        .map((e) => MultiSelectItem(e, e.toString()))
+                        .map((e) => MultiSelectItem(e.toString(), e.toString()))
                         .toList(),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -1009,6 +1009,8 @@ query MyQuery(\$flightId: Int!) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')),
                           );
+
+                          print(formState.value);
                         }
                       },
                       child: const Text('Submit'),
