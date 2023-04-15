@@ -17,7 +17,6 @@ class FlightForm extends HookWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
     TimeOfDay time = const TimeOfDay(hour: 24, minute: 00);
-    int id = 1;
 
     // Data for the Via Sites
     List<Location> selectedLocations = [];
@@ -88,8 +87,8 @@ query MyQuery(\$flightId: Int!) {
     final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
     final formState = useState({
-      'selectedFrom': -1,
-      'selectedTo': -1,
+      'selectedFrom': locations.indexWhere((element) => element.id == flight.from.id),
+      'selectedTo': locations.indexWhere((element) => element.id == flight.to.id),
       'dropdownValue': delayCodes.first,
       'ata': DateTime.parse(result.data?["flight"]["ata"]),
       'atd': DateTime.parse(result.data?["flight"]["atd"]),
@@ -210,6 +209,7 @@ query MyQuery(\$flightId: Int!) {
                     title: Text("Locations",
                         style: Theme.of(context).textTheme.titleLarge),
                     backgroundColor: Colors.white,
+                    searchIcon: const Icon(Icons.search, color: Colors.black),
 
                     //selectedItemsTextStyle: TextStyle(color: Colors.green),
                     onConfirm: (values) {
@@ -257,8 +257,10 @@ query MyQuery(\$flightId: Int!) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
                                     }
-                                    if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                    try {
+                                      DateFormat('HH:mm').parse(value);
+                                    } catch (e) {
+                                      return "The must write the time with the following format HH:MM";
                                     }
                                     return null;
                                   },
@@ -310,12 +312,13 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
+                                readOnly: true,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
                                     }
                                     if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                      return "The must write the time with the following format HH:MM";
                                     }
                                     return null;
                                   },
@@ -373,7 +376,7 @@ query MyQuery(\$flightId: Int!) {
                                       return "This field cannot be empty";
                                     }
                                     if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                      return "The must write the time with the following format HH:MM";
                                     }
                                     return null;
                                   },
@@ -436,7 +439,7 @@ query MyQuery(\$flightId: Int!) {
                                       return "This field cannot be empty";
                                     }
                                     if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                      return "The must write the time with the following format HH:MM";
                                     }
                                     return null;
                                   },
@@ -493,7 +496,7 @@ query MyQuery(\$flightId: Int!) {
                                       return "This field cannot be empty";
                                     }
                                     if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                      return "The must write the time with the following format HH:MM";
                                     }
                                     return null;
                                   },
@@ -551,7 +554,7 @@ query MyQuery(\$flightId: Int!) {
                                       return "This field cannot be empty";
                                     }
                                     if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                      return "The must write the time with the following format HH:MM";
                                     }
                                     return null;
                                   },
@@ -609,47 +612,26 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "This field cannot be empty";
-                                    }
-                                    if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
-                                    }
-                                    return null;
-                                  },
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "This field cannot be empty";
+                                  }
+                                  try {
+                                    int.parse(value);
+                                  } catch (e) {
+                                    return "Filed must be a number";
+                                  }
+                                  return null;
+                                },
                                   autofocus: false,
                                   // controller: controllerBlockTime,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-                                  onTap: () async {
-                                    TimeOfDay? newTime = await showTimePicker(
-                                      context: context,
-                                      initialTime: time,
-                                      builder: (BuildContext context,
-                                          Widget? child) {
-                                        return MediaQuery(
-                                          data: MediaQuery.of(context).copyWith(
-                                              alwaysUse24HourFormat: true),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-                                    if (newTime == null) {
-                                      return;
-                                    } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      // controllerBlockTime.text =
-                                      //     "$hours:$minutes";
-                                    }
-                                  }),
+
+                                  keyboardType: TextInputType.number,
+                                  ),
                             ),
                           ),
                         ],
@@ -671,8 +653,10 @@ query MyQuery(\$flightId: Int!) {
                                     if (value!.isEmpty) {
                                       return "This field cannot be empty";
                                     }
-                                    if (!value.contains(':')) {
-                                      return "This field must contain this ':' character";
+                                    try {
+                                      int.parse(value);
+                                    } catch (e) {
+                                      return "Filed must be a number";
                                     }
                                     return null;
                                   },
@@ -682,32 +666,8 @@ query MyQuery(\$flightId: Int!) {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-                                  onTap: () async {
-                                    TimeOfDay? newTime = await showTimePicker(
-                                      context: context,
-                                      initialTime: time,
-                                      builder: (BuildContext context,
-                                          Widget? child) {
-                                        return MediaQuery(
-                                          data: MediaQuery.of(context).copyWith(
-                                              alwaysUse24HourFormat: true),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-                                    if (newTime == null) {
-                                      return;
-                                    } else {
-                                      String hours = newTime.hour
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      String minutes = newTime.minute
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      // controllerFlightTime.text =
-                                          // "$hours:$minutes";
-                                    }
-                                  }),
+                                  keyboardType: TextInputType.number,
+                                  ),
                             ),
                           ),
                         ],
