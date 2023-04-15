@@ -671,7 +671,10 @@ query MyQuery(\$flightId: Int!) {
                                     return "This field cannot be empty";
                                   }
                                   try {
-                                    int.parse(value);
+                                    int newVal = int.parse(value);
+                                    if( newVal < 0) {
+                                      return "Block Time cannot be negative";
+                                    }
                                   } catch (e) {
                                     return "Filed must be a number";
                                   }
@@ -708,7 +711,10 @@ query MyQuery(\$flightId: Int!) {
                                     return "This field cannot be empty";
                                   }
                                   try {
-                                    int.parse(value);
+                                    int newVal = int.parse(value);
+                                    if( newVal < 0) {
+                                      return "Flight Time cannot be negative";
+                                    }
                                   } catch (e) {
                                     return "Filed must be a number";
                                   }
@@ -768,7 +774,10 @@ query MyQuery(\$flightId: Int!) {
                                         return "This field must not be empty";
                                       }
                                       try {
-                                        int.parse(value);
+                                        int newVal = int.parse(value);
+                                        if( newVal < 0) {
+                                          return "Delay Time cannot be negative";
+                                        }
                                       } catch (e) {
                                         return "Filed must be a number";
                                       }
@@ -880,7 +889,10 @@ query MyQuery(\$flightId: Int!) {
                                   return "This field must not be empty";
                                 }
                                 try {
-                                  int.parse(value);
+                                  int newVal = int.parse(value);
+                                  if( newVal < 0) {
+                                    return "PAX cannot be negative";
+                                  }
                                 } catch (e) {
                                   return "Filed must be a number";
                                 }
@@ -912,7 +924,10 @@ query MyQuery(\$flightId: Int!) {
                                   return "This field must not be empty";
                                 }
                                 try {
-                                  int.parse(value);
+                                  int newVal = int.parse(value);
+                                  if( newVal < 0) {
+                                    return "PAX Tax cannot be negative";
+                                  }
                                 } catch (e) {
                                   return "Filed must be a number";
                                 }
@@ -946,7 +961,10 @@ query MyQuery(\$flightId: Int!) {
                                 try {
                                   int.parse(value);
                                 } catch (e) {
-                                  return "Filed must be a number";
+                                  int newVal = int.parse(value);
+                                  if( newVal < 0) {
+                                    return "Cargo cannot be negative";
+                                  }
                                 }
                                 return null;
                               },
@@ -979,7 +997,10 @@ query MyQuery(\$flightId: Int!) {
                               return "This field must not be empty";
                             }
                             try {
-                              int.parse(value);
+                              int newVal = int.parse(value);
+                              if( newVal < 0) {
+                                return "Hoist Cycles cannot be negative";
+                              }
                             } catch (e) {
                               return "Filed must be a number";
                             }
