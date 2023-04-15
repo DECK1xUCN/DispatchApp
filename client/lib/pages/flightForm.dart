@@ -160,6 +160,12 @@ query MyQuery(\$flightId: Int!) {
         TextEditingController(text: formState.value['cargoPP'].toString());
     TextEditingController controllerHoistCycles =
         TextEditingController(text: formState.value['hoistCycles'].toString());
+    TextEditingController controllerBlocktime =
+        TextEditingController(text: formState.value['blockTime'].toString());
+    TextEditingController controllerFlighttime =
+        TextEditingController(text: formState.value['flightTime'].toString());
+    TextEditingController controllerDelayMin =
+        TextEditingController(text: formState.value['delayMin'].toString());
 
     useEffect(() {
       return () {
@@ -174,6 +180,9 @@ query MyQuery(\$flightId: Int!) {
         controllerPAXTax.dispose();
         controllerCargo.dispose();
         controllerHoistCycles.dispose();
+        controllerBlocktime.dispose();
+        controllerFlighttime.dispose();
+        controllerDelayMin.dispose();
       };
     }, []);
 
@@ -660,15 +669,14 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   return null;
                                 },
-                                  autofocus: false,
-                                  // controller: controllerBlockTime,
-                                  style: const TextStyle(color: Colors.black),
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-
-                                  keyboardType: TextInputType.number,
-                                  ),
+                                autofocus: false,
+                                controller: controllerBlocktime,
+                                style: const TextStyle(color: Colors.black),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
                             ),
                           ),
                         ],
@@ -686,25 +694,25 @@ query MyQuery(\$flightId: Int!) {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextFormField(
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "This field cannot be empty";
-                                    }
-                                    try {
-                                      int.parse(value);
-                                    } catch (e) {
-                                      return "Filed must be a number";
-                                    }
-                                    return null;
-                                  },
-                                  autofocus: false,
-                                  // controller: controllerFlightTime,
-                                  style: const TextStyle(color: Colors.black),
-                                  decoration: const InputDecoration(
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  keyboardType: TextInputType.number,
-                                  ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "This field cannot be empty";
+                                  }
+                                  try {
+                                    int.parse(value);
+                                  } catch (e) {
+                                    return "Filed must be a number";
+                                  }
+                                  return null;
+                                },
+                                autofocus: false,
+                                controller: controllerFlighttime,
+                                style: const TextStyle(color: Colors.black),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
                             ),
                           ),
                         ],
@@ -757,7 +765,7 @@ query MyQuery(\$flightId: Int!) {
                                       return null;
                                     },
                                     autofocus: false,
-                                    // controller: controllerDelayAmount,
+                                    controller: controllerDelayMin,
                                     style: const TextStyle(color: Colors.black),
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
