@@ -1,92 +1,25 @@
 import gql from "graphql-tag";
 
-const flightTypeDefs = gql`
-  type Query {
-    flights: [Flight!]!
-    flight(id: Int!): Flight!
-  }
-  type Mutation {
-    createFlight(data: CreateFlightInput): Flight!
-    updateFlight(id: Int!, data: UpdateFlightInput!): Flight!
-  }
+const flightsTypeDefs = gql`
   type Flight {
     id: Int!
-    flightNumber: String!
-    from: Heliport!
-    via: [Site!]!
-    to: Heliport!
-    etd: DateTime!
-    rotorStart: DateTime!
-    atd: DateTime!
-    eta: DateTime!
-    rotorStop: DateTime!
-    ata: DateTime!
-    blockTime: Int!
-    flightTime: Int!
-    delay: Boolean!
-    delayMin: Int!
-    delayCode: String!
-    delayDesc: String!
-    pax: Int!
-    paxTax: Int!
-    cargoPP: Int!
-    hoistCycles: Int!
-    notes: String!
-    dailyReport: DailyReport!
-    dailyUpdate: DailyUpdate
+    sites: [Site!]
   }
 
-  # Input types
+  type Site {
+    id: Int!
+    flights: [Flight!]
+  }
+
   input CreateFlightInput {
-    flightNumber: String!
-    fromId: Int!
-    viaId: Int!
-    toId: Int!
-    etd: DateTime!
-    rotorStart: DateTime
-    atd: DateTime!
-    eta: DateTime!
-    rotorStop: DateTime
-    ata: DateTime
-    blockTime: Int
-    flightTime: Int
-    delay: Boolean!
-    delayMin: Int
-    delayCode: String
-    delayDesc: String
-    pax: Int!
-    paxTax: Int!
-    cargoPP: Int!
-    hoistCycles: Int!
-    notes: String
-    dailyReportId: Int!
-    dailyUpdateId: Int
+    sites: [Int!]!
   }
-  input UpdateFlightInput {
-    flightNumber: String
-    fromId: Int
-    toId: Int
-    etd: DateTime
-    rotorStart: DateTime
-    atd: DateTime
-    eta: DateTime
-    rotorStop: DateTime
-    ata: DateTime
-    blockTime: Int
-    flightTime: Int
-    delay: Boolean
-    delayMin: Int
-    delayCode: String
-    delayDesc: String
-    pax: Int
-    paxTax: Int
-    cargoPP: Int
-    hoistCycles: Int
-    notes: String
-    dailyReportId: Int!
-    dailyUpdateId: Int
+  type Mutation {
+    createFlight(input: CreateFlightInput!): Flight!
   }
-  scalar DateTime
+  type Query {
+    flights: [Flight!]!
+    sites: [Site!]!
+  }
 `;
-
-export default flightTypeDefs;
+export default flightsTypeDefs;
