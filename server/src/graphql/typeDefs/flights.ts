@@ -5,6 +5,7 @@ const flightsTypeDefs = gql`
     id: Int!
     sites: [Site!]
     helicopter: Helicopter!
+    pilot: Pilot!
   }
 
   input CreateFlightInput {

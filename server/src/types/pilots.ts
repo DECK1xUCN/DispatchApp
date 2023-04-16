@@ -3,6 +3,6 @@ export type Pilot = {
   name: string;
 };
 
-export interface PilotInput {
+export interface CreatePilot {
   name: string;
 }

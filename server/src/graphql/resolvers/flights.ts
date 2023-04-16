@@ -6,6 +6,8 @@ const flightResolver = {
       const flights = await context.prisma.flight.findMany({
         include: {
           sites: true,
+          helicopter: true,
+          pilot: true,
         },
       });
       return flights;
@@ -23,6 +25,8 @@ const flightResolver = {
         },
         include: {
           sites: true,
+          helicopter: true,
+          pilot: true,
         },
       });
       return createdFlight;
