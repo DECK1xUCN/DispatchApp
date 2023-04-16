@@ -9,11 +9,7 @@ export default {
         include: { locations: true, flights: true },
       })
       .catch(() => {
-        throw createGraphQLError("Sites not found", {
-          extensions: {
-            code: "404",
-          },
-        });
+        throw createGraphQLError("Sites not found");
       });
 
     return sites;

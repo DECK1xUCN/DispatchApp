@@ -4,11 +4,7 @@ const flightsTypeDefs = gql`
   type Flight {
     id: Int!
     sites: [Site!]
-  }
-
-  type Site {
-    id: Int!
-    flights: [Flight!]
+    helicopter: Helicopter!
   }
 
   input CreateFlightInput {
@@ -19,7 +15,6 @@ const flightsTypeDefs = gql`
   }
   type Query {
     flights: [Flight!]!
-    sites: [Site!]!
   }
 `;
 export default flightsTypeDefs;

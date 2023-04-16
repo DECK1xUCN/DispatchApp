@@ -5,6 +5,7 @@ const siteTypeDefs = gql`
     id: Int!
     name: String!
     locations: [Location!]!
+    flights: [Flight!]!
   }
   type Query {
     site(id: Int!): Site!

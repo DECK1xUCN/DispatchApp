@@ -9,8 +9,10 @@ datasource db {
 }
 
 model Flight {
-  id    Int    @id @default(autoincrement())
-  sites Site[]
+  id           Int         @id @default(autoincrement())
+  sites        Site[]
+  Helicopter   Helicopter? @relation(fields: [helicopterId], references: [id])
+  helicopterId Int?
 }
 
 model Site {
@@ -28,4 +30,12 @@ model Location {
   type   String
   site   Site   @relation(fields: [siteId], references: [id])
   siteId Int
+}
+
+model Helicopter {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  model   String
+  reg     String   @unique
+  flights Flight[]
 }
