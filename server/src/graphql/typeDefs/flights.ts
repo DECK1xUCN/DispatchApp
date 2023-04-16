@@ -13,12 +13,12 @@ const flightsTypeDefs = gql`
     from: Location!
     via: [Location!]!
     to: Location!
-    # etd: DateTime!
-    # rotorStart: DateTime!
-    # atd: DateTime!
-    # eta: DateTime!
-    # rotorStop: DateTime!
-    # ata: DateTime!
+    etd: DateTime!
+    rotorStart: DateTime!
+    atd: DateTime!
+    eta: DateTime!
+    rotorStop: DateTime!
+    ata: DateTime!
     flightTime: Int!
     blockTime: Int!
     delay: Boolean
@@ -31,6 +31,7 @@ const flightsTypeDefs = gql`
     hoistCycles: Int
     note: String
     editable: Boolean
+    dailyUpdate: DailyUpdate
   }
 
   input CreateFlight {
@@ -57,9 +58,9 @@ const flightsTypeDefs = gql`
     note: String
     editable: Boolean
   }
-  type Mutation {
-    createFlight(input: CreateFlight!): Flight!
-  }
+  # type Mutation {
+  #   createFlight(input: CreateFlight!): Flight!
+  # }
   type Query {
     flights: [Flight!]!
     flightsBySiteId(siteId: Int!): [Flight!]!

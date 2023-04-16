@@ -42,13 +42,13 @@ const flightResolver = {
       return flight;
     },
   },
-  Mutation: {
-    createFlight: async (parent: any, args: { data: CreateFlight }) => {
-      const flight = await FlightService.createFlight(args.data);
-      if (!flight) throw createGraphQLError("No flight created");
-      return flight;
-    },
-  },
+  // Mutation: {
+  //   createFlight: async (parent: any, args: { data: CreateFlight }) => {
+  //     const flight = await FlightService.createFlight(args.data);
+  //     if (!flight) throw createGraphQLError("No flight created");
+  //     return flight;
+  //   },
+  // },
 };
 
 export default flightResolver;

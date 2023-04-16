@@ -24,12 +24,12 @@ model Flight {
   via             Location[]
   to              Location       @relation("to", fields: [toId], references: [id])
   toId            Int
-  // etd             DateTime
-  // rotorStart      DateTime
-  // ata             DateTime
-  // eta             DateTime
-  // rotorStop       DateTime
-  // atd             DateTime
+  etd             DateTime       @default(now())
+  rotorStart      DateTime       @default(now())
+  ata             DateTime       @default(now())
+  eta             DateTime       @default(now())
+  rotorStop       DateTime       @default(now())
+  atd             DateTime       @default(now())
   flightTime      Int?           @default(0)
   blockTime       Int?           @default(0)
   delay           Boolean?       @default(false)
@@ -42,6 +42,7 @@ model Flight {
   hoistCycles     Int?           @default(0)
   note            String?        @default("N/A")
   editable        Boolean        @default(true)
+  dailyUpdate     DailyUpdate?
 }
 
 model Site {
@@ -82,4 +83,22 @@ model HoistOperator {
   id      Int      @id @default(autoincrement())
   name    String   @unique
   flights Flight[]
+}
+
+model DailyUpdate {
+  id                  Int      @id @default(autoincrement())
+  flight              Flight   @relation(fields: [flightId], references: [id])
+  flightId            Int      @unique
+  wasFlight           Boolean  @default(true)
+  delay               Boolean  @default(false)
+  delayCode           String?
+  delayTime           Int?
+  delayDesc           String?
+  maintenance         Boolean  @default(false)
+  plannedMaintenance  Boolean?
+  unplanedMaintenance Boolean?
+  otherMaintenance    Boolean?
+  maintenanceNote     String?
+  baseAndEquipment    Boolean  @default(false)
+  note                String?
 }
