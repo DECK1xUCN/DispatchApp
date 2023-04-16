@@ -3,6 +3,6 @@ export type HoistOperator = {
   name: string;
 };
 
-export interface HoistOperatorInput {
+export interface CreateHoistOperator {
   name: string;
 }

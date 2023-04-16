@@ -9,12 +9,14 @@ datasource db {
 }
 
 model Flight {
-  id           Int         @id @default(autoincrement())
-  sites        Site[]
-  helicopter   Helicopter? @relation(fields: [helicopterId], references: [id])
-  helicopterId Int?
-  pilot        Pilot?      @relation(fields: [pilotId], references: [id])
-  pilotId      Int?
+  id              Int            @id @default(autoincrement())
+  sites           Site[]
+  helicopter      Helicopter?    @relation(fields: [helicopterId], references: [id])
+  helicopterId    Int?
+  pilot           Pilot?         @relation(fields: [pilotId], references: [id])
+  pilotId         Int?
+  hoistOperator   HoistOperator? @relation(fields: [hoistOperatorId], references: [id])
+  hoistOperatorId Int?
 }
 
 model Site {
@@ -43,6 +45,12 @@ model Helicopter {
 }
 
 model Pilot {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flights Flight[]
+}
+
+model HoistOperator {
   id      Int      @id @default(autoincrement())
   name    String   @unique
   flights Flight[]

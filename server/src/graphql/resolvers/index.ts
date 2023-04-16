@@ -4,6 +4,7 @@ import siteResolver from "./sites";
 import locationsResolver from "./locations";
 import helicopterResolver from "./helicopters";
 import pilotResolver from "./pilots";
+import hoistOperatorResolver from "./hoistOperators";
 
 const resolvers = merge(
   {},
@@ -11,7 +12,8 @@ const resolvers = merge(
   siteResolver,
   locationsResolver,
   helicopterResolver,
-  pilotResolver
+  pilotResolver,
+  hoistOperatorResolver
 );
 
 export default resolvers;

@@ -6,10 +6,14 @@ const flightsTypeDefs = gql`
     sites: [Site!]
     helicopter: Helicopter!
     pilot: Pilot!
+    hoistOperator: HoistOperator!
   }
 
   input CreateFlightInput {
     sites: [Int!]!
+    helicopterId: Int!
+    pilotId: Int!
+    hoistOperatorId: Int!
   }
   type Mutation {
     createFlight(input: CreateFlightInput!): Flight!
