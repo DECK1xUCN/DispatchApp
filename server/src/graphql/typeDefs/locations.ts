@@ -5,21 +5,23 @@ const locationsTypeDefs = gql`
     id: Int!
     name: String!
     lat: Float!
-    long: Float!
+    lng: Float!
     type: String!
-  }
-  input CreateLocationInput {
-    name: String!
-    lat: Float
-    long: Float
-    type: String!
+    site: Site!
   }
   type Query {
     location(id: Int!): Location!
     locations: [Location!]!
   }
+  input CreateLocationInput {
+    name: String!
+    lat: Float!
+    lng: Float!
+    type: String!
+    siteId: Int!
+  }
   type Mutation {
-    createLocation(input: CreateLocationInput!): Location!
+    createLocation(data: CreateLocationInput!): Location!
   }
 `;
 export default locationsTypeDefs;

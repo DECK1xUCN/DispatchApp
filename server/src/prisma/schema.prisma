@@ -21,10 +21,11 @@ model Site {
 }
 
 model Location {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  lat   Decimal
-  long  Decimal
-  type  String
-  sites Site[]
+  id     Int    @id @default(autoincrement())
+  name   String @unique
+  lat    Float  @default(0)
+  lng    Float  @default(0)
+  type   String
+  site   Site   @relation(fields: [siteId], references: [id])
+  siteId Int
 }

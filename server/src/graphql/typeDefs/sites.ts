@@ -10,8 +10,11 @@ const siteTypeDefs = gql`
     site(id: Int!): Site!
     sites: [Site!]!
   }
+  input CreateSiteInput {
+    name: String!
+  }
   type Mutation {
-    createSite(name: String!): Site!
+    createSite(data: CreateSiteInput!): Site!
     # updateSite(id: Int!, name: String!): Site!
   }
 `;

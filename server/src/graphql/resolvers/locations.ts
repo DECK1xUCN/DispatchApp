@@ -1,31 +1,30 @@
-import { Context } from "@/utils/context";
+import LocationService from "@/services/LocationService";
+import { CreateLocation } from "@/types/locations";
+import { createGraphQLError } from "graphql-yoga";
 
 const locationsResolver = {
   Query: {
-    locations: async (parent: any, args: any, context: Context) => {
-      const locations = await context.prisma.location.findMany();
+    locations: async (parent: any) => {
+      const locations = await LocationService.getLocations();
+
+      if (!locations) throw createGraphQLError("Locations not found");
       return locations;
     },
-    location: async (parent: any, { id }: any, context: Context) => {
-      const location = await context.prisma.location.findUnique({
-        where: {
-          id,
-        },
-      });
+
+    location: async (parent: any, args: { id: number }) => {
+      const location = await LocationService.getLocation(args.id);
+
+      if (!location)
+        throw createGraphQLError("Location with id " + args.id + " not found");
       return location;
     },
   },
   Mutation: {
-    createLocation: async (parent: any, { input }: any, context: Context) => {
-      const createdLocation = await context.prisma.location.create({
-        data: {
-          name: input.name,
-          lat: input.lat,
-          long: input.long,
-          type: input.type,
-        },
-      });
-      return createdLocation;
+    createLocation: async (parent: any, args: { data: CreateLocation }) => {
+      const location = await LocationService.createLocation(args.data);
+
+      if (!location) throw createGraphQLError("Location could not be created");
+      return location;
     },
   },
 };
