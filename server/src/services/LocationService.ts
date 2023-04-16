@@ -7,7 +7,7 @@ export default {
     const location = await context.prisma.location
       .findUnique({
         where: { id },
-        include: { site: true },
+        include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
         throw createGraphQLError("Location with id " + id + " not found");
@@ -17,7 +17,7 @@ export default {
 
   getLocations: async () => {
     const locations = await context.prisma.location
-      .findMany({ include: { site: true } })
+      .findMany({ include: { site: true, from: true, via: true, to: true } })
       .catch(() => {
         throw createGraphQLError("Locations not found");
       });
@@ -35,6 +35,7 @@ export default {
           type: input.type as LocationType,
           siteId: input.siteId,
         },
+        include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
         throw createGraphQLError("Location could not be created");

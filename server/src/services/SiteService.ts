@@ -1,4 +1,3 @@
-import { CreateSite } from "@/types/sites";
 import { context } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
 
@@ -34,6 +33,7 @@ export default {
     const createdSite = await context.prisma.site
       .create({
         data: { name },
+        include: { locations: true, flights: true },
       })
       .catch(() => {
         throw createGraphQLError("Site could not be created");

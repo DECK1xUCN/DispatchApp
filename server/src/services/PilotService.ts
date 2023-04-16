@@ -23,7 +23,7 @@ export default {
 
   createPilot: async (data: CreatePilot) => {
     const pilot = await context.prisma.pilot
-      .create({ data: { name: data.name } })
+      .create({ data: { name: data.name }, include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("Could not create pilot");
       });

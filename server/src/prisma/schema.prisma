@@ -10,13 +10,38 @@ datasource db {
 
 model Flight {
   id              Int            @id @default(autoincrement())
-  sites           Site[]
+  flightNumber    String         @unique
   helicopter      Helicopter?    @relation(fields: [helicopterId], references: [id])
-  helicopterId    Int?
+  helicopterId    Int
   pilot           Pilot?         @relation(fields: [pilotId], references: [id])
-  pilotId         Int?
+  pilotId         Int
   hoistOperator   HoistOperator? @relation(fields: [hoistOperatorId], references: [id])
-  hoistOperatorId Int?
+  hoistOperatorId Int
+  site            Site           @relation(fields: [siteId], references: [id])
+  siteId          Int
+  from            Location       @relation("from", fields: [fromId], references: [id])
+  fromId          Int
+  via             Location[]
+  to              Location       @relation("to", fields: [toId], references: [id])
+  toId            Int
+  // etd             DateTime
+  // rotorStart      DateTime
+  // ata             DateTime
+  // eta             DateTime
+  // rotorStop       DateTime
+  // atd             DateTime
+  flightTime      Int?           @default(0)
+  blockTime       Int?           @default(0)
+  delay           Boolean?       @default(false)
+  delayCode       String?        @default("N/A")
+  delayTime       Int?           @default(0)
+  delayNote       String?        @default("N/A")
+  pax             Int?           @default(0)
+  paxTax          Int?           @default(0)
+  cargoPP         Int?           @default(0)
+  hoistCycles     Int?           @default(0)
+  note            String?        @default("N/A")
+  editable        Boolean        @default(true)
 }
 
 model Site {
@@ -27,13 +52,16 @@ model Site {
 }
 
 model Location {
-  id     Int    @id @default(autoincrement())
-  name   String @unique
-  lat    Float  @default(0)
-  lng    Float  @default(0)
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  lat    Float    @default(0)
+  lng    Float    @default(0)
   type   String
-  site   Site   @relation(fields: [siteId], references: [id])
+  site   Site     @relation(fields: [siteId], references: [id])
   siteId Int
+  from   Flight[] @relation("from")
+  via    Flight[]
+  to     Flight[] @relation("to")
 }
 
 model Helicopter {

@@ -8,6 +8,9 @@ const locationsTypeDefs = gql`
     lng: Float!
     type: String!
     site: Site!
+    from: [Flight!]!
+    via: [Flight!]!
+    to: [Flight!]!
   }
   type Query {
     location(id: Int!): Location!

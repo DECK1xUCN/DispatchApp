@@ -40,6 +40,7 @@ export default {
           model: data.model,
           reg: data.reg,
         },
+        include: { flights: true },
       })
       .catch(() => {
         throw createGraphQLError("Failed to create helicopter");
