@@ -1,3 +1,4 @@
+import dailyReportTypeDefs from "./dailyReports";
 import dailyUpdateTypeDefs from "./dailyUpdates";
 import flightsTypeDefs from "./flights";
 import helicopterTypeDefs from "./helicopters";
@@ -14,6 +15,7 @@ const typeDefs = [
   pilotsTypeDefs,
   hoistOperatorTypeDefs,
   dailyUpdateTypeDefs,
+  dailyReportTypeDefs,
 ];
 
 export default typeDefs;

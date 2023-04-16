@@ -43,6 +43,8 @@ model Flight {
   note            String?        @default("N/A")
   editable        Boolean        @default(true)
   dailyUpdate     DailyUpdate?
+  dailyReport     DailyReport?   @relation(fields: [dailyReportId], references: [id])
+  dailyReportId   Int?
 }
 
 model Site {
@@ -101,4 +103,10 @@ model DailyUpdate {
   maintenanceNote     String?
   baseAndEquipment    Boolean  @default(false)
   note                String?
+}
+
+model DailyReport {
+  id      Int      @id @default(autoincrement())
+  date    DateTime @default(now())
+  flights Flight[]
 }

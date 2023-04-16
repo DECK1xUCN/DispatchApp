@@ -32,6 +32,7 @@ const flightsTypeDefs = gql`
     note: String
     editable: Boolean
     dailyUpdate: DailyUpdate
+    dailyReport: DailyReport
   }
 
   input CreateFlight {

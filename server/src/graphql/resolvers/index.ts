@@ -6,6 +6,7 @@ import helicopterResolver from "./helicopters";
 import pilotResolver from "./pilots";
 import hoistOperatorResolver from "./hoistOperators";
 import dailyUpdateResolver from "./dailyUpdates";
+import dailyReportResolver from "./dailyReports";
 
 const resolvers = merge(
   {},
@@ -15,7 +16,8 @@ const resolvers = merge(
   helicopterResolver,
   pilotResolver,
   hoistOperatorResolver,
-  dailyUpdateResolver
+  dailyUpdateResolver,
+  dailyReportResolver
 );
 
 export default resolvers;

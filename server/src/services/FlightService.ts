@@ -16,6 +16,7 @@ export default {
           via: true,
           to: true,
           dailyUpdate: true,
+          dailyReport: true,
         },
       })
       .catch(() => {
@@ -37,6 +38,7 @@ export default {
           via: true,
           to: true,
           dailyUpdate: true,
+          dailyReport: true,
         },
       })
       .catch(() => {
@@ -58,6 +60,7 @@ export default {
     //       via: true,
     //       to: true,
     //       dailyUpdate: true,
+    //       dailyReport: true,
     //     },
     //   })
     //   .catch(() => {
@@ -79,6 +82,7 @@ export default {
           via: true,
           to: true,
           dailyUpdate: true,
+          dailyReport: true,
         },
       })
       .catch(() => {
@@ -100,6 +104,7 @@ export default {
           via: true,
           to: true,
           dailyUpdate: true,
+          dailyReport: true,
         },
       })
       .catch(() => {
@@ -121,6 +126,7 @@ export default {
           via: true,
           to: true,
           dailyUpdate: true,
+          dailyReport: true,
         },
       })
       .catch(() => {
