@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 const helicoptersTypeDefs = gql`
   type Query {
     helicopters: [Helicopter!]!
+    helicoptersWhereModel(model: String!): [Helicopter!]!
     helicopter(id: Int!): Helicopter!
   }
   type Mutation {

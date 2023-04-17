@@ -1,6 +1,7 @@
 import 'package:client/classes/Flight.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 import 'delayCodes.dart';
@@ -165,8 +166,14 @@ query MyQuery {
                     child: Text("An error occurred, check the console :(")));
           }
           if (result.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return const Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                child: SpinKitFoldingCube(
+                  color: Color.fromRGBO(163, 160, 251, 1),
+                  size: 50.0,
+                ),
+              ),
             );
           }
 
@@ -174,6 +181,7 @@ query MyQuery {
           return Scaffold(
             backgroundColor: Colors.white,
             floatingActionButton: FloatingActionButton.extended(
+              heroTag: 'flightsButton',
               onPressed: () {},
               backgroundColor: const Color.fromRGBO(0, 66, 106, 1),
               label: const Text('Generate DFR'),
@@ -185,6 +193,28 @@ query MyQuery {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              refetch!();
+                            },
+                            icon: const Icon(
+                              Icons.refresh,
+                              size: 42,
+                              color: Color.fromRGBO(163, 160, 251, 1),
+                            )),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(163, 160, 251, 1),
+                          ),
+                          child: const Text('New Flight'),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
