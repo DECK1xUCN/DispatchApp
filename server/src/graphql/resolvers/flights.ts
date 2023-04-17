@@ -76,6 +76,33 @@ const flightResolvers = {
       }
       return flight;
     },
+    flightWhereDailyReportId: async (
+      _parent: any,
+      args: { dailyReportId: number },
+      context: Context
+    ) => {
+      const flights = await context.prisma.flight
+        .findMany({
+          where: {
+            dailyReportId: args.dailyReportId,
+          },
+        })
+        .catch((err: any) => {
+          throw createGraphQLError(`No flights found`, {
+            extensions: {
+              code: "500",
+            },
+          });
+        });
+      if (!flights) {
+        throw createGraphQLError(`No flights found`, {
+          extensions: {
+            code: "404",
+          },
+        });
+      }
+      return flights;
+    },
   },
 
   Mutation: {
