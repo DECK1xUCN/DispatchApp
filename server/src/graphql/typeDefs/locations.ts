@@ -15,6 +15,9 @@ const locationsTypeDefs = gql`
   type Query {
     location(id: Int!): Location!
     locations: [Location!]!
+    locoationsPerSite(siteId: Int!): [Location!]!
+    heliportsPerSite(siteId: Int!): [Location!]!
+    viaPerSite(siteId: Int!): [Location!]!
   }
   input CreateLocationInput {
     name: String!

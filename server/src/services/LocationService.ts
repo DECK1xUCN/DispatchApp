@@ -24,6 +24,45 @@ export default {
 
     return locations;
   },
+  getLocationsPerSite: async (siteId: number) => {
+    const locations = await context.prisma.location
+      .findMany({
+        where: { siteId },
+        include: { site: true, from: true, via: true, to: true },
+      })
+      .catch(() => {
+        throw createGraphQLError(
+          "Locations for site with id " + siteId + " not found"
+        );
+      });
+    return locations;
+  },
+  getHeliportsPerSite: async (siteId: number) => {
+    const locations = await context.prisma.location
+      .findMany({
+        where: { siteId, type: "HELIPORT" },
+        include: { site: true, from: true, via: true, to: true },
+      })
+      .catch(() => {
+        throw createGraphQLError(
+          "Heliports for site with id " + siteId + " not found"
+        );
+      });
+    return locations;
+  },
+  getViaPerSite: async (siteId: number) => {
+    const locations = await context.prisma.location
+      .findMany({
+        where: { siteId, type: "VIA" },
+        include: { site: true, from: true, via: true, to: true },
+      })
+      .catch(() => {
+        throw createGraphQLError(
+          "Via's for site with id " + siteId + " not found"
+        );
+      });
+    return locations;
+  },
 
   createLocation: async (input: CreateLocation) => {
     const location = await context.prisma.location

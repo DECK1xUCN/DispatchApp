@@ -18,7 +18,35 @@ const locationsResolver = {
         throw createGraphQLError("Location with id " + args.id + " not found");
       return location;
     },
+    locoationsPerSite: async (parent: any, args: { siteId: number }) => {
+      const locations = await LocationService.getLocationsPerSite(args.siteId);
+
+      if (!locations)
+        throw createGraphQLError(
+          "Locations for site with id " + args.siteId + " not found"
+        );
+      return locations;
+    },
+    heliportsPerSite: async (parent: any, args: { siteId: number }) => {
+      const locations = await LocationService.getHeliportsPerSite(args.siteId);
+
+      if (!locations)
+        throw createGraphQLError(
+          "Heliports for site with id " + args.siteId + " not found"
+        );
+      return locations;
+    },
+    viaPerSite: async (parent: any, args: { siteId: number }) => {
+      const locations = await LocationService.getViaPerSite(args.siteId);
+
+      if (!locations)
+        throw createGraphQLError(
+          "Via for site with id " + args.siteId + " not found"
+        );
+      return locations;
+    },
   },
+
   Mutation: {
     createLocation: async (parent: any, args: { data: CreateLocation }) => {
       const location = await LocationService.createLocation(args.data);
