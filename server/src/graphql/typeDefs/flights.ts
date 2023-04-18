@@ -6,6 +6,7 @@ const flightsTypeDefs = gql`
   type Flight {
     id: Int!
     flightNumber: String!
+    date: DateTime!
     helicopter: Helicopter!
     pilot: Pilot!
     hoistOperator: HoistOperator!
@@ -37,6 +38,7 @@ const flightsTypeDefs = gql`
 
   input CreateFlight {
     flightNumber: String!
+    date: DateTime!
     helicopterId: Int!
     pilotId: Int!
     hoistOperatorId: Int!
@@ -65,7 +67,7 @@ const flightsTypeDefs = gql`
   type Query {
     flights: [Flight!]!
     flightsBySiteId(siteId: Int!): [Flight!]!
-    # flightsPerDay:(date: DateTime!): [Flight!]!
+    flightsPerDay(date: DateTime!): [Flight!]!
     flightById(id: Int!): Flight!
     flightByFlightNumber(flightNumber: String!): Flight!
   }

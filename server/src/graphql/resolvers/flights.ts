@@ -18,12 +18,12 @@ const flightResolver = {
       return flights;
     },
 
-    // flightsPerDay: async (parent: any, args: { date: string }) => {
-    //   const flights = await FlightService.getFlightsPerDay(args.date);
-    //   if (!flights || flights.length === 0)
-    //     throw createGraphQLError("No flights found");
-    //   return flights;
-    // },
+    flightsPerDay: async (parent: any, args: { date: string }) => {
+      const flights = await FlightService.getFlightsPerDay(args.date);
+      if (!flights || flights.length === 0)
+        throw createGraphQLError("No flights found");
+      return flights;
+    },
 
     flightById: async (parent: any, args: { id: number }) => {
       const flight = await FlightService.getFlightById(args.id);

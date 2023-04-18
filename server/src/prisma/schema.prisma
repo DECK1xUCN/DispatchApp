@@ -11,6 +11,7 @@ datasource db {
 model Flight {
   id              Int            @id @default(autoincrement())
   flightNumber    String         @unique
+  date            DateTime       @default(now())
   helicopter      Helicopter?    @relation(fields: [helicopterId], references: [id])
   helicopterId    Int
   pilot           Pilot?         @relation(fields: [pilotId], references: [id])
@@ -88,21 +89,21 @@ model HoistOperator {
 }
 
 model DailyUpdate {
-  id                  Int      @id @default(autoincrement())
-  flight              Flight   @relation(fields: [flightId], references: [id])
-  flightId            Int      @unique
-  wasFlight           Boolean  @default(true)
-  delay               Boolean  @default(false)
-  delayCode           String?
-  delayTime           Int?
-  delayDesc           String?
-  maintenance         Boolean  @default(false)
-  plannedMaintenance  Boolean?
-  unplanedMaintenance Boolean?
-  otherMaintenance    Boolean?
-  maintenanceNote     String?
-  baseAndEquipment    Boolean  @default(false)
-  note                String?
+  id                   Int      @id @default(autoincrement())
+  flight               Flight   @relation(fields: [flightId], references: [id])
+  flightId             Int      @unique
+  wasFlight            Boolean  @default(true)
+  delay                Boolean  @default(false)
+  delayCode            String?  @default("N/A")
+  delayTime            Int?     @default(0)
+  delayDesc            String?  @default("N/A")
+  maintenance          Boolean  @default(false)
+  plannedMaintenance   Boolean? @default(false)
+  unplannedMaintenance Boolean? @default(false)
+  otherMaintenance     Boolean? @default(false)
+  maintenanceNote      String?  @default("N/A")
+  baseAndEquipment     Boolean  @default(false)
+  note                 String?  @default("N/A")
 }
 
 model DailyReport {

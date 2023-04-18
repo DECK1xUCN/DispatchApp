@@ -41,7 +41,7 @@ export default {
           delayDesc: data.delayDesc,
           maintenance: data.maintenace,
           plannedMaintenance: data.plannedMaintenance,
-          unplanedMaintenance: data.unplannedMaintenance,
+          unplannedMaintenance: data.unplannedMaintenance,
           otherMaintenance: data.otherMaintenance,
           maintenanceNote: data.maintenanceNote,
           baseAndEquipment: data.baseAndEquipment,
