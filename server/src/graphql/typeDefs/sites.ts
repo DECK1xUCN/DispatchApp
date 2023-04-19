@@ -16,7 +16,7 @@ const siteTypeDefs = gql`
   }
   type Mutation {
     createSite(data: CreateSiteInput!): Site!
-    # updateSite(id: Int!, name: String!): Site!
+    updateSite(id: Int!, name: String!): Site!
   }
 `;
 export default siteTypeDefs;

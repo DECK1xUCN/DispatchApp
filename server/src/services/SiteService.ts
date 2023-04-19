@@ -8,7 +8,7 @@ export default {
         include: { locations: true, flights: true },
       })
       .catch(() => {
-        throw createGraphQLError("Sites not found");
+        throw createGraphQLError("Database exception");
       });
 
     return sites;
@@ -23,7 +23,7 @@ export default {
         include: { locations: true, flights: true },
       })
       .catch(() => {
-        throw createGraphQLError("Site with id " + id + " not found");
+        throw createGraphQLError("Database exception");
       });
 
     return site;
@@ -36,9 +36,23 @@ export default {
         include: { locations: true, flights: true },
       })
       .catch(() => {
-        throw createGraphQLError("Site could not be created");
+        throw createGraphQLError("Database exception");
       });
 
     return createdSite;
+  },
+
+  updateSite: async (id: number, name: string) => {
+    const updatedSite = await context.prisma.site
+      .update({
+        where: { id },
+        data: { name },
+        include: { locations: true, flights: true },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+
+    return updatedSite;
   },
 };

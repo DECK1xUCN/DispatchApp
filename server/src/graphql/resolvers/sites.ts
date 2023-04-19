@@ -9,6 +9,7 @@ const siteResolver = {
       if (!sites) throw createGraphQLError("Sites not found");
       return sites;
     },
+
     site: async (parent: any, args: { id: number }) => {
       const site = await SiteService.getSite(args.id);
       if (!site)
@@ -16,11 +17,18 @@ const siteResolver = {
       return site;
     },
   },
+
   Mutation: {
     createSite: async (parent: any, args: { data: CreateSite }) => {
       const createdSite = await SiteService.createSite(args.data.name);
       if (!createdSite) throw createGraphQLError("Site could not be created");
       return createdSite;
+    },
+
+    updateSite: async (parent: any, args: { id: number; name: string }) => {
+      const updatedSite = await SiteService.updateSite(args.id, args.name);
+      if (!updatedSite) throw createGraphQLError("Site could not be updated");
+      return updatedSite;
     },
   },
 };
