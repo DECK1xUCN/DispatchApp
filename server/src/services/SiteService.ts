@@ -1,10 +1,10 @@
-import { context } from "../utils/context";
+import { cheeckEmptyString } from "@/utils/zodCheck";
+import { ctx } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
-import z from "zod";
 
 export default {
   getSites: async () => {
-    const sites = await context.prisma.site
+    const sites = await ctx.prisma.site
       .findMany({
         include: { locations: true, flights: true },
       })
@@ -16,7 +16,7 @@ export default {
   },
 
   getSite: async (id: number) => {
-    const site = await context.prisma.site
+    const site = await ctx.prisma.site
       .findUnique({
         where: {
           id,
@@ -31,13 +31,9 @@ export default {
   },
 
   createSite: async (name: string) => {
-    try {
-      z.string().nonempty().parse(name);
-    } catch {
-      throw createGraphQLError("Name cannot be empty");
-    }
+    cheeckEmptyString(name);
 
-    const createdSite = await context.prisma.site
+    const createdSite = await ctx.prisma.site
       .create({
         data: { name },
         include: { locations: true, flights: true },
@@ -50,13 +46,9 @@ export default {
   },
 
   updateSite: async (id: number, name: string) => {
-    try {
-      z.string().nonempty().parse(name);
-    } catch {
-      throw createGraphQLError("Name cannot be empty");
-    }
+    cheeckEmptyString(name);
 
-    const updatedSite = await context.prisma.site
+    const updatedSite = await ctx.prisma.site
       .update({
         where: { id },
         data: { name },

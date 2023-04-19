@@ -1,10 +1,10 @@
 import { CreateHelicopter } from "@/types/helicopters";
-import { context } from "@/utils/context";
+import { ctx } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
   getHelicopter: async (id: number) => {
-    const helicopter = await context.prisma.helicopter
+    const helicopter = await ctx.prisma.helicopter
       .findUnique({ where: { id }, include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("Helicopter with id " + id + " not found");
@@ -13,7 +13,7 @@ export default {
   },
 
   getHelicoptersWhereModel: async (model: string) => {
-    const helicopters = await context.prisma.helicopter
+    const helicopters = await ctx.prisma.helicopter
       .findMany({ where: { model }, include: { flights: true } })
       .catch(() => {
         throw createGraphQLError(
@@ -24,7 +24,7 @@ export default {
   },
 
   getHelicopters: async () => {
-    const helicopters = await context.prisma.helicopter
+    const helicopters = await ctx.prisma.helicopter
       .findMany({ include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("No helicopters found");
@@ -33,7 +33,7 @@ export default {
   },
 
   createHelicopter: async (data: CreateHelicopter) => {
-    const helicopter = await context.prisma.helicopter
+    const helicopter = await ctx.prisma.helicopter
       .create({
         data: {
           name: data.name,

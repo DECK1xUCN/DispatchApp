@@ -1,11 +1,11 @@
 import { CreateFlight } from "@/types/flights";
-import { context } from "@/utils/context";
+import { ctx } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
 import { formatDate } from "@/utils/dateHelper";
 
 export default {
   getFlights: async () => {
-    const flights = await context.prisma.flight
+    const flights = await ctx.prisma.flight
       .findMany({
         include: {
           helicopter: true,
@@ -26,7 +26,7 @@ export default {
   },
 
   getFlightsBySiteId: async (siteId: number) => {
-    const flights = await context.prisma.flight
+    const flights = await ctx.prisma.flight
       .findMany({
         where: { siteId },
         include: {
@@ -56,7 +56,7 @@ export default {
     );
     console.log(datePlusOne);
 
-    const flights = await context.prisma.flight
+    const flights = await ctx.prisma.flight
       .findMany({
         where: {
           date: {
@@ -83,7 +83,7 @@ export default {
   },
 
   getFlightById: async (id: number) => {
-    const flight = await context.prisma.flight
+    const flight = await ctx.prisma.flight
       .findUnique({
         where: { id },
         include: {
@@ -105,7 +105,7 @@ export default {
   },
 
   getFlightByFlightNumber: async (flightNumber: string) => {
-    const flight = await context.prisma.flight
+    const flight = await ctx.prisma.flight
       .findUnique({
         where: { flightNumber },
         include: {
@@ -136,7 +136,7 @@ export default {
     const rotorStop = formatDate(data.rotorStop);
     const ata = formatDate(data.ata);
 
-    const flight = await context.prisma.flight
+    const flight = await ctx.prisma.flight
       .create({
         data: {
           flightNumber: data.flightNumber,

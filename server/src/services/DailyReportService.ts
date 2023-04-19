@@ -1,9 +1,9 @@
-import { context } from "@/utils/context";
+import { ctx } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
   getDailyReportById: async (id: number) => {
-    const dailyReport = await context.prisma.dailyReport
+    const dailyReport = await ctx.prisma.dailyReport
       .findUnique({
         where: { id },
         include: { flights: true },
@@ -15,7 +15,7 @@ export default {
   },
 
   getDailyReportByDate: async (date: Date) => {
-    const dailyReport = await context.prisma.dailyReport
+    const dailyReport = await ctx.prisma.dailyReport
       .findMany({
         where: { date },
         include: { flights: true },
@@ -27,7 +27,7 @@ export default {
   },
 
   getDailyReports: async () => {
-    const dailyReports = await context.prisma.dailyReport
+    const dailyReports = await ctx.prisma.dailyReport
       .findMany({
         include: { flights: true },
       })

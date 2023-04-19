@@ -3,13 +3,13 @@ import {
   LocationType,
   UpdateLocation,
 } from "@/types/locations";
-import { context } from "@/utils/context";
+import { ctx } from "@/utils/context";
 import { isLocationType } from "@/utils/locationValidator";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
   getLocation: async (id: number) => {
-    const location = await context.prisma.location
+    const location = await ctx.prisma.location
       .findUnique({
         where: { id },
         include: { site: true, from: true, via: true, to: true },
@@ -21,7 +21,7 @@ export default {
   },
 
   getLocations: async () => {
-    const locations = await context.prisma.location
+    const locations = await ctx.prisma.location
       .findMany({ include: { site: true, from: true, via: true, to: true } })
       .catch(() => {
         throw createGraphQLError("Database exception");
@@ -31,7 +31,7 @@ export default {
   },
 
   getLocationsPerSite: async (siteId: number) => {
-    const locations = await context.prisma.location
+    const locations = await ctx.prisma.location
       .findMany({
         where: { siteId },
         include: { site: true, from: true, via: true, to: true },
@@ -43,7 +43,7 @@ export default {
   },
 
   getHeliportsPerSite: async (siteId: number) => {
-    const locations = await context.prisma.location
+    const locations = await ctx.prisma.location
       .findMany({
         where: { siteId, type: "HELIPORT" },
         include: { site: true, from: true, via: true, to: true },
@@ -55,7 +55,7 @@ export default {
   },
 
   getViaPerSite: async (siteId: number) => {
-    const locations = await context.prisma.location
+    const locations = await ctx.prisma.location
       .findMany({
         where: { siteId, type: "VIA" },
         include: { site: true, from: true, via: true, to: true },
@@ -70,7 +70,7 @@ export default {
     if (!isLocationType(input.type))
       throw createGraphQLError("Location type is not valid");
 
-    const location = await context.prisma.location
+    const location = await ctx.prisma.location
       .create({
         data: {
           name: input.name,
@@ -88,7 +88,7 @@ export default {
   },
 
   updateLocation: async (id: number, input: UpdateLocation) => {
-    const location = await context.prisma.location
+    const location = await ctx.prisma.location
       .update({
         where: { id },
         data: {

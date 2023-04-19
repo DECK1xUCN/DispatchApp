@@ -1,5 +1,5 @@
 import { createYoga } from "graphql-yoga";
-import { context } from "./utils/context";
+import { ctx } from "./utils/ctx";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
@@ -11,7 +11,7 @@ function main() {
     resolvers: [resolvers],
     typeDefs: [typeDefs],
   });
-  const yoga = createYoga({ schema, context });
+  const yoga = createYoga({ schema, ctx });
   app.use("/graphql", yoga);
   app.listen(4000, () => {
     console.info("🚀 Server is running on http://localhost:4000/graphql");

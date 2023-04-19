@@ -6,15 +6,13 @@ const pilotsTypeDefs = gql`
     name: String!
     flights: [Flight!]!
   }
-  input CreatePilot {
-    name: String!
-  }
   type Query {
     pilot(id: Int!): Pilot!
     pilots: [Pilot!]!
   }
   type Mutation {
-    createPilot(data: CreatePilot!): Pilot!
+    createPilot(name: String!): Pilot!
+    updatePilot(id: Int!, name: String!): Pilot!
   }
 `;
 

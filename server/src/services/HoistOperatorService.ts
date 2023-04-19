@@ -1,10 +1,11 @@
-import { context } from "@/utils/context";
+import { ctx } from "@/utils/context";
+import { checkStringMax4, cheeckEmptyString } from "@/utils/zodCheck";
 import { createGraphQLError } from "graphql-yoga";
 import z from "zod";
 
 export default {
   getHoistOperators: async () => {
-    const hoistOperators = await context.prisma.hoistOperator
+    const hoistOperators = await ctx.prisma.hoistOperator
       .findMany({ include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("Database exception");
@@ -13,7 +14,7 @@ export default {
   },
 
   getHoistOperatorById: async (id: number) => {
-    const hoistOperator = await context.prisma.hoistOperator
+    const hoistOperator = await ctx.prisma.hoistOperator
       .findUnique({ where: { id }, include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("Database exception");
@@ -22,13 +23,10 @@ export default {
   },
 
   createHoistOperator: async (name: string) => {
-    try {
-      z.string().max(4).parse(name);
-    } catch {
-      throw createGraphQLError("Name must be 4 characters or less");
-    }
+    checkStringMax4(name);
+    cheeckEmptyString(name);
 
-    const hoistOperator = await context.prisma.hoistOperator
+    const hoistOperator = await ctx.prisma.hoistOperator
       .create({ data: { name }, include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("Database exception");
@@ -37,13 +35,10 @@ export default {
   },
 
   updateHoistOperator: async (data: { id: number; name: string }) => {
-    try {
-      z.string().max(4).min(1).parse(data.name);
-    } catch {
-      throw createGraphQLError("Name must be 4 characters or less");
-    }
+    checkStringMax4(data.name);
+    cheeckEmptyString(data.name);
 
-    const hoistOperator = await context.prisma.hoistOperator
+    const hoistOperator = await ctx.prisma.hoistOperator
       .update({
         where: { id: data.id },
         data: { name: data.name },

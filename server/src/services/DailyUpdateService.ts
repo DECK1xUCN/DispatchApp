@@ -1,11 +1,11 @@
 import { CreateDailyUpdate } from "@/types/dailyUpdates";
-import { context } from "@/utils/context";
+import { ctx } from "@/utils/context";
 import { Flight, DailyUpdate } from "@prisma/client";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
   getDailyUpdateById: async (id: number) => {
-    const dailyUpdate = await context.prisma.dailyUpdate.findUnique({
+    const dailyUpdate = await ctx.prisma.dailyUpdate.findUnique({
       where: { id },
       include: {
         flight: true,
@@ -15,7 +15,7 @@ export default {
   },
 
   getAllDailyUpdates: async () => {
-    const dailyUpdates = await context.prisma.dailyUpdate.findMany({
+    const dailyUpdates = await ctx.prisma.dailyUpdate.findMany({
       include: {
         flight: true,
       },
@@ -24,14 +24,14 @@ export default {
   },
 
   createDailyUpdate: async (data: CreateDailyUpdate) => {
-    const flight = await context.prisma.flight.findUnique({
+    const flight = await ctx.prisma.flight.findUnique({
       where: { id: data.flightId },
     });
     if (!flight) throw createGraphQLError("No flight found");
     if (flight.editable === false) throw createGraphQLError("Flight is locked");
 
     try {
-      const dailyUpdate = await context.prisma.dailyUpdate.create({
+      const dailyUpdate = await ctx.prisma.dailyUpdate.create({
         data: {
           flightId: data.flightId,
           wasFlight: data.wasFlight,
@@ -52,7 +52,7 @@ export default {
         },
       });
 
-      await context.prisma.flight
+      await ctx.prisma.flight
         .update({
           where: { id: data.flightId },
           data: {
