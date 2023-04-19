@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
-import 'delayCodes.dart';
+import '../classes/delayCodes.dart';
 
 class Flights extends HookWidget {
   const Flights({Key? key}) : super(key: key);
@@ -13,130 +13,11 @@ class Flights extends HookWidget {
   @override
   Widget build(BuildContext context) {
     DelayCode dropdownValue = DelayCode.A_HeliWeather;
-    final showDropDown = useState(false);
-
-    List<Widget> generateRows(list) {
-      List<Flight> flights = [];
-
-      for (var flight in list) {
-        flights.add(Flight(
-            etd: DateTime.parse(flight['etd']),
-            flightnumber: flight['flightNumber'],
-            from: Location(
-                id: flight['from']['id'], name: flight['from']['name']),
-            to: Location(id: flight['to']['id'], name: flight['to']['name'])));
-      }
-
-      List<Widget> rows = [];
-      for (var flight in flights) {
-        rows.add(GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/flightform', arguments: flight);
-          },
-          child: Container(
-              height: 50,
-              decoration: const BoxDecoration(),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      DateFormat.Hm().format(flight.etd),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      flight.flightnumber,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      flight.from.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      flight.to.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
-                  Expanded(
-                      child: Center(
-                    child: ElevatedButton.icon(
-                      // style: ElevatedButton.styleFrom(
-                      //   backgroundColor: isCompleted
-                      //       ? Color.fromRGBO(113, 216, 150, 1)
-                      //       : Color.fromRGBO(9, 166, 215, 1),
-                      // ),
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  scrollable: true,
-                                  title: const Text(
-                                      "Please select the flight status:"),
-                                  content: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed:(){},
-                                        // onPressed: () {
-                                        //   setState(() {
-                                        //     isCompleted = true;
-                                        //     showDropdown = false;
-                                        //   });
-                                        //   Navigator.of(context).pop();
-                                        // },
-                                        child: Text(" Complete "),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      ElevatedButton(
-                                        onPressed: (){},
-                                        // onPressed: () {
-                                        //   setState(() {
-                                        //     isCompleted = false;
-                                        //     showDropdown = true;
-                                        //   });
-                                        //   Navigator.of(context).pop();
-                                        // },
-                                        child: Text("Incomplete"),
-                                      ),
-                                    ],
-                                  ));
-                            });
-                      },
-                      icon: Icon(Icons.update),
-                      label: Text('Update'),
-                    ),
-                  )),
-                ],
-              )),
-        ));
-      }
-      return rows;
-    }
 
     String flightsQuery = """
 query MyQuery {
   flights {
+    id
     etd
     flightNumber
     from {
@@ -179,6 +60,118 @@ query MyQuery {
     }
 
     List? flightList = result.data?["flights"];
+    List<Flight> flights = [];
+
+    for (var flight in flightList!) {
+      flights.add(Flight(
+          id: flight['id'],
+          etd: DateTime.parse(flight['etd']),
+          flightnumber: flight['flightNumber'],
+          from:
+              Location(id: flight['from']['id'], name: flight['from']['name']),
+          to: Location(id: flight['to']['id'], name: flight['to']['name']),
+          hasDU: false));
+    }
+
+    List<Widget> generateRows(flights) {
+      List<Widget> rows = [];
+      for (var flight in flights) {
+        rows.add(GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/flightform', arguments: flight);
+          },
+          child: Container(
+              height: 50,
+              decoration: const BoxDecoration(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                          DateFormat.Hm().format(flight.etd),
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                          flight.flightnumber,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                          flight.from.toString(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                          flight.to.toString(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                      child: Center(
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: flight.hasDU
+                                ? const Color.fromRGBO(113, 216, 150, 1)
+                                : const Color.fromRGBO(9, 166, 215, 1),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      backgroundColor: Colors.white,
+                                      scrollable: true,
+                                      title: const Text(
+                                          "Please select the flight status:"),
+                                      content: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              //todo: add mutation to update flight with DU
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text(" Complete "),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              //todo: add extra details for DU
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("Incomplete"),
+                                          ),
+                                        ],
+                                      ));
+                                });
+                          },
+                          icon: const Icon(Icons.update),
+                          label: const Text('Update'),
+                        ),
+                      )),
+                ],
+              )),
+        ));
+      }
+      return rows;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -281,7 +274,7 @@ query MyQuery {
                             ],
                           ),
                         ),
-                        ...generateRows(flightList)
+                        ...generateRows(flights)
                       ],
                     ),
                   ),
