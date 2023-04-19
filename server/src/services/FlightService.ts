@@ -1,7 +1,8 @@
-import { CreateFlight } from "@/types/flights";
+import { CreateFlight, UpdateFlight } from "@/types/flights";
 import { ctx } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
 import { formatDate } from "@/utils/dateHelper";
+import { checkFlightNumber, checkFlightTime } from "@/utils/zodCheck";
 
 export default {
   getFlights: async () => {
@@ -20,7 +21,7 @@ export default {
         },
       })
       .catch(() => {
-        throw createGraphQLError("No flights found");
+        throw createGraphQLError("Database exception");
       });
     return flights;
   },
@@ -42,7 +43,7 @@ export default {
         },
       })
       .catch(() => {
-        throw createGraphQLError("No flights found");
+        throw createGraphQLError("Database exception");
       });
     return flights;
   },
@@ -77,7 +78,7 @@ export default {
         },
       })
       .catch(() => {
-        throw createGraphQLError("No flights found");
+        throw createGraphQLError("Database exception");
       });
     return flights;
   },
@@ -99,7 +100,7 @@ export default {
         },
       })
       .catch(() => {
-        throw createGraphQLError("No flight found");
+        throw createGraphQLError("Database exception");
       });
     return flight;
   },
@@ -121,26 +122,17 @@ export default {
         },
       })
       .catch(() => {
-        throw createGraphQLError("No flight found");
+        throw createGraphQLError("Database exception");
       });
     return flight;
   },
 
   createFlight: async (data: CreateFlight) => {
-    const date = formatDate(data.date);
-    console.log(date);
-    const etd = formatDate(data.etd);
-    const rotorStart = formatDate(data.rotorStart);
-    const atd = formatDate(data.atd);
-    const eta = formatDate(data.eta);
-    const rotorStop = formatDate(data.rotorStop);
-    const ata = formatDate(data.ata);
-
     const flight = await ctx.prisma.flight
       .create({
         data: {
-          flightNumber: data.flightNumber,
-          date: date,
+          flightNumber: checkFlightNumber(data.flightNumber),
+          date: formatDate(data.date),
           helicopterId: data.helicopterId,
           pilotId: data.pilotId,
           hoistOperatorId: data.hoistOperatorId,
@@ -150,14 +142,14 @@ export default {
             connect: data.viaIds.map((id) => ({ id })),
           },
           toId: data.toId,
-          etd: etd,
-          rotorStart: rotorStart,
-          atd: atd,
-          eta: eta,
-          rotorStop: rotorStop,
-          ata: ata,
-          flightTime: data.flightTime,
-          blockTime: data.blockTime,
+          etd: formatDate(data.etd),
+          rotorStart: formatDate(data.rotorStart),
+          atd: formatDate(data.atd),
+          eta: formatDate(data.eta),
+          rotorStop: formatDate(data.rotorStop),
+          ata: formatDate(data.ata),
+          flightTime: data.flightTime ? checkFlightTime(data.flightTime) : 0,
+          blockTime: data.blockTime ? checkFlightTime(data.blockTime) : 0,
           editable: false,
         },
         include: {
@@ -173,7 +165,60 @@ export default {
         },
       })
       .catch(() => {
-        throw createGraphQLError("No flight created");
+        throw createGraphQLError("Database exception");
+      });
+    return flight;
+  },
+
+  updateFlight: async (id: number, data: UpdateFlight) => {
+    const flight = await ctx.prisma.flight
+      .update({
+        where: { id },
+        data: {
+          flightNumber: data.flightNumber
+            ? checkFlightNumber(data.flightNumber)
+            : undefined,
+          date: data.date ? formatDate(data.date) : undefined,
+          helicopterId: data.helicopterId ? data.helicopterId : undefined,
+          pilotId: data.pilotId ? data.pilotId : undefined,
+          hoistOperatorId: data.hoistOperatorId
+            ? data.hoistOperatorId
+            : undefined,
+          siteId: data.siteId ? data.siteId : undefined,
+          fromId: data.fromId,
+          via: data.viaIds
+            ? {
+                connect: data.viaIds.map((id) => ({ id })),
+              }
+            : undefined,
+          toId: data.toId ? data.toId : undefined,
+          etd: data.etd ? formatDate(data.etd) : undefined,
+          rotorStart: data.rotorStart ? formatDate(data.rotorStart) : undefined,
+          atd: data.atd ? formatDate(data.atd) : undefined,
+          eta: data.eta ? formatDate(data.eta) : undefined,
+          rotorStop: data.rotorStop ? formatDate(data.rotorStop) : undefined,
+          ata: data.eta ? formatDate(data.ata) : undefined,
+          flightTime: data.flightTime
+            ? checkFlightTime(data.flightTime)
+            : undefined,
+          blockTime: data.blockTime
+            ? checkFlightTime(data.blockTime)
+            : undefined,
+        },
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
       });
     return flight;
   },

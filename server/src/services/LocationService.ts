@@ -5,6 +5,7 @@ import {
 } from "@/types/locations";
 import { ctx } from "@/utils/context";
 import { isLocationType } from "@/utils/locationValidator";
+import { checkLocationName } from "@/utils/zodCheck";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
@@ -73,7 +74,7 @@ export default {
     const location = await ctx.prisma.location
       .create({
         data: {
-          name: input.name,
+          name: checkLocationName(input.name),
           lat: input.lat ?? 0,
           lng: input.lng ?? 0,
           type: input.type as LocationType,
@@ -88,6 +89,8 @@ export default {
   },
 
   updateLocation: async (id: number, input: UpdateLocation) => {
+    if (input.name) checkLocationName(input.name);
+
     const location = await ctx.prisma.location
       .update({
         where: { id },

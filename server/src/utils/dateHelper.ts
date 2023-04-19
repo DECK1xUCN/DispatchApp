@@ -1,7 +1,11 @@
 import { createGraphQLError } from "graphql-yoga";
+import z from "zod";
 
 export const formatDate = (input: string): Date => {
-  if (!(new Date(input) instanceof Date && !isNaN(new Date(input).getTime()))) {
+  try {
+    z.string().nonempty().parse(input);
+    z.date().parse(new Date(input));
+  } catch {
     throw createGraphQLError("Invalid date");
   }
   return new Date(input);

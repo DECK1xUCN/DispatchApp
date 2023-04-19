@@ -1,5 +1,5 @@
 import { ctx } from "@/utils/context";
-import { checkStringMax4, cheeckEmptyString } from "@/utils/zodCheck";
+import { checkName } from "@/utils/zodCheck";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
@@ -22,11 +22,8 @@ export default {
   },
 
   createPilot: async (name: string) => {
-    cheeckEmptyString(name);
-    checkStringMax4(name);
-
     const pilot = await ctx.prisma.pilot
-      .create({ data: { name }, include: { flights: true } })
+      .create({ data: { name: checkName(name) }, include: { flights: true } })
       .catch(() => {
         throw createGraphQLError("Database exception");
       });
@@ -34,13 +31,10 @@ export default {
   },
 
   updatePilot: async (data: { id: number; name: string }) => {
-    cheeckEmptyString(data.name);
-    checkStringMax4(data.name);
-
     const pilot = await ctx.prisma.pilot
       .update({
         where: { id: data.id },
-        data: { name: data.name },
+        data: { name: checkName(data.name) },
         include: { flights: true },
       })
       .catch(() => {

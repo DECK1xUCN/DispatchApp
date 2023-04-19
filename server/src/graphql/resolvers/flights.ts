@@ -1,5 +1,5 @@
 import FlightService from "@/services/FlightService";
-import { CreateFlight } from "@/types/flights";
+import { CreateFlight, UpdateFlight } from "@/types/flights";
 import { createGraphQLError } from "graphql-yoga";
 
 const flightResolver = {
@@ -42,11 +42,21 @@ const flightResolver = {
       return flight;
     },
   },
+
   Mutation: {
     createFlight: async (parent: any, args: { data: CreateFlight }) => {
       console.log(args.data);
       const flight = await FlightService.createFlight(args.data);
       if (!flight) throw createGraphQLError("No flight created");
+      return flight;
+    },
+
+    updateFlight: async (
+      parent: any,
+      args: { id: number; data: UpdateFlight }
+    ) => {
+      const flight = await FlightService.updateFlight(args.id, args.data);
+      if (!flight) throw createGraphQLError("No flight updated");
       return flight;
     },
   },

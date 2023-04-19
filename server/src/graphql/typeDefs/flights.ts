@@ -62,8 +62,35 @@ const flightsTypeDefs = gql`
     editable: Boolean
   }
 
+  input updateFlight {
+    flightNumber: String
+    date: DateTime
+    helicopterId: Int
+    pilotId: Int
+    hoistOperatorId: Int
+    siteId: Int
+    fromId: Int
+    viaIds: [Int!]
+    toId: Int
+    etd: DateTime
+    rotorStart: DateTime
+    atd: DateTime
+    eta: DateTime
+    rotorStop: DateTime
+    ata: DateTime
+    flightTime: Int
+    blockTime: Int
+    pax: Int
+    paxTax: Int
+    cargoPP: Int
+    hoistCycles: Int
+    note: String
+    editable: Boolean
+  }
+
   type Mutation {
     createFlight(data: CreateFlight!): Flight!
+    updateFlight(id: Int!, data: updateFlight!): Flight!
   }
   type Query {
     flights: [Flight!]!

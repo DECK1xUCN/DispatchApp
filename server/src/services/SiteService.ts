@@ -31,11 +31,9 @@ export default {
   },
 
   createSite: async (name: string) => {
-    cheeckEmptyString(name);
-
     const createdSite = await ctx.prisma.site
       .create({
-        data: { name },
+        data: { name: cheeckEmptyString(name) },
         include: { locations: true, flights: true },
       })
       .catch(() => {
@@ -46,12 +44,10 @@ export default {
   },
 
   updateSite: async (id: number, name: string) => {
-    cheeckEmptyString(name);
-
     const updatedSite = await ctx.prisma.site
       .update({
         where: { id },
-        data: { name },
+        data: { name: cheeckEmptyString(name) },
         include: { locations: true, flights: true },
       })
       .catch(() => {

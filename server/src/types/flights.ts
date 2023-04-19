@@ -60,6 +60,33 @@ export interface CreateFlight {
   editable: boolean;
 }
 
+export interface UpdateFlight {
+  id: number;
+  flightNumber: string;
+  date: string;
+  helicopterId: number;
+  pilotId: number;
+  hoistOperatorId: number;
+  siteId: number;
+  fromId: number;
+  viaIds: number[];
+  toId: number;
+  etd: string;
+  rotorStart: string;
+  atd: string;
+  eta: string;
+  rotorStop: string;
+  ata: string;
+  flightTime: number;
+  blockTime: number;
+  pax?: number;
+  paxTax?: number;
+  cargoPP?: number;
+  hoistCycles?: number;
+  note?: string;
+  editable: boolean;
+}
+
 export type DelayCode = {
   code: "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J";
 };
