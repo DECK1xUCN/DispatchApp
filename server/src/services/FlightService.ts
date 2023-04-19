@@ -1,13 +1,7 @@
 import { CreateFlight } from "@/types/flights";
 import { context } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import timezone from "dayjs/plugin/timezone";
 import { formatDate } from "@/utils/dateHelper";
-import { connect } from "http2";
-dayjs.extend(customParseFormat);
-dayjs.extend(timezone);
 
 export default {
   getFlights: async () => {
@@ -142,44 +136,45 @@ export default {
     const rotorStop = formatDate(data.rotorStop);
     const ata = formatDate(data.ata);
 
-    const flight = await context.prisma.flight.create({
-      data: {
-        flightNumber: data.flightNumber,
-        date: date,
-        helicopterId: data.helicopterId,
-        pilotId: data.pilotId,
-        hoistOperatorId: data.hoistOperatorId,
-        siteId: data.siteId,
-        fromId: data.fromId,
-        via: {
-          connect: data.viaIds.map((id) => ({ id })),
+    const flight = await context.prisma.flight
+      .create({
+        data: {
+          flightNumber: data.flightNumber,
+          date: date,
+          helicopterId: data.helicopterId,
+          pilotId: data.pilotId,
+          hoistOperatorId: data.hoistOperatorId,
+          siteId: data.siteId,
+          fromId: data.fromId,
+          via: {
+            connect: data.viaIds.map((id) => ({ id })),
+          },
+          toId: data.toId,
+          etd: etd,
+          rotorStart: rotorStart,
+          atd: atd,
+          eta: eta,
+          rotorStop: rotorStop,
+          ata: ata,
+          flightTime: data.flightTime,
+          blockTime: data.blockTime,
+          editable: false,
         },
-        toId: data.toId,
-        etd: etd,
-        rotorStart: rotorStart,
-        atd: atd,
-        eta: eta,
-        rotorStop: rotorStop,
-        ata: ata,
-        flightTime: data.flightTime,
-        blockTime: data.blockTime,
-        editable: false,
-      },
-      include: {
-        helicopter: true,
-        pilot: true,
-        hoistOperator: true,
-        site: true,
-        from: true,
-        via: true,
-        to: true,
-        dailyUpdate: true,
-        dailyReport: true,
-      },
-    });
-    // .catch(() => {
-    //   throw createGraphQLError("No flight created");
-    // });
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("No flight created");
+      });
     return flight;
   },
 };
