@@ -3,10 +3,9 @@ import {
   LocationType,
   UpdateLocation,
 } from "@/types/locations";
-import { Context, context } from "@/utils/context";
+import { context } from "@/utils/context";
 import { isLocationType } from "@/utils/locationValidator";
 import { createGraphQLError } from "graphql-yoga";
-import { type } from "os";
 
 export default {
   getLocation: async (id: number) => {
@@ -16,7 +15,7 @@ export default {
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
-        throw createGraphQLError("Location with id " + id + " not found");
+        throw createGraphQLError("Database exception");
       });
     return location;
   },
@@ -25,7 +24,7 @@ export default {
     const locations = await context.prisma.location
       .findMany({ include: { site: true, from: true, via: true, to: true } })
       .catch(() => {
-        throw createGraphQLError("Locations not found");
+        throw createGraphQLError("Database exception");
       });
 
     return locations;
@@ -38,9 +37,7 @@ export default {
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
-        throw createGraphQLError(
-          "Locations for site with id " + siteId + " not found"
-        );
+        throw createGraphQLError("Database exception");
       });
     return locations;
   },
@@ -52,9 +49,7 @@ export default {
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
-        throw createGraphQLError(
-          "Heliports for site with id " + siteId + " not found"
-        );
+        throw createGraphQLError("Database exception");
       });
     return locations;
   },
@@ -66,9 +61,7 @@ export default {
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
-        throw createGraphQLError(
-          "Via's for site with id " + siteId + " not found"
-        );
+        throw createGraphQLError("Database exception");
       });
     return locations;
   },
@@ -89,7 +82,7 @@ export default {
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
-        throw createGraphQLError("Location could not be created");
+        throw createGraphQLError("Database exception");
       });
     return location;
   },
@@ -106,7 +99,7 @@ export default {
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
-        throw createGraphQLError("Location could not be updated");
+        throw createGraphQLError("Database exception");
       });
     return location;
   },
