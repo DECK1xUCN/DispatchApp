@@ -3,13 +3,13 @@ import gql from "graphql-tag";
 const helicopterTypeDefs = gql`
   type Helicopter {
     id: Int!
-    name: String!
+    manufacturer: String!
     model: String!
     reg: String!
     flights: [Flight!]!
   }
   input CreateHelicopterInput {
-    name: String!
+    manufacturer: String!
     model: String!
     reg: String!
   }

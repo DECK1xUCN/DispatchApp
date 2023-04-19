@@ -2,14 +2,14 @@ import { Flight } from "./flights";
 
 export type Helicopter = {
   id: number;
-  name: string;
+  manufacturer: string;
   model: string;
   reg: string;
   flights: Flight[];
 };
 
 export interface CreateHelicopter {
-  name: string;
+  manufacturer: string;
   model: string;
   reg: string;
 }

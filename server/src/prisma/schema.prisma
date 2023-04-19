@@ -69,11 +69,11 @@ model Location {
 }
 
 model Helicopter {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  model   String
-  reg     String   @unique
-  flights Flight[]
+  id           Int      @id @default(autoincrement())
+  manufacturer String   @unique
+  model        String
+  reg          String   @unique
+  flights      Flight[]
 }
 
 model Pilot {

@@ -1,5 +1,6 @@
 import { CreateHelicopter } from "@/types/helicopters";
 import { ctx } from "@/utils/context";
+import { checkModel, checkReg } from "@/utils/zodCheck";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
@@ -33,10 +34,13 @@ export default {
   },
 
   createHelicopter: async (data: CreateHelicopter) => {
+    checkModel(data.model);
+    checkReg(data.reg);
+
     const helicopter = await ctx.prisma.helicopter
       .create({
         data: {
-          name: data.name,
+          manufacturer: data.manufacturer,
           model: data.model,
           reg: data.reg,
         },
