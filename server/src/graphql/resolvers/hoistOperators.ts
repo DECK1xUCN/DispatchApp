@@ -1,5 +1,4 @@
 import HoistOperatorService from "@/services/HoistOperatorService";
-import { CreateHoistOperator } from "@/types/hoistOperators";
 import { createGraphQLError } from "graphql-yoga";
 
 const hoistOperatorResolver = {
@@ -18,16 +17,27 @@ const hoistOperatorResolver = {
       return hoistOperator;
     },
   },
+
   Mutation: {
-    createHoistOperator: async (
-      parent: any,
-      args: { hoistOperator: CreateHoistOperator }
-    ) => {
+    createHoistOperator: async (parent: any, args: { name: string }) => {
       const hoistOperator = await HoistOperatorService.createHoistOperator(
-        args.hoistOperator
+        args.name
       );
       if (!hoistOperator)
         throw createGraphQLError("Could not create hoist operator");
+      return hoistOperator;
+    },
+
+    updateHoistOperator: async (
+      parent: any,
+      args: { id: number; name: string }
+    ) => {
+      const hoistOperator = await HoistOperatorService.updateHoistOperator({
+        id: args.id,
+        name: args.name,
+      });
+      if (!hoistOperator)
+        throw createGraphQLError("Could not update hoist operator");
       return hoistOperator;
     },
   },

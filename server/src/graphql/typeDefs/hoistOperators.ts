@@ -7,16 +7,13 @@ const hoistOperatorTypeDefs = gql`
     flights: [Flight!]!
   }
 
-  input CreateHoistOperator {
-    name: String!
-  }
-
   type Query {
     hoistOperators: [HoistOperator!]!
     hoistOperator(id: Int!): HoistOperator!
   }
   type Mutation {
-    createHoistOperator(hoistOperator: CreateHoistOperator!): HoistOperator!
+    createHoistOperator(name: String!): HoistOperator!
+    updateHoistOperator(id: Int!, name: String!): HoistOperator!
   }
 `;
 
