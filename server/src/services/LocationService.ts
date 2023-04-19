@@ -1,6 +1,12 @@
-import { CreateLocation, LocationType } from "@/types/locations";
+import {
+  CreateLocation,
+  LocationType,
+  UpdateLocation,
+} from "@/types/locations";
 import { Context, context } from "@/utils/context";
+import { isLocationType } from "@/utils/locationValidator";
 import { createGraphQLError } from "graphql-yoga";
+import { type } from "os";
 
 export default {
   getLocation: async (id: number) => {
@@ -24,6 +30,7 @@ export default {
 
     return locations;
   },
+
   getLocationsPerSite: async (siteId: number) => {
     const locations = await context.prisma.location
       .findMany({
@@ -37,6 +44,7 @@ export default {
       });
     return locations;
   },
+
   getHeliportsPerSite: async (siteId: number) => {
     const locations = await context.prisma.location
       .findMany({
@@ -50,6 +58,7 @@ export default {
       });
     return locations;
   },
+
   getViaPerSite: async (siteId: number) => {
     const locations = await context.prisma.location
       .findMany({
@@ -65,6 +74,9 @@ export default {
   },
 
   createLocation: async (input: CreateLocation) => {
+    if (!isLocationType(input.type))
+      throw createGraphQLError("Location type is not valid");
+
     const location = await context.prisma.location
       .create({
         data: {
@@ -78,6 +90,23 @@ export default {
       })
       .catch(() => {
         throw createGraphQLError("Location could not be created");
+      });
+    return location;
+  },
+
+  updateLocation: async (id: number, input: UpdateLocation) => {
+    const location = await context.prisma.location
+      .update({
+        where: { id },
+        data: {
+          name: input.name,
+          lat: input.lat,
+          lng: input.lng,
+        },
+        include: { site: true, from: true, via: true, to: true },
+      })
+      .catch(() => {
+        throw createGraphQLError("Location could not be updated");
       });
     return location;
   },

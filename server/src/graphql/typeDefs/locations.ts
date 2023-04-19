@@ -26,8 +26,14 @@ const locationsTypeDefs = gql`
     type: String!
     siteId: Int!
   }
+  input UpdateLocationInput {
+    name: String
+    lat: Float
+    lng: Float
+  }
   type Mutation {
     createLocation(data: CreateLocationInput!): Location!
+    updateLocation(id: Int!, data: UpdateLocationInput!): Location!
   }
 `;
 export default locationsTypeDefs;

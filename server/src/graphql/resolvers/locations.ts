@@ -1,5 +1,5 @@
 import LocationService from "@/services/LocationService";
-import { CreateLocation } from "@/types/locations";
+import { CreateLocation, UpdateLocation } from "@/types/locations";
 import { createGraphQLError } from "graphql-yoga";
 
 const locationsResolver = {
@@ -52,6 +52,16 @@ const locationsResolver = {
       const location = await LocationService.createLocation(args.data);
 
       if (!location) throw createGraphQLError("Location could not be created");
+      return location;
+    },
+
+    updateLocation: async (
+      parent: any,
+      args: { id: number; data: UpdateLocation }
+    ) => {
+      const location = await LocationService.updateLocation(args.id, args.data);
+
+      if (!location) throw createGraphQLError("Location could not be updated");
       return location;
     },
   },
