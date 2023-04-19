@@ -4,6 +4,8 @@ import { createGraphQLError } from "graphql-yoga";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import timezone from "dayjs/plugin/timezone";
+import { formatDate } from "@/utils/dateHelper";
+import { connect } from "http2";
 dayjs.extend(customParseFormat);
 dayjs.extend(timezone);
 
@@ -52,15 +54,7 @@ export default {
   },
 
   getFlightsPerDay: async (inputDate: string) => {
-    if (
-      !(
-        new Date(inputDate) instanceof Date &&
-        !isNaN(new Date(inputDate).getTime())
-      )
-    ) {
-      throw createGraphQLError("Invalid date");
-    }
-    const date = new Date(inputDate);
+    const date = formatDate(inputDate);
     const datePlusOne = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -139,24 +133,53 @@ export default {
   },
 
   createFlight: async (data: CreateFlight) => {
-    const flight = await context.prisma.flight
-      .create({
-        data: data,
-        include: {
-          helicopter: true,
-          pilot: true,
-          hoistOperator: true,
-          site: true,
-          from: true,
-          via: true,
-          to: true,
-          dailyUpdate: true,
-          dailyReport: true,
+    const date = formatDate(data.date);
+    console.log(date);
+    const etd = formatDate(data.etd);
+    const rotorStart = formatDate(data.rotorStart);
+    const atd = formatDate(data.atd);
+    const eta = formatDate(data.eta);
+    const rotorStop = formatDate(data.rotorStop);
+    const ata = formatDate(data.ata);
+
+    const flight = await context.prisma.flight.create({
+      data: {
+        flightNumber: data.flightNumber,
+        date: date,
+        helicopterId: data.helicopterId,
+        pilotId: data.pilotId,
+        hoistOperatorId: data.hoistOperatorId,
+        siteId: data.siteId,
+        fromId: data.fromId,
+        via: {
+          connect: data.viaIds.map((id) => ({ id })),
         },
-      })
-      .catch(() => {
-        throw createGraphQLError("No flight created");
-      });
+        toId: data.toId,
+        etd: etd,
+        rotorStart: rotorStart,
+        atd: atd,
+        eta: eta,
+        rotorStop: rotorStop,
+        ata: ata,
+        flightTime: data.flightTime,
+        blockTime: data.blockTime,
+        editable: false,
+      },
+      include: {
+        helicopter: true,
+        pilot: true,
+        hoistOperator: true,
+        site: true,
+        from: true,
+        via: true,
+        to: true,
+        dailyUpdate: true,
+        dailyReport: true,
+      },
+    });
+    // .catch(() => {
+    //   throw createGraphQLError("No flight created");
+    // });
     return flight;
   },
 };

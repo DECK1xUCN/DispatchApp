@@ -61,9 +61,10 @@ const flightsTypeDefs = gql`
     note: String
     editable: Boolean
   }
-  # type Mutation {
-  #   createFlight(input: CreateFlight!): Flight!
-  # }
+
+  type Mutation {
+    createFlight(data: CreateFlight!): Flight!
+  }
   type Query {
     flights: [Flight!]!
     flightsBySiteId(siteId: Int!): [Flight!]!

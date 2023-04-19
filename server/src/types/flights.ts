@@ -6,6 +6,7 @@ import { Site } from "./sites";
 export type Flight = {
   id: number;
   flightNumber: string;
+  date: Date;
   helicopter: Helicopter;
   pilot: Pilot;
   hoistOperator: HoistOperator;
@@ -35,6 +36,7 @@ export type Flight = {
 
 export interface CreateFlight {
   flightNumber: string;
+  date: string;
   helicopterId: number;
   pilotId: number;
   hoistOperatorId: number;
@@ -42,12 +44,12 @@ export interface CreateFlight {
   fromId: number;
   viaIds: number[];
   toId: number;
-  etd: Date;
-  rotorStart: Date;
-  atd: Date;
-  eta: Date;
-  rotorStop: Date;
-  ata: Date;
+  etd: string;
+  rotorStart: string;
+  atd: string;
+  eta: string;
+  rotorStop: string;
+  ata: string;
   flightTime: number;
   blockTime: number;
   pax?: number;
