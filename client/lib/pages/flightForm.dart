@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -15,6 +17,7 @@ class FlightForm extends HookWidget {
   Widget build(BuildContext context) {
     Flight flight = ModalRoute.of(context)!.settings.arguments as Flight;
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
+    final now = DateTime.now();
 
     String flightQuery = """
 query MyQuery(\$flightId: Int!) {
@@ -131,10 +134,56 @@ query MyQuery(\$flightId: Int!) {
       'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
     });
 
+
     final isDelayed = useState(false);
     void toggleDelay(value) {
       isDelayed.value = !isDelayed.value;
     }
+
+    // The mutation is not updated yet, so all flights that will be saved, will be added to the dailyReport wih the id 1
+    // Via is also missing from the update
+    String flightMutation = """
+    mutation MyMutation (\$flightId: Int!, \$ata: DateTime! , \$atd: DateTime!, \$blockTime: Int!, \$cargo: Int!, \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCyc: Int!, \$notes: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!){
+  updateFlight(
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargo, delay: \$delayBool, delayCode: \$delayCode, delayDesc: \$delayDesc, delayMin: \$delayAmount, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCyc, notes: \$notes, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, dailyReportId: 1} 
+    id: \$flightId
+  ) {
+    atd
+    ata
+    blockTime
+    cargoPP
+    delay
+    delayCode
+    delayDesc
+    delayMin
+    eta
+    etd
+    flightNumber
+    flightTime
+    from {
+      id
+    }
+    hoistCycles
+    notes
+    pax
+    paxTax
+    rotorStart
+    rotorStop
+    to {
+      id
+    }
+    via {
+      id
+    }
+  }
+}
+    """;
+
+    final readMutation = useMutation(
+      MutationOptions(
+        document: gql(flightMutation),
+      ),
+    );
 
     TextEditingController controllerETD = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['etd']));
@@ -415,7 +464,7 @@ query MyQuery(\$flightId: Int!) {
                                       TimeOfDay rotorStopTime =
                                           TimeOfDay.fromDateTime(
                                               formState.value['rotorStop']);
-
+                                      print(formState.value['rotorStart'].toIso8601String());
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
                                           rotorStart.hour * 60 -
@@ -1107,13 +1156,39 @@ query MyQuery(\$flightId: Int!) {
                         if (formKey.currentState!.validate() &&
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
+                          print(formState.value['ata'].toIso8601String());
+                          readMutation.runMutation({
+                            'flightId': flight.id,
+                            'ata': formState.value['ata'].toIso8601String(),
+                            'atd': formState.value['atd'].toIso8601String(),
+                            'blockTime': formState.value['blockTime'],
+                            'cargo': formState.value['cargoPP'],
+                            'delayBool': isDelayed.value,
+                            'delayCode': formState.value['delayCode'],
+                            'delayDesc': formState.value['delayDesc'],
+                            'delayAmount': formState.value['delayMin'],
+                            'eta': formState.value['eta'].toIso8601String(),
+                            'etd': formState.value['etd'].toIso8601String(),
+                            'flightTime': formState.value['flightTime'],
+                            'fromId': locations[formState.value['selectedFrom']].id,
+                            'hoistCyc': formState.value['hoistCycles'],
+                            'notes': formState.value['notes'],
+                            'pax': formState.value['pax'],
+                            'paxTax': formState.value['paxTax'],
+                            'rotorStart': formState.value['rotorStart'].toIso8601String(),
+                            'rotorStop': formState.value['rotorStop'].toIso8601String(),
+                            'toId': locations[formState.value['selectedTo']].id,
+                            //'viaId': sites[formState.value['selectedVia']].id,
+                          });
+                          print(formState.value['eta']);
+                          print(formState.value['rotorStart'].toIso8601String());
                           // If the form is valid, display a snackbar. In the real world,
                           // you'd often call a server or save the information in a database.
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')),
                           );
-
-                          print(formState.value);
+                          print(readMutation.result);
+                          //print(formState.value);
                         }
                       },
                       child: const Text('Submit'),
