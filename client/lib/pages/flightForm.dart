@@ -980,6 +980,10 @@ query MyQuery(\$flightId: Int!) {
                               width: 400,
                               height: 200,
                               child: TextFormField(
+                                onChanged: (value) {
+                                  formState.value['delayDesc'] = value;
+                                  formState.value = {...formState.value};
+                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "This field must not be empty";
@@ -1015,6 +1019,10 @@ query MyQuery(\$flightId: Int!) {
                             width: 150,
                             height: 50,
                             child: TextFormField(
+                              onChanged: (value) {
+                                formState.value['pax'] = value;
+                                formState.value = {...formState.value};
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1049,7 +1057,11 @@ query MyQuery(\$flightId: Int!) {
                             // PAX Tax
                             width: 150,
                             height: 50,
-                            child: TextFormField(
+                            child: TextFormField (
+                              onChanged: (value) {
+                                formState.value['paxTax'] = value;
+                                formState.value = {...formState.value};
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1085,6 +1097,10 @@ query MyQuery(\$flightId: Int!) {
                             width: 150,
                             height: 50,
                             child: TextFormField(
+                              onChanged: (value) {
+                                formState.value['cargoPP'] = value;
+                                formState.value = {...formState.value};
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1123,6 +1139,10 @@ query MyQuery(\$flightId: Int!) {
                         width: 150,
                         height: 50,
                         child: TextFormField(
+                          onChanged: (value) {
+                            formState.value['hoistCycles'] = value;
+                            formState.value = {...formState.value};
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "This field must not be empty";
