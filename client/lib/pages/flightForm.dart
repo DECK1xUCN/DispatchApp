@@ -134,7 +134,6 @@ query MyQuery(\$flightId: Int!) {
       'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
     });
 
-
     final isDelayed = useState(false);
     void toggleDelay(value) {
       isDelayed.value = !isDelayed.value;
@@ -464,7 +463,8 @@ query MyQuery(\$flightId: Int!) {
                                       TimeOfDay rotorStopTime =
                                           TimeOfDay.fromDateTime(
                                               formState.value['rotorStop']);
-                                      print(formState.value['rotorStart'].toIso8601String());
+                                      print(formState.value['rotorStart']
+                                          .toIso8601String());
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
                                           rotorStart.hour * 60 -
@@ -803,7 +803,7 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   try {
                                     int newVal = int.parse(value);
-                                    if( newVal < 0) {
+                                    if (newVal < 0) {
                                       return "Block Time cannot be negative";
                                     }
                                   } catch (e) {
@@ -843,7 +843,7 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   try {
                                     int newVal = int.parse(value);
-                                    if( newVal < 0) {
+                                    if (newVal < 0) {
                                       return "Flight Time cannot be negative";
                                     }
                                   } catch (e) {
@@ -906,7 +906,7 @@ query MyQuery(\$flightId: Int!) {
                                       }
                                       try {
                                         int newVal = int.parse(value);
-                                        if( newVal < 0) {
+                                        if (newVal < 0) {
                                           return "Delay Time cannot be negative";
                                         }
                                       } catch (e) {
@@ -1029,7 +1029,7 @@ query MyQuery(\$flightId: Int!) {
                                 }
                                 try {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "PAX cannot be negative";
                                   }
                                 } catch (e) {
@@ -1057,7 +1057,7 @@ query MyQuery(\$flightId: Int!) {
                             // PAX Tax
                             width: 150,
                             height: 50,
-                            child: TextFormField (
+                            child: TextFormField(
                               onChanged: (value) {
                                 formState.value['paxTax'] = value;
                                 formState.value = {...formState.value};
@@ -1068,7 +1068,7 @@ query MyQuery(\$flightId: Int!) {
                                 }
                                 try {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "PAX Tax cannot be negative";
                                   }
                                 } catch (e) {
@@ -1109,7 +1109,7 @@ query MyQuery(\$flightId: Int!) {
                                   int.parse(value);
                                 } catch (e) {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "Cargo cannot be negative";
                                   }
                                 }
@@ -1149,7 +1149,7 @@ query MyQuery(\$flightId: Int!) {
                             }
                             try {
                               int newVal = int.parse(value);
-                              if( newVal < 0) {
+                              if (newVal < 0) {
                                 return "Hoist Cycles cannot be negative";
                               }
                             } catch (e) {
@@ -1190,18 +1190,22 @@ query MyQuery(\$flightId: Int!) {
                             'eta': formState.value['eta'].toIso8601String(),
                             'etd': formState.value['etd'].toIso8601String(),
                             'flightTime': formState.value['flightTime'],
-                            'fromId': locations[formState.value['selectedFrom']].id,
+                            'fromId':
+                                locations[formState.value['selectedFrom']].id,
                             'hoistCyc': formState.value['hoistCycles'],
                             'notes': formState.value['notes'],
                             'pax': formState.value['pax'],
                             'paxTax': formState.value['paxTax'],
-                            'rotorStart': formState.value['rotorStart'].toIso8601String(),
-                            'rotorStop': formState.value['rotorStop'].toIso8601String(),
+                            'rotorStart':
+                                formState.value['rotorStart'].toIso8601String(),
+                            'rotorStop':
+                                formState.value['rotorStop'].toIso8601String(),
                             'toId': locations[formState.value['selectedTo']].id,
                             //'viaId': sites[formState.value['selectedVia']].id,
                           });
                           print(formState.value['eta']);
-                          print(formState.value['rotorStart'].toIso8601String());
+                          print(
+                              formState.value['rotorStart'].toIso8601String());
                           // If the form is valid, display a snackbar. In the real world,
                           // you'd often call a server or save the information in a database.
                           ScaffoldMessenger.of(context).showSnackBar(
