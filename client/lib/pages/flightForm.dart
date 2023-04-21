@@ -1024,7 +1024,13 @@ query MyQuery(\$flightId: Int!) {
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                formState.value['pax'] = value;
+                                var newValue;
+                                try {
+                                  newValue = int.parse(value);
+                                } catch (e) {
+                                  return;
+                                }
+                                formState.value['pax'] = newValue;
                                 formState.value = {...formState.value};
                               },
                               validator: (value) {
@@ -1063,7 +1069,13 @@ query MyQuery(\$flightId: Int!) {
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                formState.value['paxTax'] = value;
+                                var newValue;
+                                try {
+                                  newValue = int.parse(value);
+                                } catch (e) {
+                                  return;
+                                }
+                                formState.value['paxTax'] = newValue;
                                 formState.value = {...formState.value};
                               },
                               validator: (value) {
@@ -1102,7 +1114,13 @@ query MyQuery(\$flightId: Int!) {
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                formState.value['cargoPP'] = value;
+                                var newValue;
+                                try {
+                                  newValue = int.parse(value);
+                                } catch (e) {
+                                  return;
+                                }
+                                formState.value['cargoPP'] = newValue;
                                 formState.value = {...formState.value};
                               },
                               validator: (value) {
@@ -1144,7 +1162,13 @@ query MyQuery(\$flightId: Int!) {
                         height: 50,
                         child: TextFormField(
                           onChanged: (value) {
-                            formState.value['hoistCycles'] = value;
+                            var newValue;
+                            try {
+                              newValue = int.parse(value);
+                            } catch (e) {
+                              return;
+                            }
+                            formState.value['hoistCycles'] = newValue;
                             formState.value = {...formState.value};
                           },
                           validator: (value) {
@@ -1181,7 +1205,8 @@ query MyQuery(\$flightId: Int!) {
                         if (formKey.currentState!.validate() &&
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
-                          //print(formState.value['pax'] as int);
+                          // print(formState.value['pax'] as String);
+
                           readMutation.runMutation({
                             'flightId': flight.id,
                             'ata': formState.value['ata'].toIso8601String(),
@@ -1206,18 +1231,7 @@ query MyQuery(\$flightId: Int!) {
                             'rotorStop':
                                 formState.value['rotorStop'].toIso8601String(),
                             'toId': locations[formState.value['selectedTo']].id,
-                            //'viaId': sites[formState.value['selectedVia']].id,
                           });
-                          print(formState.value['eta']);
-                          print(
-                              formState.value['rotorStart'].toIso8601String());
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
-                          //print(readMutation.result);
-                          //print(formState.value);
                         }
                       },
                       child: const Text('Submit'),
