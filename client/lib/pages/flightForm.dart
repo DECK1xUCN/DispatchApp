@@ -119,13 +119,13 @@ query MyQuery(\$flightId: Int!) {
       'atd': DateTime.parse(result.data?["flight"]["atd"]),
       'etd': DateTime.parse(result.data?["flight"]["etd"]),
       'blockTime': result.data?["flight"]["blockTime"],
+      'flightTime': result.data?["flight"]["flightTime"],
       'cargoPP': result.data?["flight"]["cargoPP"],
       'delay': result.data?["flight"]["delay"],
       'delayCode': result.data?["flight"]["delayCode"],
       'delayDesc': result.data?["flight"]["delayDesc"],
       'delayMin': result.data?["flight"]["delayMin"],
       'eta': DateTime.parse(result.data?["flight"]["eta"]),
-      'flightTime': result.data?["flight"]["flightTime"],
       'hoistCycles': result.data?["flight"]["hoistCycles"],
       'notes': result.data?["flight"]["notes"],
       'pax': result.data?["flight"]["pax"],
@@ -134,7 +134,7 @@ query MyQuery(\$flightId: Int!) {
       'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
     });
 
-    final isDelayed = useState(false);
+    final isDelayed = useState(formState.value['delay']);
     void toggleDelay(value) {
       isDelayed.value = !isDelayed.value;
     }
@@ -181,6 +181,10 @@ query MyQuery(\$flightId: Int!) {
     final readMutation = useMutation(
       MutationOptions(
         document: gql(flightMutation),
+        onCompleted: (dynamic resultData) {
+          print(resultData);
+          //Navigator.pop(context);
+        },
       ),
     );
 
@@ -1172,11 +1176,12 @@ query MyQuery(\$flightId: Int!) {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
+                        //print(formState.value['hoistCycles'] as String);
                         // Validate returns true if the form is valid, or false otherwise.
                         if (formKey.currentState!.validate() &&
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
-                          print(formState.value['ata'].toIso8601String());
+                          //print(formState.value['pax'] as int);
                           readMutation.runMutation({
                             'flightId': flight.id,
                             'ata': formState.value['ata'].toIso8601String(),
@@ -1211,7 +1216,7 @@ query MyQuery(\$flightId: Int!) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')),
                           );
-                          print(readMutation.result);
+                          //print(readMutation.result);
                           //print(formState.value);
                         }
                       },
