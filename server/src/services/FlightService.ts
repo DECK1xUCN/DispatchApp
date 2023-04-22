@@ -61,7 +61,6 @@ export default {
       date.getMonth(),
       date.getDate() + 1
     );
-    console.log(datePlusOne);
 
     const flights = await ctx.prisma.flight
       .findMany({

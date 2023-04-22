@@ -45,7 +45,6 @@ const flightResolver = {
 
   Mutation: {
     createFlight: async (parent: any, args: { data: CreateFlight }) => {
-      console.log(args.data);
       const flight = await FlightService.createFlight(args.data);
       if (!flight) throw createGraphQLError("No flight created");
       return flight;
