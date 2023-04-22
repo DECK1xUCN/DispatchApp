@@ -1,5 +1,5 @@
 import { ctx } from "@/utils/context";
-import { checkName } from "@/utils/zodCheck";
+import { validateName } from "@/utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
@@ -23,7 +23,10 @@ export default {
 
   createHoistOperator: async (name: string) => {
     const hoistOperator = await ctx.prisma.hoistOperator
-      .create({ data: { name: checkName(name) }, include: { flights: true } })
+      .create({
+        data: { name: validateName(name) },
+        include: { flights: true },
+      })
       .catch(() => {
         throw createGraphQLError("Database exception");
       });
@@ -34,7 +37,7 @@ export default {
     const hoistOperator = await ctx.prisma.hoistOperator
       .update({
         where: { id: data.id },
-        data: { name: checkName(data.name) },
+        data: { name: validateName(data.name) },
         include: { flights: true },
       })
       .catch(() => {

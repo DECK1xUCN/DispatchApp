@@ -2,7 +2,7 @@ import { CreateFlight, UpdateFlight } from "@/types/flights";
 import { ctx } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
 import { formatDate } from "@/utils/dateHelper";
-import { checkFlightNumber, checkFlightTime } from "@/utils/zodCheck";
+import { validateFlightNumber, validateFlightTime } from "@/utils/validators";
 
 export default {
   getFlights: async () => {
@@ -131,7 +131,7 @@ export default {
     const flight = await ctx.prisma.flight
       .create({
         data: {
-          flightNumber: checkFlightNumber(data.flightNumber),
+          flightNumber: validateFlightNumber(data.flightNumber),
           date: formatDate(data.date),
           helicopterId: data.helicopterId,
           pilotId: data.pilotId,
@@ -148,8 +148,8 @@ export default {
           eta: formatDate(data.eta),
           rotorStop: formatDate(data.rotorStop),
           ata: formatDate(data.ata),
-          flightTime: data.flightTime ? checkFlightTime(data.flightTime) : 0,
-          blockTime: data.blockTime ? checkFlightTime(data.blockTime) : 0,
+          flightTime: data.flightTime ? validateFlightTime(data.flightTime) : 0,
+          blockTime: data.blockTime ? validateFlightTime(data.blockTime) : 0,
           editable: false,
         },
         include: {
@@ -176,7 +176,7 @@ export default {
         where: { id },
         data: {
           flightNumber: data.flightNumber
-            ? checkFlightNumber(data.flightNumber)
+            ? validateFlightNumber(data.flightNumber)
             : undefined,
           date: data.date ? formatDate(data.date) : undefined,
           helicopterId: data.helicopterId ? data.helicopterId : undefined,
@@ -199,10 +199,10 @@ export default {
           rotorStop: data.rotorStop ? formatDate(data.rotorStop) : undefined,
           ata: data.eta ? formatDate(data.ata) : undefined,
           flightTime: data.flightTime
-            ? checkFlightTime(data.flightTime)
+            ? validateFlightTime(data.flightTime)
             : undefined,
           blockTime: data.blockTime
-            ? checkFlightTime(data.blockTime)
+            ? validateFlightTime(data.blockTime)
             : undefined,
         },
         include: {

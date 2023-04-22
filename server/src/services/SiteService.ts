@@ -1,4 +1,4 @@
-import { cheeckEmptyString } from "@/utils/zodCheck";
+import { validateEmptyString } from "@/utils/validators";
 import { ctx } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
 
@@ -33,7 +33,7 @@ export default {
   createSite: async (name: string) => {
     const createdSite = await ctx.prisma.site
       .create({
-        data: { name: cheeckEmptyString(name) },
+        data: { name: validateEmptyString(name) },
         include: { locations: true, flights: true },
       })
       .catch(() => {
@@ -47,7 +47,7 @@ export default {
     const updatedSite = await ctx.prisma.site
       .update({
         where: { id },
-        data: { name: cheeckEmptyString(name) },
+        data: { name: validateEmptyString(name) },
         include: { locations: true, flights: true },
       })
       .catch(() => {

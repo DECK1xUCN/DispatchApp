@@ -1,7 +1,7 @@
 import { createGraphQLError } from "graphql-yoga";
 import z from "zod";
 
-export const cheeckEmptyString = (input: string) => {
+export const validateEmptyString = (input: string) => {
   try {
     z.string().nonempty().parse(input);
   } catch {
@@ -10,7 +10,7 @@ export const cheeckEmptyString = (input: string) => {
   return input;
 };
 
-export const checkReg = (input: string) => {
+export const validateReg = (input: string) => {
   try {
     z.string().max(10).parse(input);
   } catch {
@@ -21,7 +21,7 @@ export const checkReg = (input: string) => {
   return input;
 };
 
-export const checkModel = (input: string) => {
+export const validateModel = (input: string) => {
   try {
     z.string().max(10).parse(input);
   } catch {
@@ -30,7 +30,7 @@ export const checkModel = (input: string) => {
   return input;
 };
 
-export const checkFlightNumber = (input: string) => {
+export const validateFlightNumber = (input: string) => {
   try {
     z.string().max(10).parse(input);
   } catch {
@@ -39,7 +39,7 @@ export const checkFlightNumber = (input: string) => {
   return input;
 };
 
-export const checkLocationName = (input: string) => {
+export const validateLocationName = (input: string) => {
   try {
     z.string().nonempty().max(20).parse(input);
   } catch {
@@ -48,7 +48,7 @@ export const checkLocationName = (input: string) => {
   return input;
 };
 
-export const checkName = (input: string) => {
+export const validateName = (input: string) => {
   try {
     z.string().nonempty().max(4).parse(input);
   } catch {
@@ -59,7 +59,7 @@ export const checkName = (input: string) => {
   return input;
 };
 
-export const checkFlightTime = (input: number) => {
+export const validateFlightTime = (input: number) => {
   try {
     z.number().min(0).max(1440).parse(input);
   } catch {

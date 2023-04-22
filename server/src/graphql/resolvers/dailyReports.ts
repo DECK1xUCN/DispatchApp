@@ -3,13 +3,13 @@ import { createGraphQLError } from "graphql-yoga";
 
 const dailyReportResolver = {
   Query: {
-    dailyReportById: async (parent: any, args: { id: number }) => {
+    dailyReportsById: async (parent: any, args: { id: number }) => {
       const dailyReport = await DailyReportService.getDailyReportById(args.id);
       if (!dailyReport) throw createGraphQLError("No daily report found");
       return dailyReport;
     },
 
-    dailyReportsByDate: async (parent: any, args: { date: Date }) => {
+    dailyReportsByDate: async (parent: any, args: { date: string }) => {
       const dailyReport = await DailyReportService.getDailyReportByDate(
         args.date
       );

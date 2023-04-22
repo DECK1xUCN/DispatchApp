@@ -1,4 +1,5 @@
 import { ctx } from "@/utils/context";
+import { formatDate } from "@/utils/dateHelper";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
@@ -14,10 +15,10 @@ export default {
     return dailyReport;
   },
 
-  getDailyReportByDate: async (date: Date) => {
+  getDailyReportByDate: async (date: string) => {
     const dailyReport = await ctx.prisma.dailyReport
       .findMany({
-        where: { date },
+        where: { date: formatDate(date) },
         include: { flights: true },
       })
       .catch(() => {

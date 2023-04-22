@@ -1,6 +1,5 @@
 import { CreateDailyUpdate } from "@/types/dailyUpdates";
 import { ctx } from "@/utils/context";
-import { Flight, DailyUpdate } from "@prisma/client";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
@@ -24,9 +23,13 @@ export default {
   },
 
   createDailyUpdate: async (data: CreateDailyUpdate) => {
-    const flight = await ctx.prisma.flight.findUnique({
-      where: { id: data.flightId },
-    });
+    const flight = await ctx.prisma.flight
+      .findUnique({
+        where: { id: data.flightId },
+      })
+      .catch(() => {
+        throw createGraphQLError("No flight found");
+      });
     if (!flight) throw createGraphQLError("No flight found");
     if (flight.editable === false) throw createGraphQLError("Flight is locked");
 
