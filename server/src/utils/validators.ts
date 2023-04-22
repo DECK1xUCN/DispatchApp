@@ -12,7 +12,7 @@ export const validateEmptyString = (input: string) => {
 
 export const validateReg = (input: string) => {
   try {
-    z.string().max(10).parse(input);
+    z.string().nonempty().max(10).parse(input);
   } catch {
     throw createGraphQLError(
       "Helicopter Registration must be 10 characters or less"
@@ -23,7 +23,7 @@ export const validateReg = (input: string) => {
 
 export const validateModel = (input: string) => {
   try {
-    z.string().max(10).parse(input);
+    z.string().nonempty().max(10).parse(input);
   } catch {
     throw createGraphQLError("Helicopter Model must be 10 characters or less");
   }
@@ -68,4 +68,17 @@ export const validateFlightTime = (input: number) => {
     );
   }
   return input;
+};
+
+export const validateDateBeforeNow = (input: Date) => {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
+  if (input < now) return true;
+  return false;
+};
+
+export const isAfter = (input: Date, compare: Date) => {
+  if (input > compare) return true;
+  return false;
 };

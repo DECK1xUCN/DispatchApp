@@ -2,7 +2,13 @@ import { CreateFlight, UpdateFlight } from "@/types/flights";
 import { ctx } from "@/utils/context";
 import { createGraphQLError } from "graphql-yoga";
 import { formatDate } from "@/utils/dateHelper";
-import { validateFlightNumber, validateFlightTime } from "@/utils/validators";
+import {
+  isAfter,
+  validateDateBeforeNow,
+  validateFlightNumber,
+  validateFlightTime,
+} from "@/utils/validators";
+import LocationService from "./LocationService";
 
 export default {
   getFlights: async () => {
@@ -128,6 +134,36 @@ export default {
   },
 
   createFlight: async (data: CreateFlight) => {
+    // when creating a flight, check if the date is in the past
+    // if so, set editable to false
+    let isEditable: boolean = true;
+    if (validateDateBeforeNow(formatDate(data.date))) isEditable = false;
+
+    // check if all via locations exist
+    // if not, return null
+    const via = await LocationService.getViaByIds(data.viaIds);
+    if (data.viaIds.length > 0 && via.length !== data.viaIds.length)
+      throw createGraphQLError("Enter valid locations for VIA");
+
+    // check if to and from have valid location types
+    if (
+      !(await LocationService.validateLocationType(data.fromId, "HELIPORT")) ||
+      !(await LocationService.validateLocationType(data.fromId, "AIRPORT"))
+    )
+      throw createGraphQLError("Enter valid location for FROM");
+    if (
+      !(await LocationService.validateLocationType(data.toId, "HELIPORT")) ||
+      !(await LocationService.validateLocationType(data.toId, "AIRPORT"))
+    )
+      throw createGraphQLError("Enter valid location for TO");
+
+    if (isAfter(formatDate(data.etd), formatDate(data.atd)))
+      throw createGraphQLError("ETD must be before ATD");
+    if (isAfter(formatDate(data.eta), formatDate(data.ata)))
+      throw createGraphQLError("ETA must be before ATA");
+    if (isAfter(formatDate(data.rotorStart), formatDate(data.rotorStop)))
+      throw createGraphQLError("Rotor start must be before rotor stop");
+
     const flight = await ctx.prisma.flight
       .create({
         data: {
@@ -150,7 +186,12 @@ export default {
           ata: formatDate(data.ata),
           flightTime: data.flightTime ? validateFlightTime(data.flightTime) : 0,
           blockTime: data.blockTime ? validateFlightTime(data.blockTime) : 0,
-          editable: false,
+          pax: data.pax,
+          paxTax: data.paxTax,
+          cargoPP: data.cargoPP,
+          hoistCycles: data.hoistCycles,
+          note: data.note,
+          editable: isEditable,
         },
         include: {
           helicopter: true,

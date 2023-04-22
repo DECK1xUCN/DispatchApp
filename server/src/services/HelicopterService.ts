@@ -1,5 +1,6 @@
 import { CreateHelicopter } from "@/types/helicopters";
 import { ctx } from "@/utils/context";
+import { validateEmptyString } from "@/utils/validators";
 import { validateModel, validateReg } from "@/utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
@@ -34,15 +35,12 @@ export default {
   },
 
   createHelicopter: async (data: CreateHelicopter) => {
-    validateModel(data.model);
-    validateReg(data.reg);
-
     const helicopter = await ctx.prisma.helicopter
       .create({
         data: {
-          manufacturer: data.manufacturer,
-          model: data.model,
-          reg: data.reg,
+          manufacturer: validateEmptyString(data.manufacturer),
+          model: validateModel(data.model),
+          reg: validateReg(data.reg),
         },
         include: { flights: true },
       })

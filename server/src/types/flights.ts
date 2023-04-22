@@ -57,7 +57,7 @@ export interface CreateFlight {
   cargoPP?: number;
   hoistCycles?: number;
   note?: string;
-  editable: boolean;
+  editable?: boolean;
 }
 
 export interface UpdateFlight {
