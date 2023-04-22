@@ -79,6 +79,6 @@ export const validateDateBeforeNow = (input: Date) => {
 };
 
 export const isAfter = (input: Date, compare: Date) => {
-  if (input > compare) return true;
+  if (input >= compare) return true;
   return false;
 };
