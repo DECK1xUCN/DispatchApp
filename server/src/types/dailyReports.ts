@@ -1,25 +1,7 @@
-import { Helicopter } from "./helicopters";
-import { HoistOperator } from "./hoistOperators";
-import { Pilot } from "./pilots";
+import { Flight } from "./flights";
 
 export type DailyReport = {
   id: number;
   date: Date;
-  helicopter: Helicopter;
-  pilot: Pilot;
-  hoistOperator: HoistOperator;
+  flights: Flight[];
 };
-
-export interface CreateDailyReportInput {
-  date: Date;
-  helicopterId: number;
-  pilotId: number;
-  hoistOperatorId: number;
-}
-
-export interface UpdateDailyReportInput {
-  date?: Date;
-  helicopterId?: number;
-  pilotId?: number;
-  hoistOperatorId?: number;
-}

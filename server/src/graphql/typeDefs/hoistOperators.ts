@@ -1,22 +1,20 @@
 import gql from "graphql-tag";
 
-const hoistOperators = gql`
+const hoistOperatorTypeDefs = gql`
+  type HoistOperator {
+    id: Int!
+    name: String!
+    flights: [Flight!]!
+  }
+
   type Query {
     hoistOperators: [HoistOperator!]!
     hoistOperator(id: Int!): HoistOperator!
   }
   type Mutation {
-    createHoistOperator(data: HoistOperatorInput): HoistOperator!
-    updateHoistOperator(id: String!, data: HoistOperatorInput!): HoistOperator!
-  }
-  type HoistOperator {
-    id: Int!
-    name: String!
-  }
-  # Input types
-  input HoistOperatorInput {
-    name: String!
+    createHoistOperator(name: String!): HoistOperator!
+    updateHoistOperator(id: Int!, name: String!): HoistOperator!
   }
 `;
 
-export default hoistOperators;
+export default hoistOperatorTypeDefs;

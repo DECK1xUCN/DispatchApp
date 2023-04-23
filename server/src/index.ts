@@ -1,5 +1,4 @@
 import { createYoga } from "graphql-yoga";
-import { context } from "./utils/context";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
@@ -7,6 +6,7 @@ import express from "express";
 import https from "https";
 import fs from "fs";
 import * as Sentry from "@sentry/node";
+import { ctx } from "./utils/context";
 
 function main() {
   // Create an instance of Express
@@ -34,7 +34,7 @@ function main() {
     tracesSampleRate: 1.0,
   });
 
-  const yoga = createYoga({ schema, context, graphqlEndpoint: "/" });
+  const yoga = createYoga({ schema, context: ctx, graphqlEndpoint: "/" });
   app.use(yoga);
 
   httpsServer.listen(443, () => {
