@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
-    "start": "nodemon ts-node src/index.ts"
+    "start": "ts-node -r tsconfig-paths/register src/index.ts"
   },
   "devDependencies": {
     "@prisma/client": "^4.13.0",

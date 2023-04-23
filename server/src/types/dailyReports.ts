@@ -1,4 +1,4 @@
-import { Flight } from "@prisma/client";
+import { Flight } from "./flights";
 
 export type DailyReport = {
   id: number;
