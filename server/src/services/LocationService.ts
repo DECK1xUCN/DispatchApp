@@ -46,7 +46,7 @@ export default {
   getHeliportsPerSite: async (siteId: number) => {
     const locations = await ctx.prisma.location
       .findMany({
-        where: { siteId, type: "HELIPORT" },
+        where: { siteId, type: { in: ["HELIPORT", "AIRPORT"] } },
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
