@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'home.dart';
-import 'notimplemented.dart';
-
 class Loading extends StatefulWidget {
   const Loading({Key? key}) : super(key: key);
 
@@ -14,7 +11,7 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
   void getDashboardData() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     Navigator.pushReplacementNamed(context, '/home', arguments: {'test': true});
   }
 
@@ -41,4 +38,3 @@ class _LoadingState extends State<Loading> {
     );
   }
 }
-

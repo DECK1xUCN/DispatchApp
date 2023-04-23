@@ -1,7 +1,10 @@
+import 'package:client/pages/sites.dart';
+
 import 'package:flutter/material.dart';
 
-import 'dashboard.dart';
-import 'notimplemented.dart';
+import 'stats.dart';
+import 'dfrs.dart';
+import 'flights.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key});
@@ -11,12 +14,13 @@ class Sidebar extends StatefulWidget {
 }
 
 class SidebarB extends State<Sidebar> {
-  @override
   int _selectedIndex = 0;
 
+  @override
   Widget build(BuildContext context) {
     Color myColor = const Color.fromRGBO(240, 240, 240, 1.0); //background color
-    Color selectedColor = const Color.fromRGBO(50 , 50, 50, 1.0); //selected icon color
+    Color selectedColor =
+        const Color.fromRGBO(50, 50, 50, 1.0); //selected icon color
     double width = 35; //icon width
 
     return Scaffold(
@@ -44,34 +48,41 @@ class SidebarB extends State<Sidebar> {
                       Card(
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100), // set the desired border radius
+                          borderRadius: BorderRadius.circular(
+                              100), // set the desired border radius
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: _selectedIndex == 0 ? selectedColor : myColor,
+                            color:
+                                _selectedIndex == 0 ? selectedColor : myColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             minLeadingWidth: -10,
                             tileColor: myColor,
                             title: Row(
-                              mainAxisAlignment: MainAxisAlignment.center, // center the children of the Row
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // center the children of the Row
                               children: [
                                 SizedBox(
                                   width: width,
                                   height: width,
                                   child: _selectedIndex == 0
-                                      ? Image.asset("assets/dailyUpdatesSelected.png") // show selected icon
+                                      ? Image.asset(
+                                          "assets/dailyUpdatesSelected.png") // show selected icon
                                       : Image.asset("assets/dailyUpdates.png"),
                                 ),
-                                const SizedBox(width: 10), // add some spacing between the image and text
+                                const SizedBox(width: 10),
+                                // add some spacing between the image and text
                                 Text(
                                   'Flights',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 30,
-                                    color:
-                                    _selectedIndex == 0 ? Colors.white : Colors.black, // change color based on selection
+                                    color: _selectedIndex == 0
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // change color based on selection
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -88,34 +99,41 @@ class SidebarB extends State<Sidebar> {
                       Card(
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100), // set the desired border radius
+                          borderRadius: BorderRadius.circular(
+                              100), // set the desired border radius
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: _selectedIndex == 1 ? selectedColor : myColor,
+                            color:
+                                _selectedIndex == 1 ? selectedColor : myColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             minLeadingWidth: -10,
                             tileColor: myColor,
                             title: Row(
-                              mainAxisAlignment: MainAxisAlignment.center, // center the children of the Row
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // center the children of the Row
                               children: [
                                 SizedBox(
                                   width: width,
                                   height: width,
                                   child: _selectedIndex == 1
-                                      ? Image.asset("assets/dailyReportsSelected.png") // show selected icon
+                                      ? Image.asset(
+                                          "assets/dailyReportsSelected.png") // show selected icon
                                       : Image.asset("assets/dailyReports.png"),
                                 ),
-                                SizedBox(width: 10), // add some spacing between the image and text
+                                const SizedBox(width: 10),
+                                // add some spacing between the image and text
                                 Text(
                                   'DFRs',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 30,
-                                    color:
-                                    _selectedIndex == 1 ? Colors.white : Colors.black, // change color based on selection
+                                    color: _selectedIndex == 1
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // change color based on selection
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -128,37 +146,45 @@ class SidebarB extends State<Sidebar> {
                             },
                           ),
                         ),
-                      ),Card(
+                      ),
+                      Card(
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100), // set the desired border radius
+                          borderRadius: BorderRadius.circular(
+                              100), // set the desired border radius
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: _selectedIndex == 2 ? selectedColor : myColor,
+                            color:
+                                _selectedIndex == 2 ? selectedColor : myColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             minLeadingWidth: -10,
                             tileColor: myColor,
                             title: Row(
-                              mainAxisAlignment: MainAxisAlignment.center, // center the children of the Row
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // center the children of the Row
                               children: [
                                 SizedBox(
                                   width: width,
                                   height: width,
                                   child: _selectedIndex == 2
-                                      ? Image.asset("assets/sitesSelected.png") // show selected icon
+                                      ? Image.asset(
+                                          "assets/sitesSelected.png") // show selected icon
                                       : Image.asset("assets/sites.png"),
                                 ),
-                                SizedBox(width: 10), // add some spacing between the image and text
+                                const SizedBox(width: 10),
+                                // add some spacing between the image and text
                                 Text(
                                   'Sites',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 30,
-                                    color:
-                                    _selectedIndex == 2 ? Colors.white : Colors.black, // change color based on selection
+                                    color: _selectedIndex == 2
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // change color based on selection
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -171,37 +197,45 @@ class SidebarB extends State<Sidebar> {
                             },
                           ),
                         ),
-                      ),Card(
+                      ),
+                      Card(
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100), // set the desired border radius
+                          borderRadius: BorderRadius.circular(
+                              100), // set the desired border radius
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: _selectedIndex == 3 ? selectedColor : myColor,
+                            color:
+                                _selectedIndex == 3 ? selectedColor : myColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             minLeadingWidth: -10,
                             tileColor: myColor,
                             title: Row(
-                              mainAxisAlignment: MainAxisAlignment.center, // center the children of the Row
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              // center the children of the Row
                               children: [
                                 SizedBox(
                                   width: width,
                                   height: width,
                                   child: _selectedIndex == 3
-                                      ? Image.asset("assets/dashboardSelected.png") // show selected icon
+                                      ? Image.asset(
+                                          "assets/dashboardSelected.png") // show selected icon
                                       : Image.asset("assets/dashboard.png"),
                                 ),
-                                SizedBox(width: 10), // add some spacing between the image and text
+                                const SizedBox(width: 10),
+                                // add some spacing between the image and text
                                 Text(
                                   'Stats',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 30,
-                                    color:
-                                    _selectedIndex == 3 ? Colors.white : Colors.black, // change color based on selection
+                                    color: _selectedIndex == 3
+                                        ? Colors.white
+                                        : Colors.black,
+                                    // change color based on selection
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -241,10 +275,10 @@ class SidebarB extends State<Sidebar> {
             child: IndexedStack(
               index: _selectedIndex,
               children: const <Widget>[
-                NotImplemented(),
-                NotImplemented(),
-                NotImplemented(),
-                Dashboard(),
+                Flights(),
+                DFRs(),
+                Sites(),
+                Stats(),
               ],
             ),
           )

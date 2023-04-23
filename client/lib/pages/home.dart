@@ -1,4 +1,4 @@
-import 'package:client/pages/dashboard.dart';
+import 'package:client/pages/flightForm.dart';
 import 'package:client/pages/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,8 +24,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue[200],
-      child:
-          SizedBox(child: Sidebar()),
+      child: const SizedBox(child: Sidebar()),
     );
   }
 }

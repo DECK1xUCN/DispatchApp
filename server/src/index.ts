@@ -7,6 +7,8 @@ import express from "express";
 
 function main() {
   const app = express();
+
+  // Create GraphQL schema
   const schema = makeExecutableSchema({
     resolvers: [resolvers],
     typeDefs: [typeDefs],

@@ -119,18 +119,16 @@ export default {
     return location;
   },
 
-  validateLocationType: async (id: number, type: LocationType) => {
+  validateLandable: async (id: number) => {
     const location = await ctx.prisma.location
-      .update({
+      .findUnique({
         where: { id },
-        data: {
-          type: type,
-        },
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
         throw createGraphQLError("Database exception");
       });
-    return location ? true : false;
+    if (location && (location.type === "HELIPORT" || "AIRPORT")) return true;
+    return false;
   },
 };

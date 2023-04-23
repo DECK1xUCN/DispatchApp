@@ -145,16 +145,20 @@ export default {
       throw createGraphQLError("Enter valid locations for VIA");
 
     // check if to and from have valid location types
-    if (
-      !(await LocationService.validateLocationType(data.fromId, "HELIPORT")) ||
-      !(await LocationService.validateLocationType(data.fromId, "AIRPORT"))
-    )
-      throw createGraphQLError("Enter valid location for FROM");
-    if (
-      !(await LocationService.validateLocationType(data.toId, "HELIPORT")) ||
-      !(await LocationService.validateLocationType(data.toId, "AIRPORT"))
-    )
-      throw createGraphQLError("Enter valid location for TO");
+    const isFromLandable: boolean = await LocationService.validateLandable(
+      data.fromId
+    );
+    const isToLandable: boolean = await LocationService.validateLandable(
+      data.toId
+    );
+    if (!isFromLandable)
+      throw createGraphQLError(
+        "FROM location must be either Heliport or Airport"
+      );
+    if (!isToLandable)
+      throw createGraphQLError(
+        "TO location must be either Heliport or Airport"
+      );
 
     if (isAfter(formatDate(data.etd), formatDate(data.atd)))
       throw createGraphQLError("ETD must be before ATD");
@@ -211,39 +215,95 @@ export default {
   },
 
   updateFlight: async (id: number, data: UpdateFlight) => {
+    const originalFlight = await ctx.prisma.flight
+      .findUnique({
+        where: { id },
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    if (!originalFlight) throw createGraphQLError("Flight not found");
+    if (validateDateBeforeNow(formatDate(originalFlight.date.toString())))
+      throw createGraphQLError("Flight is not editable");
+
+    if (data.viaIds) {
+      const via = await LocationService.getViaByIds(data.viaIds).catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+      if (data.viaIds.length > 0 && via.length !== data.viaIds.length)
+        throw createGraphQLError("Enter valid locations for VIA");
+    }
+
+    if (data.etd && isAfter(formatDate(data.etd), formatDate(data.atd))) {
+      throw createGraphQLError("ETD must be before ATD");
+    }
+    if (data.eta && isAfter(formatDate(data.eta), formatDate(data.ata))) {
+      throw createGraphQLError("ETA must be before ATA");
+    }
+    if (
+      data.rotorStart &&
+      isAfter(formatDate(data.rotorStart), formatDate(data.rotorStop))
+    ) {
+      throw createGraphQLError("Rotor start must be before rotor stop");
+    }
+
+    // validate landable
+    if (data.fromId) {
+      const isFromLandable: boolean = await LocationService.validateLandable(
+        data.fromId
+      );
+      if (!isFromLandable)
+        throw createGraphQLError(
+          "FROM location must be either Heliport or Airport"
+        );
+    }
+    if (data.toId) {
+      const isToLandable: boolean = await LocationService.validateLandable(
+        data.toId
+      );
+      if (!isToLandable)
+        throw createGraphQLError(
+          "TO location must be either Heliport or Airport"
+        );
+    }
+
     const flight = await ctx.prisma.flight
       .update({
         where: { id },
         data: {
-          flightNumber: data.flightNumber
-            ? validateFlightNumber(data.flightNumber)
-            : undefined,
-          date: data.date ? formatDate(data.date) : undefined,
-          helicopterId: data.helicopterId ? data.helicopterId : undefined,
-          pilotId: data.pilotId ? data.pilotId : undefined,
-          hoistOperatorId: data.hoistOperatorId
-            ? data.hoistOperatorId
-            : undefined,
-          siteId: data.siteId ? data.siteId : undefined,
-          fromId: data.fromId,
+          flightNumber:
+            data.flightNumber ?? validateFlightNumber(data.flightNumber),
+          date: data.date ?? formatDate(data.date),
+          helicopterId: data.helicopterId ?? data.helicopterId,
+          pilotId: data.pilotId ?? data.pilotId,
+          hoistOperatorId: data.hoistOperatorId ?? data.hoistOperatorId,
+          siteId: data.siteId ?? data.siteId,
+          fromId: data.fromId ?? data.fromId,
           via: data.viaIds
             ? {
                 connect: data.viaIds.map((id) => ({ id })),
               }
             : undefined,
-          toId: data.toId ? data.toId : undefined,
-          etd: data.etd ? formatDate(data.etd) : undefined,
-          rotorStart: data.rotorStart ? formatDate(data.rotorStart) : undefined,
-          atd: data.atd ? formatDate(data.atd) : undefined,
-          eta: data.eta ? formatDate(data.eta) : undefined,
-          rotorStop: data.rotorStop ? formatDate(data.rotorStop) : undefined,
-          ata: data.eta ? formatDate(data.ata) : undefined,
-          flightTime: data.flightTime
-            ? validateFlightTime(data.flightTime)
-            : undefined,
-          blockTime: data.blockTime
-            ? validateFlightTime(data.blockTime)
-            : undefined,
+          toId: data.toId ?? data.toId,
+          etd: data.etd ?? formatDate(data.etd),
+          rotorStart: data.rotorStart ?? formatDate(data.rotorStart),
+          atd: data.atd ?? formatDate(data.atd),
+          eta: data.eta ?? formatDate(data.eta),
+          rotorStop: data.rotorStop ?? formatDate(data.rotorStop),
+          ata: data.eta ?? formatDate(data.ata),
+          flightTime: data.flightTime ?? validateFlightTime(data.flightTime),
+          blockTime: data.blockTime ?? validateFlightTime(data.blockTime),
         },
         include: {
           helicopter: true,
