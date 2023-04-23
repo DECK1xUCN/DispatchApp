@@ -1,85 +1,90 @@
-import { DailyReport } from "./dailyReports";
-import { DailyUpdate } from "./dailyUpdates";
-import { Heliport } from "./heliports";
+import { Helicopter } from "./helicopters";
+import { HoistOperator } from "./hoistOperators";
+import { Pilot } from "./pilots";
 import { Site } from "./sites";
 
 export type Flight = {
   id: number;
   flightNumber: string;
-  from: Heliport;
-  via: Site[];
-  to: Heliport;
+  date: Date;
+  helicopter: Helicopter;
+  pilot: Pilot;
+  hoistOperator: HoistOperator;
+  site: Site;
+  from: Location;
+  via: Location[];
+  to: Location;
   etd: Date;
   rotorStart: Date;
   atd: Date;
   eta: Date;
   rotorStop: Date;
   ata: Date;
-  blockTime: number;
   flightTime: number;
+  blockTime: number;
   delay: boolean;
-  delayMin: number;
-  delayCode: DelayCode;
-  delayDesc: string;
+  delayCode: string;
+  delayTime: number;
+  delayNote: string;
   pax: number;
   paxTax: number;
   cargoPP: number;
   hoistCycles: number;
-  notes: string;
-  dailyReport: DailyReport;
-  dailyUpdate?: DailyUpdate;
+  note: string;
+  editable: boolean;
 };
 
-export interface CreateFlightInput {
+export interface CreateFlight {
   flightNumber: string;
+  date: string;
+  helicopterId: number;
+  pilotId: number;
+  hoistOperatorId: number;
+  siteId: number;
   fromId: number;
-  viaId: number;
+  viaIds: number[];
   toId: number;
-  etd: Date;
-  rotorStart: Date;
-  atd: Date;
-  eta: Date;
-  rotorStop: Date;
-  ata: Date;
-  blockTime: number;
+  etd: string;
+  rotorStart: string;
+  atd: string;
+  eta: string;
+  rotorStop: string;
+  ata: string;
   flightTime: number;
-  delay: boolean;
-  delayMin: number;
-  delayCode: DelayCode;
-  delayDesc: string;
-  pax: number;
-  paxTax: number;
-  cargoPP: number;
-  hoistCycles: number;
-  notes: string;
-  dailyReportId: number;
-  dailyUpdateId?: number;
-}
-
-export interface UpdateFlightInput {
-  flightNumber?: string;
-  fromId?: number;
-  viaId?: number;
-  toId?: number;
-  etd?: Date;
-  rotorStart?: Date;
-  atd?: Date;
-  eta?: Date;
-  rotorStop?: Date;
-  ata?: Date;
-  blockTime?: number;
-  flightTime?: number;
-  delay?: boolean;
-  delayMin?: number;
-  delayCode?: DelayCode;
-  delayDesc?: string;
+  blockTime: number;
   pax?: number;
   paxTax?: number;
   cargoPP?: number;
   hoistCycles?: number;
-  notes?: string;
-  dailyReportId?: number;
-  dailyUpdateId?: number;
+  note?: string;
+  editable?: boolean;
+}
+
+export interface UpdateFlight {
+  id: number;
+  flightNumber: string;
+  date: string;
+  helicopterId: number;
+  pilotId: number;
+  hoistOperatorId: number;
+  siteId: number;
+  fromId: number;
+  viaIds: number[];
+  toId: number;
+  etd: string;
+  rotorStart: string;
+  atd: string;
+  eta: string;
+  rotorStop: string;
+  ata: string;
+  flightTime: number;
+  blockTime: number;
+  pax?: number;
+  paxTax?: number;
+  cargoPP?: number;
+  hoistCycles?: number;
+  note?: string;
+  editable: boolean;
 }
 
 export type DelayCode = {

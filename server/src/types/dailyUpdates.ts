@@ -3,47 +3,32 @@ import { Flight } from "./flights";
 export type DailyUpdate = {
   id: number;
   flight: Flight;
-  date: Date;
   wasFlight: boolean;
-  delayReason: string;
-  delayReasonDesc: string;
-  maintenace: boolean;
+  delay: boolean;
+  delayCode: string;
+  delayTime: number;
+  delayDesc: string;
+  maintenance: boolean;
   plannedMaintenance: boolean;
   unplannedMaintenance: boolean;
   otherMaintenance: boolean;
-  maintenanceDesc: string;
+  maintenanceNote: string;
   baseAndEquipment: boolean;
   note: string;
 };
 
-export interface CreateDailyUpdateInput {
+export interface CreateDailyUpdate {
   flightId: number;
-  date: Date;
   wasFlight: boolean;
   delay: boolean;
-  delayReason?: string;
-  delayReasonDesc?: string;
+  delayCode?: string;
+  delayTime?: number;
+  delayDesc?: string;
   maintenace: boolean;
   plannedMaintenance?: boolean;
   unplannedMaintenance?: boolean;
   otherMaintenance?: boolean;
-  maintenanceDesc: string;
+  maintenanceNote?: string;
   baseAndEquipment: boolean;
-  note?: string;
-}
-
-export interface UpdateDailyUpdateInput {
-  flightId?: number;
-  date?: Date;
-  wasFlight?: boolean;
-  delay?: boolean;
-  delayReason?: string;
-  delayReasonDesc?: string;
-  maintenace?: boolean;
-  plannedMaintenance?: boolean;
-  unplannedMaintenance?: boolean;
-  otherMaintenance?: boolean;
-  maintenanceDesc?: string;
-  baseAndEquipment?: boolean;
   note?: string;
 }

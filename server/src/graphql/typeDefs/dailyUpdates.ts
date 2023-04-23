@@ -1,61 +1,47 @@
 import gql from "graphql-tag";
 
-const dailyUpdatesTypeDefs = gql`
-  type Query {
-    dailyUpdates: [DailyUpdate!]!
-    dailyUpdate(id: Int!): DailyUpdate!
-  }
-  type Mutation {
-    createDailyUpdate(data: CreateDailyUpdateInput): DailyUpdate!
-    updateDailyUpdate(id: String!, data: UpdateDailyUpdateInput!): DailyUpdate!
-  }
+const dailyUpdateTypeDefs = gql`
   type DailyUpdate {
     id: Int!
     flight: Flight!
-    date: DateTime!
     wasFlight: Boolean!
     delay: Boolean!
-    delayReason: String!
+    delayCode: String!
+    delayTime: Int!
     delayDesc: String!
-    maintenace: Boolean!
+    maintenance: Boolean!
     plannedMaintenance: Boolean!
     unplannedMaintenance: Boolean!
     otherMaintenance: Boolean!
-    maintenanceDesc: String!
+    maintenanceNote: String!
     baseAndEquipment: Boolean!
     note: String!
   }
-  # Input types
-  input CreateDailyUpdateInput {
-    flightId: Int!
-    date: DateTime!
-    wasFlight: Boolean!
-    delay: Boolean!
-    delayReason: String
-    delayDesc: String
-    maintenace: Boolean!
-    plannedMaintenance: Boolean
-    unplannedMaintenance: Boolean
-    otherMaintenance: Boolean
-    maintenanceDesc: String
-    baseAndEquipment: Boolean!
-    note: String
-  }
-  input UpdateDailyUpdateInput {
+
+  input CreateDailyUpdate {
     flightId: Int
-    date: DateTime
     wasFlight: Boolean
     delay: Boolean
-    delayReason: String
+    delayCode: String
+    delayTime: Int
     delayDesc: String
-    maintenace: Boolean
+    maintenance: Boolean
     plannedMaintenance: Boolean
     unplannedMaintenance: Boolean
     otherMaintenance: Boolean
-    maintenanceDesc: String
+    maintenanceNote: String
     baseAndEquipment: Boolean
     note: String
   }
+
+  type Query {
+    dailyUpdate(id: Int!): DailyUpdate!
+    dailyUpdates: [DailyUpdate!]!
+  }
+
+  type Mutation {
+    createDailyUpdate(input: CreateDailyUpdate!): DailyUpdate!
+  }
 `;
 
-export default dailyUpdatesTypeDefs;
+export default dailyUpdateTypeDefs;
