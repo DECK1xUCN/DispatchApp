@@ -20,50 +20,55 @@ class FlightForm extends HookWidget {
     final now = DateTime.now();
 
     String flightQuery = """
-query MyQuery(\$flightId: Int!) {
-  flight(id: \$flightId) {
-    etd
+query MyQuery {
+  flightById(id: 1) {
     ata
     atd
     blockTime
     cargoPP
+    date
     delay
     delayCode
-    delayDesc
-    delayMin
+    delayNote
+    delayTime
     eta
     flightTime
     hoistCycles
-    notes
+    note
     pax
     paxTax
     rotorStart
     rotorStop
-    from {
+    site {
       id
+      name
     }
+    etd
+    flightNumber
     via {
       id
       name
     }
     to {
       id
+      name
+    }
+    from {
+      id
+      name
     }
   }
-  heliports {
-    name
+  locoationsPerSite(siteId: 1) {
     id
-  }
-  sites {
     name
-    id
+    type
   }
 }
   """;
 
     final readFlight = useQuery(
       QueryOptions(
-          document: gql(flightQuery), variables: {'flightId': flight.id}),
+          document: gql(flightQuery), variables: {'flightId': flight.id, 'siteId': flight.siteId}),
     );
     final result = readFlight.result;
 
@@ -86,52 +91,53 @@ query MyQuery(\$flightId: Int!) {
     }
 
     List<Location> locations = [];
-    List<Location> sites = [];
+    List<Location> via = [];
 
-    List? listHeliports = result.data?["heliports"];
-    List? listSites = result.data?["sites"];
+    List? listHeliports = result.data?["locoationsPerSite"]; //This was for from and to
 
     // Load the data from the query into the _locations list
     for (var location in listHeliports!) {
-      locations.add(Location(id: location["id"], name: location["name"]));
+      if(location["type"] == "VIA")
+        via.add(Location(id: location["id"], name: location["name"]));
+      else
+        locations.add(Location(id: location["id"], name: location["name"]));
     }
-
-    for (var site in listSites!) {
-      sites.add(Location(id: site["id"], name: site["name"]));
-    }
+    print(via);
+    print(locations);
 
     final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
     List<String> viaLocations = [];
+    List<int> selectedViaIds = [];
 
-    for (var via in result.data?["flight"]["via"]) {
+    for (var via in result.data?["flightById"]["via"]) {
       viaLocations.add(via["name"]);
     }
 
     final formState = useState({
       'selectedFrom': locations
-          .indexWhere((obj) => obj.id == result.data?['flight']['from']['id']),
+          .indexWhere((obj) => obj.id == result.data?['flightById']['from']['id']),
       'selectedTo': locations
-          .indexWhere((obj) => obj.id == result.data?['flight']['to']['id']),
+          .indexWhere((obj) => obj.id == result.data?['flightById']['to']['id']),
       'via': viaLocations,
       'dropdownValue': delayCodes.first,
-      'ata': DateTime.parse(result.data?["flight"]["ata"]),
-      'atd': DateTime.parse(result.data?["flight"]["atd"]),
-      'etd': DateTime.parse(result.data?["flight"]["etd"]),
-      'blockTime': result.data?["flight"]["blockTime"],
-      'flightTime': result.data?["flight"]["flightTime"],
-      'cargoPP': result.data?["flight"]["cargoPP"],
-      'delay': result.data?["flight"]["delay"],
-      'delayCode': result.data?["flight"]["delayCode"],
-      'delayDesc': result.data?["flight"]["delayDesc"],
-      'delayMin': result.data?["flight"]["delayMin"],
-      'eta': DateTime.parse(result.data?["flight"]["eta"]),
-      'hoistCycles': result.data?["flight"]["hoistCycles"],
-      'notes': result.data?["flight"]["notes"],
-      'pax': result.data?["flight"]["pax"],
-      'paxTax': result.data?["flight"]["paxTax"],
-      'rotorStart': DateTime.parse(result.data?["flight"]["rotorStart"]),
-      'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
+      'ata': DateTime.parse(result.data?["flightById"]["ata"]),
+      'atd': DateTime.parse(result.data?["flightById"]["atd"]),
+      'etd': DateTime.parse(result.data?["flightById"]["etd"]),
+      'blockTime': result.data?["flightById"]["blockTime"],
+      'flightTime': result.data?["flightById"]["flightTime"],
+      'cargoPP': result.data?["flightById"]["cargoPP"],
+      'delay': result.data?["flightById"]["delay"],
+      'delayCode': result.data?["flightById"]["delayCode"],
+      'delayDesc': result.data?["flightById"]["delayNote"],
+      'delayMin': result.data?["flightById"]["delayTime"],
+      'eta': DateTime.parse(result.data?["flightById"]["eta"]),
+      'hoistCycles': result.data?["flightById"]["hoistCycles"],
+      'notes': result.data?["flightById"]["note"],
+      'pax': result.data?["flightById"]["pax"],
+      'paxTax': result.data?["flightById"]["paxTax"],
+      'rotorStart': DateTime.parse(result.data?["flightById"]["rotorStart"]),
+      'rotorStop': DateTime.parse(result.data?["flightById"]["rotorStop"]),
     });
 
     final isDelayed = useState(formState.value['delay']);
@@ -139,40 +145,43 @@ query MyQuery(\$flightId: Int!) {
       isDelayed.value = !isDelayed.value;
     }
 
-    // The mutation is not updated yet, so all flights that will be saved, will be added to the dailyReport wih the id 1
-    // Via is also missing from the update
+    // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
+    // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-    mutation MyMutation (\$flightId: Int!, \$ata: DateTime! , \$atd: DateTime!, \$blockTime: Int!, \$cargo: Int!, \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCyc: Int!, \$notes: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!){
+    mutation MyMutation (\$flightId: Int!, \$ata: DateTime! , \$atd: DateTime!, \$blockTime: Int!, \$cargo: Int!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCyc: Int!, \$notes: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]){
   updateFlight(
-    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargo, delay: \$delayBool, delayCode: \$delayCode, delayDesc: \$delayDesc, delayMin: \$delayAmount, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCyc, notes: \$notes, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, dailyReportId: 1} 
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargo, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCyc, note: \$notes, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, viaIds: \$viaIds} 
     id: \$flightId
   ) {
-    atd
     ata
+    atd
     blockTime
     cargoPP
     delay
     delayCode
-    delayDesc
-    delayMin
+    delayNote
+    delayTime
     eta
     etd
     flightNumber
     flightTime
     from {
       id
+      name
     }
     hoistCycles
-    notes
+    note
     pax
     paxTax
     rotorStart
     rotorStop
-    to {
-      id
-    }
     via {
       id
+      name
+    }
+    to {
+      id
+      name
     }
   }
 }
@@ -184,6 +193,7 @@ query MyQuery(\$flightId: Int!) {
         onCompleted: (dynamic resultData) {
           print(resultData);
           //Navigator.pop(context);
+          print(result.exception);
         },
       ),
     );
@@ -202,6 +212,8 @@ query MyQuery(\$flightId: Int!) {
         text: DateFormat('HH:mm').format(formState.value['ata']));
     TextEditingController controllerDelayReason =
         TextEditingController(text: formState.value['delayDesc']);
+    TextEditingController controllerNotes =
+    TextEditingController(text: formState.value['notes']);
     TextEditingController controllerPAX =
         TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
@@ -272,7 +284,7 @@ query MyQuery(\$flightId: Int!) {
                   const SizedBox(height: 10),
                   MultiSelectDialogField<String>(
                     initialValue: formState.value['via'],
-                    items: sites
+                    items: via
                         .map((e) => MultiSelectItem(e.toString(), e.toString()))
                         .toList(),
                     validator: (value) {
@@ -1196,6 +1208,44 @@ query MyQuery(\$flightId: Int!) {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Additional Notes",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: 10),
+                      Scrollbar(
+                        // Delay desc
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          child: SizedBox(
+                            width: 400,
+                            height: 200,
+                            child: TextFormField(
+                              onChanged: (value) {
+                                formState.value['notes'] = value;
+                                formState.value = {...formState.value};
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field must not be empty";
+                                }
+                                return null;
+                              },
+                              controller: controllerNotes,
+                              maxLines: 100,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
@@ -1206,17 +1256,21 @@ query MyQuery(\$flightId: Int!) {
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
                           // print(formState.value['pax'] as String);
-
+                          for(var v in via){
+                            if(formState.value['via'].contains(v.name)) {
+                              selectedViaIds.add(v.id);
+                            }
+                          }
                           readMutation.runMutation({
                             'flightId': flight.id,
                             'ata': formState.value['ata'].toIso8601String(),
                             'atd': formState.value['atd'].toIso8601String(),
                             'blockTime': formState.value['blockTime'],
                             'cargo': formState.value['cargoPP'],
-                            'delayBool': isDelayed.value,
+                            /*'delayBool': isDelayed.value,
                             'delayCode': formState.value['delayCode'],
-                            'delayDesc': formState.value['delayDesc'],
-                            'delayAmount': formState.value['delayMin'],
+                            'delayDesc': formState.value['delayNote'],
+                            'delayAmount': formState.value['delayMin'],*/
                             'eta': formState.value['eta'].toIso8601String(),
                             'etd': formState.value['etd'].toIso8601String(),
                             'flightTime': formState.value['flightTime'],
@@ -1231,6 +1285,7 @@ query MyQuery(\$flightId: Int!) {
                             'rotorStop':
                                 formState.value['rotorStop'].toIso8601String(),
                             'toId': locations[formState.value['selectedTo']].id,
+                            'viaIds': selectedViaIds,
                           });
                         }
                       },

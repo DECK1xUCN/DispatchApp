@@ -24,6 +24,7 @@ class Flights extends HookWidget {
 
         flights.add(Flight(
             id: flight['id'],
+            siteId: flight['site']['id'],
             etd: DateTime.parse(flight['etd']),
             flightnumber: flight['flightNumber'],
             from: Location(
@@ -102,6 +103,9 @@ query MyQuery {
     id
     etd
     flightNumber
+    site {
+      id
+    }
     from {
       id
       name
@@ -125,7 +129,6 @@ query MyQuery {
       ),
     );
     final result = readFlights.result;
-
     if (result.hasException) {
       print(result.exception.toString());
       return const SafeArea(

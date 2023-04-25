@@ -2,6 +2,7 @@ import 'package:client/classes/Location.dart';
 
 class Flight {
   int id;
+  int? siteId;
   DateTime? ata;
   DateTime? atd;
   int? blockTime;
@@ -27,6 +28,7 @@ class Flight {
 
   Flight({
     required this.id,
+    this.siteId,
     this.ata,
     this.atd,
     this.blockTime,
