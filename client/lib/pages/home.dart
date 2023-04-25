@@ -24,8 +24,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue[200],
-      child:
-          SizedBox(child: Sidebar()),
+      child: const SizedBox(child: Sidebar()),
     );
   }
 }

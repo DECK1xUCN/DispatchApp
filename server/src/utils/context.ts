@@ -2,10 +2,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export interface Context {
+export interface ctx {
   prisma: PrismaClient;
 }
 
-export const context: Context = {
+export const ctx: ctx = {
   prisma: prisma,
 };

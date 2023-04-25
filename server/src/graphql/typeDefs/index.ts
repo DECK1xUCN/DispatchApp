@@ -1,21 +1,21 @@
-import sitesTypeDefs from "./sites";
-import heliportsTypeDefs from "./heliports";
+import dailyReportTypeDefs from "./dailyReports";
+import dailyUpdateTypeDefs from "./dailyUpdates";
 import flightsTypeDefs from "./flights";
-import dailyUpdatesTypeDefs from "./dailyUpdates";
-import dailyReportsTypeDefs from "./dailyReports";
-import helicoptersTypeDefs from "./helicopters";
-import hoistOperatorsTypeDefs from "./hoistOperators";
+import helicopterTypeDefs from "./helicopters";
+import hoistOperatorTypeDefs from "./hoistOperators";
+import locationsTypeDefs from "./locations";
 import pilotsTypeDefs from "./pilots";
+import siteTypeDefs from "./sites";
 
 const typeDefs = [
   flightsTypeDefs,
-  sitesTypeDefs,
-  heliportsTypeDefs,
-  dailyUpdatesTypeDefs,
-  dailyReportsTypeDefs,
-  helicoptersTypeDefs,
-  hoistOperatorsTypeDefs,
+  siteTypeDefs,
+  locationsTypeDefs,
+  helicopterTypeDefs,
   pilotsTypeDefs,
+  hoistOperatorTypeDefs,
+  dailyUpdateTypeDefs,
+  dailyReportTypeDefs,
 ];
 
 export default typeDefs;

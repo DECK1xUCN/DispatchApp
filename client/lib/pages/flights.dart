@@ -1,147 +1,185 @@
 import 'package:client/classes/Flight.dart';
+import 'package:client/classes/Location.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 
-class Flights extends StatefulWidget {
+class Flights extends HookWidget {
   const Flights({Key? key}) : super(key: key);
 
   @override
-  State<Flights> createState() => _FlightsState();
-}
-
-class _FlightsState extends State<Flights> {
-  List<Flight> flights = [
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 1)),
-        flightnumber: 'ABC-1',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 2)),
-        flightnumber: 'ABC-2',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 3)),
-        flightnumber: 'ABC-3',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 4)),
-        flightnumber: 'ABC-4',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-    Flight(
-        etd: DateTime.now().add(const Duration(hours: 4)),
-        flightnumber: 'ABC-4',
-        from: 'A',
-        via: ['B', 'C'],
-        to: 'D'),
-  ];
-
-  List<Widget> generateRows() {
-    List<Widget> rows = [];
-    for (var element in flights) {
-      rows.add(GestureDetector(
-        onTap: () {
-          print('tapped' + element.flightnumber.toString());
-        },
-        child: Container(
-            height: 50,
-            decoration: const BoxDecoration(
-
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: Center(
-                      child: Text(
-                    DateFormat.Hm().format(element.etd),
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
-                ),
-                Expanded(
-                  child: Center(
-                      child: Text(
-                    element.flightnumber,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
-                ),
-                Expanded(
-                  child: Center(
-                      child: Text(
-                    element.from,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
-                ),
-                Expanded(
-                  child: Center(
-                      child: Text(
-                    element.via.toString(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
-                ),
-                Expanded(
-                  child: Center(
-                      child: Text(
-                    element.to,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  )),
-                ),
-              ],
-            )),
-      ));
-    }
-    return rows;
-  }
-
-  @override
   Widget build(BuildContext context) {
+    List<Widget> generateRows(list) {
+      List<Flight> flights = [];
+
+      for (var flight in list) {
+        List<Location> via = [];
+
+        for (var location in flight['via']) {
+          via.add(Location(id: location['id'], name: location['name']));
+        }
+
+        flights.add(Flight(
+            id: flight['id'],
+            etd: DateTime.parse(flight['etd']),
+            flightnumber: flight['flightNumber'],
+            from: Location(
+                id: flight['from']['id'], name: flight['from']['name']),
+            via: via,
+            to: Location(id: flight['to']['id'], name: flight['to']['name'])));
+      }
+
+      List<Widget> rows = [];
+      for (var flight in flights) {
+        rows.add(GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/flightform', arguments: flight);
+          },
+          child: Container(
+              height: 50,
+              decoration: const BoxDecoration(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                      DateFormat.Hm().format(flight.etd),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                      flight.flightnumber,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                      flight.from.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                      flight.via.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
+                  ),
+                  Expanded(
+                    child: Center(
+                        child: Text(
+                      flight.to.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
+                  ),
+                ],
+              )),
+        ));
+      }
+      return rows;
+    }
+
+    String flightsQuery = """
+query MyQuery {
+  flights {
+    id
+    etd
+    flightNumber
+    from {
+      id
+      name
+    }
+    via {
+      id
+      name
+    }
+    to {
+      id
+      name
+    }
+  }
+}
+  """;
+
+    final readFlights = useQuery(
+      QueryOptions(
+        document: gql(flightsQuery),
+        pollInterval: const Duration(seconds: 2),
+      ),
+    );
+    final result = readFlights.result;
+
+    if (result.hasException) {
+      print(result.exception.toString());
+      return const SafeArea(
+          child:
+              Center(child: Text("An error occurred, check the console :(")));
+    }
+    if (result.isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: SpinKitFoldingCube(
+            color: Color.fromRGBO(163, 160, 251, 1),
+            size: 50.0,
+          ),
+        ),
+      );
+    }
+
+    List? flightList = result.data?["flights"];
+
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {},
+        backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
+        label: const Text('Generate DFR'),
+        icon: const Icon(Icons.add_chart),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Flights',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Roboto',
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.topRight,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 30.0, vertical: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
-                ),
-                child: const Text('New Flight'),
-                onPressed: () {
-
-                },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        readFlights;
+                      },
+                      icon: const Icon(
+                        Icons.refresh,
+                        size: 42,
+                        color: Color.fromRGBO(163, 160, 251, 1),
+                      )),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(163, 160, 251, 1),
+                    ),
+                    child: const Text('New Flight'),
+                    onPressed: () {},
+                  ),
+                ],
               ),
             ),
             Container(
@@ -168,8 +206,8 @@ class _FlightsState extends State<Flights> {
                           height: 50,
                           decoration: const BoxDecoration(
                             border: Border(
-                              bottom: BorderSide(
-                                  width: 1.5, color: Colors.white),
+                              bottom:
+                                  BorderSide(width: 1.5, color: Colors.white),
                             ),
                           ),
                           child: Row(
@@ -233,7 +271,7 @@ class _FlightsState extends State<Flights> {
                             ],
                           ),
                         ),
-                        ...generateRows(),
+                        ...generateRows(flightList)
                       ],
                     ),
                   ),

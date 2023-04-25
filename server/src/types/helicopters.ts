@@ -1,15 +1,15 @@
+import { Flight } from "./flights";
+
 export type Helicopter = {
   id: number;
-  reg: string;
+  manufacturer: string;
   model: string;
+  reg: string;
+  flights: Flight[];
 };
 
-export interface CreateHelicopterInput {
-  reg: string;
+export interface CreateHelicopter {
+  manufacturer: string;
   model: string;
-}
-
-export interface UpdateHelicopterInput {
-  reg?: string;
-  model?: string;
+  reg: string;
 }
