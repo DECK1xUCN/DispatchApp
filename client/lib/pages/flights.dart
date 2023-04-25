@@ -1,19 +1,16 @@
-import 'package:client/classes/Flight.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
-import '../classes/delayCodes.dart';
+import '../classes/FlightSimple.dart';
 
 class Flights extends HookWidget {
   const Flights({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DelayCode dropdownValue = DelayCode.A_HeliWeather;
-
     String flightsQuery = """
 query MyQuery {
   flights {
@@ -24,10 +21,12 @@ query MyQuery {
       id
       name
     }
-
     to {
       id
       name
+    }
+    dailyUpdate {
+      id
     }
   }
 }
@@ -60,17 +59,22 @@ query MyQuery {
     }
 
     List? flightList = result.data?["flights"];
-    List<Flight> flights = [];
+    List<FlightSimple> flights = [];
 
     for (var flight in flightList!) {
-      flights.add(Flight(
+      var flightObject = FlightSimple(
           id: flight['id'],
           etd: DateTime.parse(flight['etd']),
           flightnumber: flight['flightNumber'],
           from:
               Location(id: flight['from']['id'], name: flight['from']['name']),
-          to: Location(id: flight['to']['id'], name: flight['to']['name']),
-          hasDU: false));
+          to: Location(id: flight['to']['id'], name: flight['to']['name']));
+
+      if (flight['dailyUpdate'] != null) {
+        flightObject.hasDU = true;
+      }
+
+      flights.add(flightObject);
     }
 
     List<Widget> generateRows(flights) {
@@ -89,83 +93,98 @@ query MyQuery {
                   Expanded(
                     child: Center(
                         child: Text(
-                          DateFormat.Hm().format(flight.etd),
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
+                      DateFormat.Hm().format(flight.etd),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                   Expanded(
                     child: Center(
                         child: Text(
-                          flight.flightnumber,
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
+                      flight.flightnumber,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                   Expanded(
                     child: Center(
                         child: Text(
-                          flight.from.toString(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
+                      flight.from.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                   Expanded(
                     child: Center(
                         child: Text(
-                          flight.to.toString(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                          ),
-                        )),
+                      flight.to.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    )),
                   ),
                   Expanded(
                       child: Center(
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: flight.hasDU
-                                ? const Color.fromRGBO(113, 216, 150, 1)
-                                : const Color.fromRGBO(9, 166, 215, 1),
-                          ),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                      backgroundColor: Colors.white,
-                                      scrollable: true,
-                                      title: const Text(
-                                          "Please select the flight status:"),
-                                      content: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              //todo: add mutation to update flight with DU
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text(" Complete "),
-                                          ),
-                                          const SizedBox(height: 16),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              //todo: add way to collect extra details for DU and then send of mutation
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("Incomplete"),
-                                          ),
-                                        ],
-                                      ));
-                                });
-                          },
-                          icon: const Icon(Icons.update),
-                          label: const Text('Update'),
-                        ),
-                      )),
+                          child: !flight.hasDU
+                              ? ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        const Color.fromRGBO(9, 166, 215, 1),
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          scrollable: true,
+                                          title: Text(
+                                              'Did ${flight.flightnumber} fly without delay?'),
+                                          actions: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    //todo: add mutation to update flight with a DU
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Colors.green,
+                                                  ),
+                                                  child: const Text('No delays')
+                                                ),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      Navigator.pushNamed(context, '/dailyUpdateForm', arguments: flight);
+
+                                                    },
+                                                    style: ElevatedButton.styleFrom(
+                                                      backgroundColor: Colors.orange,
+                                                    ),
+                                                    child: const Text(
+                                                        'Delays occurred')),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(Icons.update),
+                                  label: const Text('Update'),
+                                )
+                              : const Icon(
+                                  Icons.check,
+                                  color: Colors.green,
+                                ))),
                 ],
               )),
         ));
@@ -187,7 +206,8 @@ query MyQuery {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
