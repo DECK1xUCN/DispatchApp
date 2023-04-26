@@ -32,6 +32,23 @@ query MyQuery {
 }
   """;
 
+    String dailyUpdateFineMutation = """
+    mutation MyMutation(\$flightId: Int!) {
+  createDailyUpdate(input: {wasFlight: true, flightId: \$flightId}) {
+    wasFlight
+    flight {
+      id
+    }
+  }
+}
+    """;
+
+    final dailyUpdateFine = useMutation(
+      MutationOptions(
+        document: gql(dailyUpdateFineMutation),
+      ),
+    );
+
     final readFlights = useQuery(
       QueryOptions(
         document: gql(flightsQuery),
@@ -142,7 +159,7 @@ query MyQuery {
                                           backgroundColor: Colors.white,
                                           scrollable: true,
                                           title: Text(
-                                              'Did ${flight.flightnumber} fly without delay?'),
+                                              'Was flight ${flight.flightnumber} completed?'),
                                           actions: [
                                             Row(
                                               mainAxisAlignment:
@@ -152,12 +169,14 @@ query MyQuery {
                                                 ElevatedButton(
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
-                                                    //todo: add mutation to update flight with a DU
+                                                    dailyUpdateFine.runMutation({
+                                                      'flightId': flight.id
+                                                    });
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor: Colors.green,
                                                   ),
-                                                  child: const Text('No delays')
+                                                  child: const Text('Completed')
                                                 ),
                                                 ElevatedButton(
                                                     onPressed: () {
@@ -170,7 +189,7 @@ query MyQuery {
                                                       backgroundColor: Colors.orange,
                                                     ),
                                                     child: const Text(
-                                                        'Delays occurred')),
+                                                        'Not completed')),
                                               ],
                                             ),
                                           ],
@@ -197,9 +216,9 @@ query MyQuery {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'flightsButton',
         onPressed: () {},
-        backgroundColor: const Color.fromRGBO(0, 66, 106, 1),
-        label: const Text('Generate DFR'),
-        icon: const Icon(Icons.add_chart),
+        backgroundColor: const Color.fromRGBO(9, 166, 215, 1),
+        label: const Text('Generate DFR', style: TextStyle(color: Colors.white)),
+        icon: const Icon(Icons.add_chart, color: Colors.white),
       ),
       body: SafeArea(
         child: Column(
