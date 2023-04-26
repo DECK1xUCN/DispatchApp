@@ -46,6 +46,9 @@ query MyQuery {
     final dailyUpdateFine = useMutation(
       MutationOptions(
         document: gql(dailyUpdateFineMutation),
+        onCompleted: (dynamic resultData) {
+          print(resultData);
+        },
       ),
     );
 

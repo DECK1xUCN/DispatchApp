@@ -1,3 +1,5 @@
+import 'package:client/classes/FlightSimple.dart';
+import 'package:client/classes/delayCode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -5,6 +7,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
+import 'package:client/classes/delayCode.dart';
 
 import '../classes/Flight.dart';
 
@@ -13,12 +16,12 @@ class FlightForm extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    Flight flight = ModalRoute.of(context)!.settings.arguments as Flight;
+    FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
     String flightQuery = """
 query MyQuery(\$flightId: Int!) {
-  flight(id: \$flightId) {
+  flightById(id: \$flightId) {
     etd
     ata
     atd
@@ -97,7 +100,7 @@ query MyQuery(\$flightId: Int!) {
       sites.add(Location(id: site["id"], name: site["name"]));
     }
 
-    final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    DelayCode dropdownValue = DelayCode.A_HeliWeather;
 
     List<String> viaLocations = [];
 
@@ -148,8 +151,10 @@ query MyQuery(\$flightId: Int!) {
         text: DateFormat('HH:mm').format(formState.value['rotorStop']));
     TextEditingController controllerATA = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['ata']));
-    TextEditingController controllerDelayReason =
-    TextEditingController(text: formState.value['delayDesc']);
+    TextEditingController controllerDelayDescription = TextEditingController(
+        text: formState.value['delayDesc']);
+    TextEditingController controllerDelayReason = TextEditingController(
+        text: dropdownValue.toString());
     TextEditingController controllerPAX =
     TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
@@ -887,26 +892,31 @@ query MyQuery(\$flightId: Int!) {
                                 // Delay Reason
                                 width: 150,
                                 height: 60,
-                                child: DropdownButtonFormField<String>(
-                                  value: formState.value['dropdownValue']
-                                      .toString(),
+                                child: DropdownButtonFormField<DelayCode>(
+                                  value: dropdownValue,
                                   icon: const Icon(Icons.arrow_downward),
                                   dropdownColor: Colors.white,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (String? value) {
+                                  onChanged: (DelayCode? value) {
                                     // This is called when the user selects an item.
                                     formState.value['dropdownValue'] = value!;
                                     formState.value = {...formState.value};
                                   },
-                                  items: delayCodes
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
+                                  items: DelayCode.values
+                                      .map<DropdownMenuItem<DelayCode>>(
+                                          (DelayCode value) {
+                                        return DropdownMenuItem<DelayCode>(
                                           value: value,
-                                          child: Text(value),
+                                          child: Text(
+                                              value
+                                                  .toString()
+                                                  .split('.')
+                                                  .last
+                                                  .replaceAll('_',
+                                                  ' ')),
                                         );
                                       }).toList(),
                                 ),
@@ -1084,7 +1094,7 @@ query MyQuery(\$flightId: Int!) {
                                 return "Hoist Cycles cannot be negative";
                               }
                             } catch (e) {
-                              return "Filed must be a number";
+                              return "This field must be a number";
                             }
                             return null;
                           },

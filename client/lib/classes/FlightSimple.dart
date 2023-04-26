@@ -1,7 +1,5 @@
 import 'package:client/classes/Location.dart';
 
-import 'DailyUpdate.dart';
-
 class FlightSimple {
   int id;
   DateTime etd;
