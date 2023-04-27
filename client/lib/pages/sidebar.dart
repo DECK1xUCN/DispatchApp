@@ -18,9 +18,10 @@ class SidebarB extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    Color myColor = const Color.fromRGBO(240, 240, 240, 1.0); //background color
-    Color selectedColor =
-        const Color.fromRGBO(50, 50, 50, 1.0); //selected icon color
+    Color backgroundColor =
+        const Color.fromRGBO(34, 47, 62, 1.0); //background color
+    Color backgroundColorSelected =
+        const Color.fromRGBO(48, 63, 80, 1); //selected icon color
     double width = 35; //icon width
 
     return Scaffold(
@@ -28,13 +29,12 @@ class SidebarB extends State<Sidebar> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Drawer(
-            backgroundColor: myColor,
+            backgroundColor: backgroundColor,
             child: Column(
               children: [
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 200,
-                  color: myColor,
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -51,17 +51,18 @@ class SidebarB extends State<Sidebar> {
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
-                              100), // set the desired border radius
+                              100),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color:
-                                _selectedIndex == 0 ? selectedColor : myColor,
+                            color: _selectedIndex == 0
+                                ? backgroundColorSelected
+                                : backgroundColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             minLeadingWidth: -10,
-                            tileColor: myColor,
+                            tileColor: Colors.transparent,
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               // center the children of the Row
@@ -70,9 +71,8 @@ class SidebarB extends State<Sidebar> {
                                     width: width,
                                     height: width,
                                     child: _selectedIndex == 0
-                                        ? Icon(Icons.local_airport,
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                        ? const Icon(Icons.local_airport,
+                                            color: Colors.white,
                                             size: 32)
                                         : const Icon(
                                             Icons.local_airport,
@@ -117,7 +117,7 @@ class SidebarB extends State<Sidebar> {
                       //     ),
                       //     child: ListTile(
                       //       minLeadingWidth: -10,
-                      //       tileColor: myColor,
+                      // tileColor: Colors.transparent,
                       //       title: Row(
                       //         mainAxisAlignment: MainAxisAlignment.center,
                       //         // center the children of the Row
@@ -173,7 +173,7 @@ class SidebarB extends State<Sidebar> {
                       //     ),
                       //     child: ListTile(
                       //       minLeadingWidth: -10,
-                      //       tileColor: myColor,
+                      // tileColor: Colors.transparent,
                       //       title: Row(
                       //         mainAxisAlignment: MainAxisAlignment.center,
                       //         // center the children of the Row
@@ -223,13 +223,14 @@ class SidebarB extends State<Sidebar> {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            color:
-                                _selectedIndex == 3 ? selectedColor : myColor,
+                            color: _selectedIndex == 3
+                                ? backgroundColorSelected
+                                : backgroundColor,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           child: ListTile(
                             minLeadingWidth: -10,
-                            tileColor: myColor,
+                            tileColor: Colors.transparent,
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               // center the children of the Row
@@ -238,9 +239,8 @@ class SidebarB extends State<Sidebar> {
                                     width: width,
                                     height: width,
                                     child: _selectedIndex == 3
-                                        ? Icon(Icons.bar_chart,
-                                            color:
-                                                Theme.of(context).primaryColor,
+                                        ? const Icon(Icons.bar_chart,
+                                            color: Colors.white,
                                             size: 32)
                                         : const Icon(
                                             Icons.bar_chart_outlined,
@@ -275,7 +275,7 @@ class SidebarB extends State<Sidebar> {
                   ),
                 ),
                 // ListTile(
-                //   tileColor: myColor,
+                // tileColor: Colors.transparent,
                 //   leading: const Icon(
                 //     Icons.logout,
                 //     color: Colors.black,
