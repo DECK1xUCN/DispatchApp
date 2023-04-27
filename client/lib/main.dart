@@ -29,7 +29,7 @@ void main() async {
             fontFamily: 'Lato',
             textTheme: const TextTheme(
               displayLarge: TextStyle(
-                  fontSize: 32.0,
+                  fontSize: 36.0,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
