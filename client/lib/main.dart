@@ -53,9 +53,9 @@ void main() async {
           ),
           initialRoute: '/',
           routes: {
-            '/': (context) => Loading(),
-            '/home': (context) => Home(),
-            '/flightform': (context) => FlightForm(),
-            '/dailyUpdateForm': (context) => DailyUpdateForm(),
+            '/': (context) => const Loading(),
+            '/home': (context) => const Home(),
+            '/flightform': (context) => const FlightForm(),
+            '/dailyUpdateForm': (context) => const DailyUpdateForm(),
           })));
 }
