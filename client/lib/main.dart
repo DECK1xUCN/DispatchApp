@@ -24,6 +24,7 @@ void main() async {
       child: MaterialApp(
           title: 'Deck1 Dispatch App',
           theme: ThemeData(
+            useMaterial3: true,
             brightness: Brightness.dark,
             primaryColor: const Color.fromRGBO(9, 166, 215, 1),
             fontFamily: 'Lato',
