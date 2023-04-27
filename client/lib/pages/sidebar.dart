@@ -274,17 +274,17 @@ class SidebarB extends State<Sidebar> {
                     ],
                   ),
                 ),
-                ListTile(
-                  tileColor: myColor,
-                  leading: const Icon(
-                    Icons.logout,
-                    color: Colors.black,
-                    size: 32,
-                  ),
-                  title: Text('Log out',
-                      style: Theme.of(context).textTheme.displayLarge),
-                  onTap: () {},
-                ),
+                // ListTile(
+                //   tileColor: myColor,
+                //   leading: const Icon(
+                //     Icons.logout,
+                //     color: Colors.black,
+                //     size: 32,
+                //   ),
+                //   title: Text('Log out',
+                //       style: Theme.of(context).textTheme.displayLarge),
+                //   onTap: () {},
+                // ),
               ],
             ),
           ),
