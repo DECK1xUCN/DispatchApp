@@ -29,7 +29,7 @@ void main() async {
             primaryColor: const Color.fromRGBO(9, 166, 215, 1),
             colorScheme: const ColorScheme.dark(
               primary: Color.fromRGBO(9, 166, 215, 1),
-              secondary: Color.fromRGBO(89, 178, 102,1),
+              secondary: Color.fromRGBO(89, 178, 102, 1),
               error: Color.fromRGBO(252, 129, 129, 1),
             ),
             fontFamily: 'Lato',
@@ -38,11 +38,20 @@ void main() async {
                   fontSize: 36.0,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                  color: Color.fromRGBO(28, 28, 28, 1)),
               titleLarge: TextStyle(
-                  fontSize: 25.0, fontFamily: 'Roboto', color: Colors.black),
+                  fontSize: 25.0,
+                  fontFamily: 'Roboto',
+                  color: Color.fromRGBO(28, 28, 28, 1)),
+              bodyLarge: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: 'Roboto',
+                  color: Color.fromRGBO(28, 28, 28, 1),
+                  fontWeight: FontWeight.bold),
               bodyMedium: TextStyle(
-                  fontSize: 14.0, fontFamily: 'Lato', color: Colors.black),
+                  fontSize: 14.0,
+                  fontFamily: 'Lato',
+                  color: Color.fromRGBO(28, 28, 28, 1)),
             ),
           ),
           initialRoute: '/',
