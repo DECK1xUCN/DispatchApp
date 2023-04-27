@@ -132,6 +132,7 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
       'blockTime': result.data?["flightById"]["blockTime"],
       'flightTime': result.data?["flightById"]["flightTime"],
       'cargoPP': result.data?["flightById"]["cargoPP"],
+      'date': DateTime.parse(result.data?["flightById"]["date"]),
       'delay': result.data?["flightById"]["delay"],
       'delayCode': result.data?["flightById"]["delayCode"],
       'delayDesc': result.data?["flightById"]["delayNote"],
@@ -153,17 +154,19 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
     // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$toId: Int!, \$viaIds: [Int!] = 10, \$id: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!) {
+mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$id: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]) {
   updateFlight(
-    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, viaIds: \$viaIds, toId: \$toId}
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, date: \$date, eta: \$eta, etd: \$etd, flightNumber: \$flightNumber, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, viaIds: \$viaIds}
     id: \$id
   ) {
     ata
     atd
     blockTime
     cargoPP
+    date
     eta
     etd
+    flightNumber
     flightTime
     from {
       id
@@ -1001,10 +1004,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                               width: 400,
                               height: 200,
                               child: TextFormField(
-                                onChanged: (value) {
-                                  formState.value['delayDesc'] = value;
-                                  formState.value = {...formState.value};
-                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "This field must not be empty";
@@ -1040,16 +1039,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             width: 150,
                             height: 50,
                             child: TextFormField(
-                              onChanged: (value) {
-                                var newValue;
-                                try {
-                                  newValue = int.parse(value);
-                                } catch (e) {
-                                  return;
-                                }
-                                formState.value['pax'] = newValue;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1085,16 +1074,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             width: 150,
                             height: 50,
                             child: TextFormField(
-                              onChanged: (value) {
-                                var newValue;
-                                try {
-                                  newValue = int.parse(value);
-                                } catch (e) {
-                                  return;
-                                }
-                                formState.value['paxTax'] = newValue;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1130,16 +1109,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             width: 150,
                             height: 50,
                             child: TextFormField(
-                              onChanged: (value) {
-                                var newValue;
-                                try {
-                                  newValue = int.parse(value);
-                                } catch (e) {
-                                  return;
-                                }
-                                formState.value['cargoPP'] = newValue;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1178,16 +1147,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                         width: 150,
                         height: 50,
                         child: TextFormField(
-                          onChanged: (value) {
-                            var newValue;
-                            try {
-                              newValue = int.parse(value);
-                            } catch (e) {
-                              return;
-                            }
-                            formState.value['hoistCycles'] = newValue;
-                            formState.value = {...formState.value};
-                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "This field must not be empty";
@@ -1220,7 +1179,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                           style: Theme.of(context).textTheme.titleLarge),
                       const SizedBox(height: 10),
                       Scrollbar(
-                        // Delay desc
+                        // Delay notes
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           reverse: true,
@@ -1228,10 +1187,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             width: 400,
                             height: 200,
                             child: TextFormField(
-                              onChanged: (value) {
-                                formState.value['notes'] = value;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1267,49 +1222,62 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             }
                           }
 
+                          // Set formState values
+                          formState.value['pax'] = int.parse(controllerPAX.text);
+                          formState.value['paxTax'] = int.parse(controllerPAXTax.text);
+                          formState.value['cargoPP'] = int.parse(controllerCargo.text);
+                          formState.value['hoistCycles'] = int.parse(controllerHoistCycles.text);
+
+                          formState.value['notes'] = controllerNotes.text;
+                          formState.value['delayDesc'] = controllerDelayReason.text;
+
+
                           print(formState.value['ata'].toIso8601String());
                           print(formState.value['atd'].toIso8601String());
                           print(formState.value['blockTime']);
                           print(formState.value['blockTime'] is int);
                           print(formState.value['cargoPP']);
                           print(formState.value['cargoPP'] is int);
+                          print(formState.value['date'].toIso8601String());
                           print(formState.value['eta'].toIso8601String());
                           print(formState.value['etd'].toIso8601String());
+                          print(formState.value['flightNumber']);
+                          print(formState.value['flightTime']);
                           print(formState.value['flightTime'] is int);
                           print(locations[formState.value['selectedFrom']].id);
+                          print(formState.value['hoistCycles']);
                           print(formState.value['hoistCycles'] is int);
-                          print(formState.value['notes'] is String);
-                          print(selectedViaIds);
-                          print(locations[formState.value['selectedTo']].id);
-                          print(locations[formState.value['selectedFrom']].id);
+                          print(flight.id);
+                          print(formState.value['notes']);
+                          print(formState.value['pax']);
                           print(formState.value['pax'] is int);
+                          print(formState.value['paxTax']);
                           print(formState.value['paxTax'] is int);
-                          print(
-                              formState.value['rotorStart'].toIso8601String());
+                          print(formState.value['rotorStart'].toIso8601String());
                           print(formState.value['rotorStop'].toIso8601String());
+                          print(locations[formState.value['selectedTo']].id);
+                          print(selectedViaIds);
 
                           readMutation.runMutation({
-                            'cargoPP': formState.value['cargoPP'],
-                            'blockTime': formState.value['blockTime'],
-                            'atd': formState.value['atd'].toIso8601String(),
                             'ata': formState.value['ata'].toIso8601String(),
+                            'atd': formState.value['atd'].toIso8601String(),
+                            'blockTime': formState.value['blockTime'],
+                            'cargoPP': formState.value['cargoPP'],
+                            'date': formState.value['date'].toIso8601String(),
                             'eta': formState.value['eta'].toIso8601String(),
                             'etd': formState.value['etd'].toIso8601String(),
+                            'flightNumber': formState.value['flightNumber'],
                             'flightTime': formState.value['flightTime'],
-                            'fromId':
-                                locations[formState.value['selectedFrom']].id,
+                            'fromId': locations[formState.value['selectedFrom']].id,
                             'hoistCycles': formState.value['hoistCycles'],
+                            'id': flight.id,
                             'note': formState.value['notes'],
                             'pax': formState.value['pax'],
                             'paxTax': formState.value['paxTax'],
+                            'rotorStart': formState.value['rotorStart'].toIso8601String(),
+                            'rotorStop': formState.value['rotorStop'].toIso8601String(),
                             'toId': locations[formState.value['selectedTo']].id,
-                            "viaIds": [3, 4, 5],
-                            'id': flight.id,
-                            'rotorStart':
-                                formState.value['rotorStart'].toIso8601String(),
-                            'rotorStop':
-                                formState.value['rotorStop'].toIso8601String(),
-
+                            "viaIds": selectedViaIds,
                             /*'delayBool': isDelayed.value,
                             'delayCode': formState.value['delayCode'],
                             'delayDesc': formState.value['delayNote'],
