@@ -121,36 +121,28 @@ query MyQuery {
                     child: Center(
                         child: Text(
                       DateFormat.Hm().format(flight.etd),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     )),
                   ),
                   Expanded(
                     child: Center(
                         child: Text(
                       flight.flightnumber,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     )),
                   ),
                   Expanded(
                     child: Center(
                         child: Text(
                       flight.from.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     )),
                   ),
                   Expanded(
                     child: Center(
                         child: Text(
                       flight.to.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     )),
                   ),
                   Expanded(
@@ -159,7 +151,7 @@ query MyQuery {
                               ? ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor:
-                                        const Color.fromRGBO(9, 166, 215, 1),
+                                        Theme.of(context).primaryColor,
                                   ),
                                   onPressed: () {
                                     showDialog(
@@ -167,9 +159,11 @@ query MyQuery {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           backgroundColor: Colors.white,
-                                          scrollable: true,
                                           title: Text(
-                                              'Was flight ${flight.flightnumber} completed?'),
+                                              'Was flight ${flight.flightnumber} completed?',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleLarge),
                                           actions: [
                                             Row(
                                               mainAxisAlignment:
@@ -177,29 +171,46 @@ query MyQuery {
                                                       .spaceBetween,
                                               children: [
                                                 ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    dailyUpdateFine.runMutation({
-                                                      'flightId': flight.id
-                                                    });
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor: Colors.green,
-                                                  ),
-                                                  child: const Text('Completed')
-                                                ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      dailyUpdateFine
+                                                          .runMutation({
+                                                        'flightId': flight.id
+                                                      });
+                                                    },
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .colorScheme
+                                                              .secondary,
+                                                    ),
+                                                    child: Text(
+                                                      'Completed',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyMedium,
+                                                    )),
                                                 ElevatedButton(
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();
-                                                      Navigator.pushNamed(context, '/dailyUpdateForm', arguments: flight);
-
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/dailyUpdateForm',
+                                                          arguments: flight);
                                                     },
-                                                    style: ElevatedButton.styleFrom(
-                                                      backgroundColor: Colors.orange,
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          const Color.fromRGBO(
+                                                              249, 206, 85, 1),
                                                     ),
-                                                    child: const Text(
-                                                        'Not completed')),
+                                                    child: Text('Not completed',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium)),
                                               ],
                                             ),
                                           ],
@@ -207,8 +218,15 @@ query MyQuery {
                                       },
                                     );
                                   },
-                                  icon: const Icon(Icons.update),
-                                  label: const Text('Update'),
+                                  icon: const Icon(Icons.assignment,
+                                      color: Colors.white),
+                                  label: Text('Update',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold)),
                                 )
                               : const Icon(
                                   Icons.check,
@@ -227,8 +245,12 @@ query MyQuery {
         heroTag: 'flightsButton',
         onPressed: () {},
         backgroundColor: const Color.fromRGBO(9, 166, 215, 1),
-        label: const Text('Generate DFR', style: TextStyle(color: Colors.white)),
-        icon: const Icon(Icons.add_chart, color: Colors.white),
+        label: Text('Generate DFR',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+        icon: const Icon(Icons.description, color: Colors.white),
       ),
       body: SafeArea(
         child: Column(
@@ -270,7 +292,6 @@ query MyQuery {
                                 child: Center(
                                   child: Text(
                                     'ETD',
-
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
