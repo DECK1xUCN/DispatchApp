@@ -36,9 +36,11 @@ class SidebarB extends State<Sidebar> {
                   height: 200,
                   color: myColor,
                   child: Center(
-                    child: Image.asset(
-                      "assets/deck1Logo.png",
-                      scale: 0.8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        "assets/deck1Logo.png",
+                      ),
                     ),
                   ),
                 ),
