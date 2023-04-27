@@ -13,14 +13,16 @@ class DailyUpdateForm extends HookWidget {
         ModalRoute.of(context)!.settings.arguments as FlightSimple;
 
     String updateMutation = """
-    mutation MyMutation(\$wasFlight: Boolean!, \$delayDesc: String!, \$delayCode: String!, \$flightId: Int!) {
+mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!) {
   createDailyUpdate(
-    input: {delayCode: \$delayCode, wasFlight: \$wasFlight, delayDesc: \$delayDesc, flightId: \$flightId}
+    input: {wasFlight: false, flightId: \$flightId, delayCode: \$delayCode, delayDesc: \$delayDesc}
   ) {
+    wasFlight
+    flight {
+      id
+    }
     delayCode
     delayDesc
-    wasFlight
-    flightId
   }
 }
     """;
@@ -28,9 +30,6 @@ class DailyUpdateForm extends HookWidget {
     final readMutation = useMutation(
       MutationOptions(
         document: gql(updateMutation),
-        onCompleted: (dynamic resultData) {
-          print(resultData);
-        },
       ),
     );
 
@@ -115,11 +114,11 @@ class DailyUpdateForm extends HookWidget {
                         print(formState.value);
                         print(flight.id);
                         readMutation.runMutation({
-                          'wasFlight': false,
                           'flightId': flight.id,
                           'delayDesc': formState.value['cancelationDescription'],
                           'delayCode': formState.value['cancelationCode'].toString().split('.').last,
                         });
+                        Navigator.pop(context);
                       }
                     },
                     child: const Text('Submit'),
