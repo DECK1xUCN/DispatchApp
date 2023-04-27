@@ -50,8 +50,7 @@ class SidebarB extends State<Sidebar> {
                       Card(
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              100),
+                          borderRadius: BorderRadius.circular(100),
                         ),
                         child: Container(
                           decoration: BoxDecoration(
@@ -72,11 +71,11 @@ class SidebarB extends State<Sidebar> {
                                     height: width,
                                     child: _selectedIndex == 0
                                         ? const Icon(Icons.local_airport,
-                                            color: Colors.white,
-                                            size: 32)
+                                            color: Colors.white, size: 32)
                                         : const Icon(
                                             Icons.local_airport,
-                                            color: Colors.black,
+                                            color: Color.fromRGBO(
+                                                129, 132, 135, 1),
                                             size: 32,
                                           )),
                                 const SizedBox(width: 10),
@@ -90,7 +89,7 @@ class SidebarB extends State<Sidebar> {
                                         inherit: true,
                                         color: _selectedIndex == 0
                                             ? Colors.white
-                                            : Colors.black,
+                                            : Color.fromRGBO(129, 132, 135, 1),
                                       ),
                                 ),
                               ],
@@ -132,7 +131,7 @@ class SidebarB extends State<Sidebar> {
                       //                       size: 32)
                       //                   : const Icon(
                       //                       Icons.description,
-                      //                       color: Colors.black,
+                      //                       color: Color.fromRGBO(129, 132, 135, 1),
                       //                       size: 32,
                       //                     )),
                       //           const SizedBox(width: 10),
@@ -146,7 +145,7 @@ class SidebarB extends State<Sidebar> {
                       //                   inherit: true,
                       //                   color: _selectedIndex == 1
                       //                       ? Colors.white
-                      //                       : Colors.black,
+                      //                       : Color.fromRGBO(129, 132, 135, 1),
                       //                 ),
                       //           ),
                       //         ],
@@ -188,7 +187,7 @@ class SidebarB extends State<Sidebar> {
                       //                       size: 32)
                       //                   : const Icon(
                       //                       Icons.place,
-                      //                       color: Colors.black,
+                      //                       color: Color.fromRGBO(129, 132, 135, 1),
                       //                       size: 32,
                       //                     )),
                       //           const SizedBox(width: 10),
@@ -202,7 +201,7 @@ class SidebarB extends State<Sidebar> {
                       //                   inherit: true,
                       //                   color: _selectedIndex == 2
                       //                       ? Colors.white
-                      //                       : Colors.black,
+                      //                       : Color.fromRGBO(129, 132, 135, 1),
                       //                 ),
                       //           ),
                       //         ],
@@ -240,11 +239,11 @@ class SidebarB extends State<Sidebar> {
                                     height: width,
                                     child: _selectedIndex == 3
                                         ? const Icon(Icons.bar_chart,
-                                            color: Colors.white,
-                                            size: 32)
+                                            color: Colors.white, size: 32)
                                         : const Icon(
                                             Icons.bar_chart_outlined,
-                                            color: Colors.black,
+                                            color: Color.fromRGBO(
+                                                129, 132, 135, 1),
                                             size: 32,
                                           )),
                                 const SizedBox(width: 10),
@@ -258,7 +257,7 @@ class SidebarB extends State<Sidebar> {
                                         inherit: true,
                                         color: _selectedIndex == 3
                                             ? Colors.white
-                                            : Colors.black,
+                                            : Color.fromRGBO(129, 132, 135, 1),
                                       ),
                                 ),
                               ],
@@ -278,7 +277,7 @@ class SidebarB extends State<Sidebar> {
                 // tileColor: Colors.transparent,
                 //   leading: const Icon(
                 //     Icons.logout,
-                //     color: Colors.black,
+                //     color: Color.fromRGBO(129, 132, 135, 1),
                 //     size: 32,
                 //   ),
                 //   title: Text('Log out',
