@@ -29,6 +29,9 @@ query MyQuery {
     dailyUpdate {
       id
     }
+    site {
+      id
+    }
   }
 }
   """;
@@ -89,7 +92,8 @@ query MyQuery {
           flightnumber: flight['flightNumber'],
           from:
               Location(id: flight['from']['id'], name: flight['from']['name']),
-          to: Location(id: flight['to']['id'], name: flight['to']['name']));
+          to: Location(id: flight['to']['id'], name: flight['to']['name']),
+          siteId: flight['site']['id']);
 
       if (flight['dailyUpdate'] != null) {
         flightObject.hasDU = true;

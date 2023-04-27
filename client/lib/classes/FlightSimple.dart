@@ -6,6 +6,7 @@ class FlightSimple {
   String flightnumber;
   Location from;
   Location to;
+  int siteId;
   bool hasDU;
 
   FlightSimple({
@@ -14,6 +15,7 @@ class FlightSimple {
     required this.flightnumber,
     required this.from,
     required this.to,
+    required this.siteId,
     this.hasDU = false,
   });
 }
