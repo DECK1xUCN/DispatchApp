@@ -1,33 +1,18 @@
 import gql from "graphql-tag";
 
 const dailyReportTypeDefs = gql`
-  type Query {
-    dailyReports: [DailyReport!]!
-    dailyReport(id: Int!): DailyReport!
-  }
-  type Mutation {
-    createDailyReport(data: CreateDailyReportInput): DailyReport!
-    updateDailyReport(id: String!, data: UpdateDailyReportInput!): DailyReport!
-  }
+  scalar DateTime
+
   type DailyReport {
     id: Int!
     date: DateTime!
-    helicopter: Helicopter!
-    pilot: Pilot!
-    hoistOperator: HoistOperator!
+    flights: [Flight!]!
   }
-  # Input types
-  input CreateDailyReportInput {
-    date: DateTime!
-    helicopterId: Int!
-    pilotId: Int!
-    hoistOperatorId: Int!
-  }
-  input UpdateDailyReportInput {
-    date: DateTime
-    helicopter: Int
-    pilot: Int
-    hoistOperator: Int
+
+  type Query {
+    dailyReportsById(id: Int!): DailyReport!
+    dailyReportsByDate(date: DateTime!): [DailyReport!]!
+    dailyReports: [DailyReport!]!
   }
 `;
 

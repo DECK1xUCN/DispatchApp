@@ -1,3 +1,4 @@
+import 'package:client/pages/dailyUpdateForm.dart';
 import 'package:client/pages/flightForm.dart';
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
@@ -55,5 +56,6 @@ void main() async {
             '/': (context) => Loading(),
             '/home': (context) => Home(),
             '/flightform': (context) => FlightForm(),
+            '/dailyUpdateForm': (context) => DailyUpdateForm(),
           })));
 }

@@ -1,29 +1,25 @@
 import gql from "graphql-tag";
 
-const helicoptersTypeDefs = gql`
-  type Query {
-    helicopters: [Helicopter!]!
-    helicoptersWhereModel(model: String!): [Helicopter!]!
-    helicopter(id: Int!): Helicopter!
-  }
-  type Mutation {
-    createHelicopter(data: CreateHelicopterInput): Helicopter!
-    updateHelicopter(id: String!, data: UpdateHelicopterInput!): Helicopter!
-  }
+const helicopterTypeDefs = gql`
   type Helicopter {
     id: Int!
-    reg: String!
+    manufacturer: String!
     model: String!
+    reg: String!
+    flights: [Flight!]!
   }
-  # Input types
   input CreateHelicopterInput {
-    reg: String!
+    manufacturer: String!
     model: String!
+    reg: String!
   }
-  input UpdateHelicopterInput {
-    reg: String
-    model: String
+  type Query {
+    helicopter(id: Int!): Helicopter!
+    helicoptersWhereModel(model: String!): [Helicopter!]!
+    helicopters: [Helicopter!]!
+  }
+  type Mutation {
+    createHelicopter(data: CreateHelicopterInput!): Helicopter!
   }
 `;
-
-export default helicoptersTypeDefs;
+export default helicopterTypeDefs;

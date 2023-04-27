@@ -1,71 +1,76 @@
 import gql from "graphql-tag";
 
-const flightTypeDefs = gql`
-  type Query {
-    flights: [Flight!]!
-    flight(id: Int!): Flight!
-    flightWhereDailyReportId(dailyReportId: Int!): [Flight!]!
-  }
-  type Mutation {
-    createFlight(data: CreateFlightInput!): Flight!
-    updateFlight(id: Int!, data: UpdateFlightInput!): Flight!
-  }
+const flightsTypeDefs = gql`
+  scalar DateTime
+
   type Flight {
     id: Int!
     flightNumber: String!
-    from: Heliport!
-    via: [Site!]!
-    to: Heliport!
+    date: DateTime!
+    helicopter: Helicopter!
+    pilot: Pilot!
+    hoistOperator: HoistOperator!
+    site: Site!
+    from: Location!
+    via: [Location!]!
+    to: Location!
     etd: DateTime!
     rotorStart: DateTime!
     atd: DateTime!
     eta: DateTime!
     rotorStop: DateTime!
     ata: DateTime!
-    blockTime: Int!
     flightTime: Int!
-    delay: Boolean!
-    delayMin: Int!
-    delayCode: String!
-    delayDesc: String!
-    pax: Int!
-    paxTax: Int!
-    cargoPP: Int!
-    hoistCycles: Int!
-    notes: String!
-    dailyReport: DailyReport!
+    blockTime: Int!
+    delay: Boolean
+    delayCode: String
+    delayTime: Int
+    delayNote: String
+    pax: Int
+    paxTax: Int
+    cargoPP: Int
+    hoistCycles: Int
+    note: String
+    editable: Boolean
     dailyUpdate: DailyUpdate
+    dailyReport: DailyReport
   }
 
-  # Input types
-  input CreateFlightInput {
+  input CreateFlight {
     flightNumber: String!
+    date: DateTime!
+    helicopterId: Int!
+    pilotId: Int!
+    hoistOperatorId: Int!
+    siteId: Int!
     fromId: Int!
-    viaId: [Int!]!
+    viaIds: [Int!]!
     toId: Int!
     etd: DateTime!
-    rotorStart: DateTime
+    rotorStart: DateTime!
     atd: DateTime!
     eta: DateTime!
-    rotorStop: DateTime
-    ata: DateTime
-    blockTime: Int
-    flightTime: Int
-    delay: Boolean!
-    delayMin: Int
-    delayCode: String
-    delayDesc: String
-    pax: Int!
-    paxTax: Int!
-    cargoPP: Int!
-    hoistCycles: Int!
-    notes: String
-    dailyReportId: Int!
-    dailyUpdateId: Int
+    rotorStop: DateTime!
+    ata: DateTime!
+    flightTime: Int!
+    blockTime: Int!
+    pax: Int
+    paxTax: Int
+    cargoPP: Int
+    hoistCycles: Int
+    note: String
+    editable: Boolean
   }
-  input UpdateFlightInput {
+
+  input updateFlight {
     flightNumber: String
+    date: DateTime
+    helicopterId: Int
+    pilotId: Int
+    hoistOperatorId: Int
+    siteId: Int
     fromId: Int
+    viaIds: [Int!]
     toId: Int
     etd: DateTime
     rotorStart: DateTime
@@ -73,21 +78,26 @@ const flightTypeDefs = gql`
     eta: DateTime
     rotorStop: DateTime
     ata: DateTime
-    blockTime: Int
     flightTime: Int
-    delay: Boolean
-    delayMin: Int
-    delayCode: String
-    delayDesc: String
+    blockTime: Int
     pax: Int
     paxTax: Int
     cargoPP: Int
     hoistCycles: Int
-    notes: String
-    dailyReportId: Int!
-    dailyUpdateId: Int
+    note: String
+    editable: Boolean
   }
-  scalar DateTime
-`;
 
-export default flightTypeDefs;
+  type Mutation {
+    createFlight(data: CreateFlight!): Flight!
+    updateFlight(id: Int!, data: updateFlight!): Flight!
+  }
+  type Query {
+    flights: [Flight!]!
+    flightsBySiteId(siteId: Int!): [Flight!]!
+    flightsPerDay(date: DateTime!): [Flight!]!
+    flightById(id: Int!): Flight!
+    flightByFlightNumber(flightNumber: String!): Flight!
+  }
+`;
+export default flightsTypeDefs;

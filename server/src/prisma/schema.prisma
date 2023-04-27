@@ -9,93 +9,105 @@ datasource db {
 }
 
 model Flight {
-  id            Int          @id @unique @default(autoincrement())
-  flightNumber  String       @unique
-  from          Heliport     @relation("from", fields: [fromId], references: [id])
-  fromId        Int
-  via           Site[]
-  to            Heliport     @relation("to", fields: [toId], references: [id])
-  toId          Int
-  etd           DateTime
-  rotorStart    DateTime
-  atd           DateTime
-  eta           DateTime
-  rotorStop     DateTime
-  ata           DateTime
-  blockTime     Int
-  flightTime    Int
-  delay         Boolean
-  delayMin      Int?         @default(0)
-  delayCode     String?      @default("N/A")
-  delayDesc     String?      @default("N/A")
-  pax           Int
-  paxTax        Int
-  cargoPP       Int
-  hoistCycles   Int
-  notes         String?      @default("N/A")
-  dailyReport   DailyReport  @relation(fields: [dailyReportId], references: [id])
-  dailyReportId Int
-  dailyUpdate   DailyUpdate?
-}
-
-model Heliport {
-  id   Int      @id @unique @default(autoincrement())
-  name String   @unique
-  from Flight[] @relation("from")
-  to   Flight[] @relation("to")
+  id              Int            @id @default(autoincrement())
+  flightNumber    String         @unique
+  date            DateTime       @default(now())
+  helicopter      Helicopter?    @relation(fields: [helicopterId], references: [id])
+  helicopterId    Int
+  pilot           Pilot?         @relation(fields: [pilotId], references: [id])
+  pilotId         Int
+  hoistOperator   HoistOperator? @relation(fields: [hoistOperatorId], references: [id])
+  hoistOperatorId Int
+  site            Site           @relation(fields: [siteId], references: [id])
+  siteId          Int
+  from            Location       @relation("from", fields: [fromId], references: [id])
+  fromId          Int
+  via             Location[]
+  to              Location       @relation("to", fields: [toId], references: [id])
+  toId            Int
+  etd             DateTime       @default(now())
+  rotorStart      DateTime       @default(now())
+  ata             DateTime       @default(now())
+  eta             DateTime       @default(now())
+  rotorStop       DateTime       @default(now())
+  atd             DateTime       @default(now())
+  flightTime      Int?           @default(0)
+  blockTime       Int?           @default(0)
+  delay           Boolean?       @default(false)
+  delayCode       String?        @default("N/A")
+  delayTime       Int?           @default(0)
+  delayNote       String?        @default("N/A")
+  pax             Int?           @default(0)
+  paxTax          Int?           @default(0)
+  cargoPP         Int?           @default(0)
+  hoistCycles     Int?           @default(0)
+  note            String?        @default("N/A")
+  editable        Boolean        @default(true)
+  dailyUpdate     DailyUpdate?
+  dailyReport     DailyReport?   @relation(fields: [dailyReportId], references: [id])
+  dailyReportId   Int?
 }
 
 model Site {
-  id   Int      @id @unique @default(autoincrement())
-  name String   @unique
-  via  Flight[]
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  flights   Flight[]
+  locations Location[]
 }
 
-model DailyReport {
-  id           Int           @id @unique @default(autoincrement())
-  date         DateTime
-  helicopter   Helicopter    @relation(fields: [helicopterId], references: [id])
-  helicopterId Int
-  pilot        Pilot         @relation(fields: [pilotId], references: [id])
-  pilotId      Int
-  hoist        HoistOperator @relation(fields: [hoistId], references: [id])
-  hoistId      Int
-  flights      Flight[]
+model Location {
+  id     Int      @id @default(autoincrement())
+  name   String   @unique
+  lat    Float    @default(0)
+  lng    Float    @default(0)
+  type   String
+  site   Site     @relation(fields: [siteId], references: [id])
+  siteId Int
+  from   Flight[] @relation("from")
+  via    Flight[]
+  to     Flight[] @relation("to")
 }
 
 model Helicopter {
-  id          Int           @id @unique @default(autoincrement())
-  reg         String        @unique
-  model       String
-  DailyReport DailyReport[]
+  id           Int      @id @default(autoincrement())
+  manufacturer String   @unique
+  model        String
+  reg          String   @unique
+  flights      Flight[]
 }
 
 model Pilot {
-  id           Int           @id @unique @default(autoincrement())
-  name         String
-  dailyReports DailyReport[]
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flights Flight[]
 }
 
 model HoistOperator {
-  id           Int           @id @unique @default(autoincrement())
-  name         String
-  dailyReports DailyReport[]
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flights Flight[]
 }
 
 model DailyUpdate {
-  id                   Int      @id @unique @default(autoincrement())
+  id                   Int      @id @default(autoincrement())
   flight               Flight   @relation(fields: [flightId], references: [id])
   flightId             Int      @unique
-  date                 DateTime
-  wasFlight            Boolean
-  delay                Boolean
-  delayReason          String?  @default("N/A")
+  wasFlight            Boolean  @default(true)
+  delay                Boolean  @default(false)
+  delayCode            String?  @default("N/A")
+  delayTime            Int?     @default(0)
   delayDesc            String?  @default("N/A")
-  maintenace           Boolean
+  maintenance          Boolean  @default(false)
   plannedMaintenance   Boolean? @default(false)
   unplannedMaintenance Boolean? @default(false)
   otherMaintenance     Boolean? @default(false)
-  maintenanceDesc      String?  @default("N/A")
-  baseAndEquipment     Boolean
+  maintenanceNote      String?  @default("N/A")
+  baseAndEquipment     Boolean  @default(false)
   note                 String?  @default("N/A")
+}
+
+model DailyReport {
+  id      Int      @id @default(autoincrement())
+  date    DateTime @default(now())
+  flights Flight[]
 }

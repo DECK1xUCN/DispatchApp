@@ -16,7 +16,7 @@ class Flight {
   int? flightTime;
   String flightnumber;
   Location from;
-  List<Location> via;
+  List<Location>? via;
   Location to;
   int? hoistCycles;
   String? notes;
@@ -24,7 +24,6 @@ class Flight {
   int? paxTax;
   DateTime? rotorStart;
   DateTime? rotorStop;
-
 
   Flight({
     required this.id,
@@ -40,7 +39,7 @@ class Flight {
     this.flightTime,
     required this.flightnumber,
     required this.from,
-    required this.via,
+    this.via,
     required this.to,
     this.hoistCycles,
     this.notes,
