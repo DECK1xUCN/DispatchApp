@@ -20,8 +20,8 @@ class FlightForm extends HookWidget {
     final now = DateTime.now();
 
     String flightQuery = """
-query MyQuery {
-  flightById(id: 1) {
+query MyQuery(\$flightId: Int!, \$siteId: Int!) {
+  flightById(id: \$flightId) {
     ata
     atd
     blockTime
@@ -58,7 +58,7 @@ query MyQuery {
       name
     }
   }
-  locoationsPerSite(siteId: 1) {
+  locoationsPerSite(siteId: \$siteId) {
     id
     name
     type
@@ -148,26 +148,20 @@ query MyQuery {
     // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
     // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-    mutation MyMutation (\$flightId: Int!, \$ata: DateTime! , \$atd: DateTime!, \$blockTime: Int!, \$cargo: Int!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCyc: Int!, \$notes: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]){
+    mutation MyMutation (\$flightId: Int!, \$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]){
   updateFlight(
-    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargo, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCyc, note: \$notes, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, viaIds: \$viaIds} 
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, viaIds: \$viaIds}
     id: \$flightId
   ) {
     ata
     atd
     blockTime
     cargoPP
-    delay
-    delayCode
-    delayNote
-    delayTime
     eta
     etd
-    flightNumber
     flightTime
     from {
       id
-      name
     }
     hoistCycles
     note
@@ -175,13 +169,11 @@ query MyQuery {
     paxTax
     rotorStart
     rotorStop
-    via {
-      id
-      name
-    }
     to {
       id
-      name
+    }
+    via {
+      id
     }
   }
 }
@@ -1261,12 +1253,30 @@ query MyQuery {
                               selectedViaIds.add(v.id);
                             }
                           }
+                          print(formState.value['ata'].toIso8601String());
+                          print(formState.value['atd'].toIso8601String());
+                          print(formState.value['blockTime']);
+                          print(formState.value['cargoPP']);
+                          print(formState.value['eta'].toIso8601String());
+                          print(formState.value['etd'].toIso8601String());
+                          print(formState.value['flightTime']);
+                          print(locations[formState.value['selectedFrom']].id);
+                          print(formState.value['hoistCycles']);
+                          print(formState.value['notes']);
+                          print(selectedViaIds);
+                          print(locations[formState.value['selectedTo']].id);
+                          print(locations[formState.value['selectedFrom']].id);
+                          print(formState.value['pax']);
+                          print(formState.value['paxTax']);
+                          print(formState.value['rotorStart'].toIso8601String());
+                          print(formState.value['rotorStop'].toIso8601String());
+
                           readMutation.runMutation({
                             'flightId': flight.id,
                             'ata': formState.value['ata'].toIso8601String(),
                             'atd': formState.value['atd'].toIso8601String(),
                             'blockTime': formState.value['blockTime'],
-                            'cargo': formState.value['cargoPP'],
+                            'cargoPP': formState.value['cargoPP'],
                             /*'delayBool': isDelayed.value,
                             'delayCode': formState.value['delayCode'],
                             'delayDesc': formState.value['delayNote'],
@@ -1276,8 +1286,8 @@ query MyQuery {
                             'flightTime': formState.value['flightTime'],
                             'fromId':
                                 locations[formState.value['selectedFrom']].id,
-                            'hoistCyc': formState.value['hoistCycles'],
-                            'notes': formState.value['notes'],
+                            'hoistCycles': formState.value['hoistCycles'],
+                            'note': formState.value['notes'],
                             'pax': formState.value['pax'],
                             'paxTax': formState.value['paxTax'],
                             'rotorStart':
@@ -1285,7 +1295,7 @@ query MyQuery {
                             'rotorStop':
                                 formState.value['rotorStop'].toIso8601String(),
                             'toId': locations[formState.value['selectedTo']].id,
-                            'viaIds': selectedViaIds,
+                            //'viaIds': selectedViaIds,
                           });
                         }
                       },
