@@ -67,23 +67,31 @@ class SidebarB extends State<Sidebar> {
                               // center the children of the Row
                               children: [
                                 SizedBox(
-                                  width: width,
-                                  height: width,
-                                  child: _selectedIndex == 0
-                                      ? Image.asset(
-                                          "assets/dailyUpdatesSelected.png") // show selected icon
-                                      : Image.asset("assets/dailyUpdates.png"),
-                                ),
+                                    width: width,
+                                    height: width,
+                                    child: _selectedIndex == 0
+                                        ? Icon(Icons.local_airport,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 32)
+                                        : const Icon(
+                                            Icons.local_airport,
+                                            color: Colors.black,
+                                            size: 32,
+                                          )),
                                 const SizedBox(width: 10),
                                 // add some spacing between the image and text
-                                Text('Flights',
-                                    style:
-                                        Theme.of(context).textTheme.displayLarge!.copyWith(
-                                          inherit: true,
-                                          color: _selectedIndex == 0
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
+                                Text(
+                                  'Flights',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge!
+                                      .copyWith(
+                                        inherit: true,
+                                        color: _selectedIndex == 0
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -115,24 +123,31 @@ class SidebarB extends State<Sidebar> {
                               // center the children of the Row
                               children: [
                                 SizedBox(
-                                  width: width,
-                                  height: width,
-                                  child: _selectedIndex == 1
-                                      ? Image.asset(
-                                          "assets/dailyReportsSelected.png") // show selected icon
-                                      : Image.asset("assets/dailyReports.png"),
-                                ),
+                                    width: width,
+                                    height: width,
+                                    child: _selectedIndex == 1
+                                        ? Icon(Icons.description,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 32)
+                                        : const Icon(
+                                            Icons.description,
+                                            color: Colors.black,
+                                            size: 32,
+                                          )),
                                 const SizedBox(width: 10),
                                 // add some spacing between the image and text
                                 Text(
                                   'DFRs',
-                                  style:
-                                  Theme.of(context).textTheme.displayLarge!.copyWith(
-                                    inherit: true,
-                                    color: _selectedIndex == 1
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge!
+                                      .copyWith(
+                                        inherit: true,
+                                        color: _selectedIndex == 1
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -164,24 +179,31 @@ class SidebarB extends State<Sidebar> {
                               // center the children of the Row
                               children: [
                                 SizedBox(
-                                  width: width,
-                                  height: width,
-                                  child: _selectedIndex == 2
-                                      ? Image.asset(
-                                          "assets/sitesSelected.png") // show selected icon
-                                      : Image.asset("assets/sites.png"),
-                                ),
+                                    width: width,
+                                    height: width,
+                                    child: _selectedIndex == 2
+                                        ? Icon(Icons.place,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 32)
+                                        : const Icon(
+                                            Icons.place,
+                                            color: Colors.black,
+                                            size: 32,
+                                          )),
                                 const SizedBox(width: 10),
                                 // add some spacing between the image and text
                                 Text(
                                   'Sites',
-                                  style:
-                                  Theme.of(context).textTheme.displayLarge!.copyWith(
-                                    inherit: true,
-                                    color: _selectedIndex == 2
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge!
+                                      .copyWith(
+                                        inherit: true,
+                                        color: _selectedIndex == 2
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -213,24 +235,31 @@ class SidebarB extends State<Sidebar> {
                               // center the children of the Row
                               children: [
                                 SizedBox(
-                                  width: width,
-                                  height: width,
-                                  child: _selectedIndex == 3
-                                      ? Image.asset(
-                                          "assets/dashboardSelected.png") // show selected icon
-                                      : Image.asset("assets/dashboard.png"),
-                                ),
+                                    width: width,
+                                    height: width,
+                                    child: _selectedIndex == 3
+                                        ? Icon(Icons.bar_chart,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            size: 32)
+                                        : const Icon(
+                                            Icons.bar_chart_outlined,
+                                            color: Colors.black,
+                                            size: 32,
+                                          )),
                                 const SizedBox(width: 10),
                                 // add some spacing between the image and text
                                 Text(
                                   'Stats',
-                                  style:
-                                  Theme.of(context).textTheme.displayLarge!.copyWith(
-                                    inherit: true,
-                                    color: _selectedIndex == 3
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge!
+                                      .copyWith(
+                                        inherit: true,
+                                        color: _selectedIndex == 3
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                 ),
                               ],
                             ),
@@ -250,11 +279,10 @@ class SidebarB extends State<Sidebar> {
                   leading: const Icon(
                     Icons.logout,
                     color: Colors.black,
+                    size: 32,
                   ),
-                  title: Text(
-                    'Log out',
-                    style: Theme.of(context).textTheme.displayLarge
-                  ),
+                  title: Text('Log out',
+                      style: Theme.of(context).textTheme.displayLarge),
                   onTap: () {},
                 ),
               ],
