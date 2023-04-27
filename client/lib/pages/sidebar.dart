@@ -76,17 +76,14 @@ class SidebarB extends State<Sidebar> {
                                 ),
                                 const SizedBox(width: 10),
                                 // add some spacing between the image and text
-                                Text(
-                                  'Flights',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 30,
-                                    color: _selectedIndex == 0
-                                        ? Colors.white
-                                        : Colors.black,
-                                    // change color based on selection
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                Text('Flights',
+                                    style:
+                                        Theme.of(context).textTheme.displayLarge!.copyWith(
+                                          inherit: true,
+                                          color: _selectedIndex == 0
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
                                 ),
                               ],
                             ),
@@ -129,14 +126,12 @@ class SidebarB extends State<Sidebar> {
                                 // add some spacing between the image and text
                                 Text(
                                   'DFRs',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 30,
+                                  style:
+                                  Theme.of(context).textTheme.displayLarge!.copyWith(
+                                    inherit: true,
                                     color: _selectedIndex == 1
                                         ? Colors.white
                                         : Colors.black,
-                                    // change color based on selection
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -180,14 +175,12 @@ class SidebarB extends State<Sidebar> {
                                 // add some spacing between the image and text
                                 Text(
                                   'Sites',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 30,
+                                  style:
+                                  Theme.of(context).textTheme.displayLarge!.copyWith(
+                                    inherit: true,
                                     color: _selectedIndex == 2
                                         ? Colors.white
                                         : Colors.black,
-                                    // change color based on selection
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -231,14 +224,12 @@ class SidebarB extends State<Sidebar> {
                                 // add some spacing between the image and text
                                 Text(
                                   'Stats',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 30,
+                                  style:
+                                  Theme.of(context).textTheme.displayLarge!.copyWith(
+                                    inherit: true,
                                     color: _selectedIndex == 3
                                         ? Colors.white
                                         : Colors.black,
-                                    // change color based on selection
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -260,13 +251,9 @@ class SidebarB extends State<Sidebar> {
                     Icons.logout,
                     color: Colors.black,
                   ),
-                  title: const Text(
+                  title: Text(
                     'Log out',
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 30,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.displayLarge
                   ),
                   onTap: () {},
                 ),
