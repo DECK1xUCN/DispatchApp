@@ -28,12 +28,15 @@ void main() async {
             primaryColor: const Color.fromRGBO(9, 166, 215, 1),
             fontFamily: 'Lato',
             textTheme: const TextTheme(
-              displayLarge:
-                  TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+              displayLarge: TextStyle(
+                  fontSize: 32.0,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
               titleLarge: TextStyle(
-                  fontSize: 25.0, fontFamily: 'Hind', color: Colors.black),
+                  fontSize: 25.0, fontFamily: 'Roboto', color: Colors.black),
               bodyMedium: TextStyle(
-                  fontSize: 14.0, fontFamily: 'Hind', color: Colors.black),
+                  fontSize: 14.0, fontFamily: 'Lato', color: Colors.black),
             ),
           ),
           initialRoute: '/',
