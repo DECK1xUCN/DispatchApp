@@ -102,6 +102,8 @@ query MyQuery {
       flights.add(flightObject);
     }
 
+    flights.sort((a, b) => a.etd.compareTo(b.etd));
+
     List<Widget> generateRows(flights) {
       List<Widget> rows = [];
       for (var flight in flights) {
