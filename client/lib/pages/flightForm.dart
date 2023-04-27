@@ -193,8 +193,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
         document: gql(flightMutation),
         onCompleted: (dynamic resultData) {
           print(resultData);
-          //Navigator.pop(context);
-          print(result.exception);
+          Navigator.pop(context);
         },
       ),
     );
@@ -1231,33 +1230,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                           formState.value['notes'] = controllerNotes.text;
                           formState.value['delayDesc'] = controllerDelayReason.text;
 
-
-                          print(formState.value['ata'].toIso8601String());
-                          print(formState.value['atd'].toIso8601String());
-                          print(formState.value['blockTime']);
-                          print(formState.value['blockTime'] is int);
-                          print(formState.value['cargoPP']);
-                          print(formState.value['cargoPP'] is int);
-                          print(formState.value['date'].toIso8601String());
-                          print(formState.value['eta'].toIso8601String());
-                          print(formState.value['etd'].toIso8601String());
-                          print(formState.value['flightNumber']);
-                          print(formState.value['flightTime']);
-                          print(formState.value['flightTime'] is int);
-                          print(locations[formState.value['selectedFrom']].id);
-                          print(formState.value['hoistCycles']);
-                          print(formState.value['hoistCycles'] is int);
-                          print(flight.id);
-                          print(formState.value['notes']);
-                          print(formState.value['pax']);
-                          print(formState.value['pax'] is int);
-                          print(formState.value['paxTax']);
-                          print(formState.value['paxTax'] is int);
-                          print(formState.value['rotorStart'].toIso8601String());
-                          print(formState.value['rotorStop'].toIso8601String());
-                          print(locations[formState.value['selectedTo']].id);
-                          print(selectedViaIds);
-
                           readMutation.runMutation({
                             'ata': formState.value['ata'].toIso8601String(),
                             'atd': formState.value['atd'].toIso8601String(),
@@ -1266,7 +1238,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             'date': formState.value['date'].toIso8601String(),
                             'eta': formState.value['eta'].toIso8601String(),
                             'etd': formState.value['etd'].toIso8601String(),
-                            'flightNumber': formState.value['flightNumber'],
+                            'flightNumber': flight.flightnumber,
                             'flightTime': formState.value['flightTime'],
                             'fromId': locations[formState.value['selectedFrom']].id,
                             'hoistCycles': formState.value['hoistCycles'],
