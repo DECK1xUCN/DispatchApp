@@ -29,7 +29,7 @@ void main() async {
             primaryColor: const Color.fromRGBO(9, 166, 215, 1),
 
             // Define the default font family.
-            fontFamily: 'Roboto',
+            fontFamily: 'Lato',
 
             // Define the default `decoration` for the Input fields
             inputDecorationTheme: const InputDecorationTheme(
