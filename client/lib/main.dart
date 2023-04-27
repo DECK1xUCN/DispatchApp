@@ -27,6 +27,11 @@ void main() async {
             useMaterial3: true,
             brightness: Brightness.dark,
             primaryColor: const Color.fromRGBO(9, 166, 215, 1),
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromRGBO(9, 166, 215, 1),
+              secondary: Color.fromRGBO(89, 178, 102,1),
+              error: Color.fromRGBO(252, 129, 129, 1),
+            ),
             fontFamily: 'Lato',
             textTheme: const TextTheme(
               displayLarge: TextStyle(
