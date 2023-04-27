@@ -103,118 +103,118 @@ class SidebarB extends State<Sidebar> {
                           ),
                         ),
                       ),
-                      Card(
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              100), // set the desired border radius
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                _selectedIndex == 1 ? selectedColor : myColor,
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: ListTile(
-                            minLeadingWidth: -10,
-                            tileColor: myColor,
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              // center the children of the Row
-                              children: [
-                                SizedBox(
-                                    width: width,
-                                    height: width,
-                                    child: _selectedIndex == 1
-                                        ? Icon(Icons.description,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            size: 32)
-                                        : const Icon(
-                                            Icons.description,
-                                            color: Colors.black,
-                                            size: 32,
-                                          )),
-                                const SizedBox(width: 10),
-                                // add some spacing between the image and text
-                                Text(
-                                  'DFRs',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayLarge!
-                                      .copyWith(
-                                        inherit: true,
-                                        color: _selectedIndex == 1
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = 1;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
-                      Card(
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              100), // set the desired border radius
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                _selectedIndex == 2 ? selectedColor : myColor,
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          child: ListTile(
-                            minLeadingWidth: -10,
-                            tileColor: myColor,
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              // center the children of the Row
-                              children: [
-                                SizedBox(
-                                    width: width,
-                                    height: width,
-                                    child: _selectedIndex == 2
-                                        ? Icon(Icons.place,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            size: 32)
-                                        : const Icon(
-                                            Icons.place,
-                                            color: Colors.black,
-                                            size: 32,
-                                          )),
-                                const SizedBox(width: 10),
-                                // add some spacing between the image and text
-                                Text(
-                                  'Sites',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displayLarge!
-                                      .copyWith(
-                                        inherit: true,
-                                        color: _selectedIndex == 2
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = 2;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
+                      // Card(
+                      //   shadowColor: Colors.transparent,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(
+                      //         100), // set the desired border radius
+                      //   ),
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       color:
+                      //           _selectedIndex == 1 ? selectedColor : myColor,
+                      //       borderRadius: BorderRadius.circular(15.0),
+                      //     ),
+                      //     child: ListTile(
+                      //       minLeadingWidth: -10,
+                      //       tileColor: myColor,
+                      //       title: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         // center the children of the Row
+                      //         children: [
+                      //           SizedBox(
+                      //               width: width,
+                      //               height: width,
+                      //               child: _selectedIndex == 1
+                      //                   ? Icon(Icons.description,
+                      //                       color:
+                      //                           Theme.of(context).primaryColor,
+                      //                       size: 32)
+                      //                   : const Icon(
+                      //                       Icons.description,
+                      //                       color: Colors.black,
+                      //                       size: 32,
+                      //                     )),
+                      //           const SizedBox(width: 10),
+                      //           // add some spacing between the image and text
+                      //           Text(
+                      //             'DFRs',
+                      //             style: Theme.of(context)
+                      //                 .textTheme
+                      //                 .displayLarge!
+                      //                 .copyWith(
+                      //                   inherit: true,
+                      //                   color: _selectedIndex == 1
+                      //                       ? Colors.white
+                      //                       : Colors.black,
+                      //                 ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       onTap: () {
+                      //         setState(() {
+                      //           _selectedIndex = 1;
+                      //         });
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
+                      // Card(
+                      //   shadowColor: Colors.transparent,
+                      //   shape: RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.circular(
+                      //         100), // set the desired border radius
+                      //   ),
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       color:
+                      //           _selectedIndex == 2 ? selectedColor : myColor,
+                      //       borderRadius: BorderRadius.circular(15.0),
+                      //     ),
+                      //     child: ListTile(
+                      //       minLeadingWidth: -10,
+                      //       tileColor: myColor,
+                      //       title: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         // center the children of the Row
+                      //         children: [
+                      //           SizedBox(
+                      //               width: width,
+                      //               height: width,
+                      //               child: _selectedIndex == 2
+                      //                   ? Icon(Icons.place,
+                      //                       color:
+                      //                           Theme.of(context).primaryColor,
+                      //                       size: 32)
+                      //                   : const Icon(
+                      //                       Icons.place,
+                      //                       color: Colors.black,
+                      //                       size: 32,
+                      //                     )),
+                      //           const SizedBox(width: 10),
+                      //           // add some spacing between the image and text
+                      //           Text(
+                      //             'Sites',
+                      //             style: Theme.of(context)
+                      //                 .textTheme
+                      //                 .displayLarge!
+                      //                 .copyWith(
+                      //                   inherit: true,
+                      //                   color: _selectedIndex == 2
+                      //                       ? Colors.white
+                      //                       : Colors.black,
+                      //                 ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       onTap: () {
+                      //         setState(() {
+                      //           _selectedIndex = 2;
+                      //         });
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                       Card(
                         shadowColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
