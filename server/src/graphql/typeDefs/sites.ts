@@ -1,21 +1,22 @@
 import gql from "graphql-tag";
 
-const sitesTypeDefs = gql`
-  type Query {
-    sites: [Site!]!
-    site(id: Int!): Site!
-  }
-  type Mutation {
-    createSite(data: SiteInput): Site!
-    updateSite(id: Int!, data: SiteInput!): Site!
-  }
+const siteTypeDefs = gql`
   type Site {
     id: Int!
     name: String!
+    locations: [Location!]!
+    flights: [Flight!]!
   }
-  # Input types
-  input SiteInput {
+  type Query {
+    site(id: Int!): Site!
+    sites: [Site!]!
+  }
+  input CreateSiteInput {
     name: String!
   }
+  type Mutation {
+    createSite(data: CreateSiteInput!): Site!
+    updateSite(id: Int!, name: String!): Site!
+  }
 `;
-export default sitesTypeDefs;
+export default siteTypeDefs;

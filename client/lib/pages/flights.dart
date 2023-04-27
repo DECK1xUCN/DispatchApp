@@ -1,6 +1,7 @@
 import 'package:client/classes/Location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
@@ -51,6 +52,7 @@ query MyQuery {
         },
       ),
     );
+
 
     final readFlights = useQuery(
       QueryOptions(
@@ -263,6 +265,7 @@ query MyQuery {
                                 child: Center(
                                   child: Text(
                                     'ETD',
+
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,

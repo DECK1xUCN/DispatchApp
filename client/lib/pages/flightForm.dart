@@ -17,6 +17,7 @@ class FlightForm extends HookWidget {
   @override
   Widget build(BuildContext context) {
     FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
+
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
     String flightQuery = """
@@ -210,7 +211,7 @@ query MyQuery(\$flightId: Int!) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
                       locations.length,
-                          (index) => GestureDetector(
+                      (index) => GestureDetector(
                           onTap: () {
                             formState.value['selectedFrom'] = index;
                             formState.value = {...formState.value};
@@ -269,7 +270,7 @@ query MyQuery(\$flightId: Int!) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
                       locations.length,
-                          (index) => GestureDetector(
+                      (index) => GestureDetector(
                         onTap: () {
                           formState.value['selectedTo'] = index;
                           formState.value = {...formState.value};
@@ -416,10 +417,10 @@ query MyQuery(\$flightId: Int!) {
                                           newDateTime;
 
                                       TimeOfDay rotorStart =
-                                      TimeOfDay.fromDateTime(newDateTime);
+                                          TimeOfDay.fromDateTime(newDateTime);
                                       TimeOfDay rotorStopTime =
-                                      TimeOfDay.fromDateTime(
-                                          formState.value['rotorStop']);
+                                          TimeOfDay.fromDateTime(
+                                              formState.value['rotorStop']);
 
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
@@ -490,6 +491,7 @@ query MyQuery(\$flightId: Int!) {
 
                                       TimeOfDay atd =
                                       TimeOfDay.fromDateTime(newDateTime);
+
                                       TimeOfDay ata = TimeOfDay.fromDateTime(
                                           formState.value['ata']);
 
@@ -643,6 +645,7 @@ query MyQuery(\$flightId: Int!) {
                                           formState.value['rotorStart']);
                                       TimeOfDay rotorStopTime =
                                       TimeOfDay.fromDateTime(newDateTime);
+
 
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -

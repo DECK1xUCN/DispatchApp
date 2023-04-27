@@ -23,8 +23,6 @@ class Flight {
   int? paxTax;
   DateTime? rotorStart;
   DateTime? rotorStop;
-  bool hasDU;
-
 
   Flight({
     required this.id,
@@ -47,6 +45,5 @@ class Flight {
     this.paxTax,
     this.rotorStart,
     this.rotorStop,
-    required this.hasDU,
   });
 }
