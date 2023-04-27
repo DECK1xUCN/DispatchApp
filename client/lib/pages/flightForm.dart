@@ -1,3 +1,5 @@
+import 'package:client/classes/FlightSimple.dart';
+import 'package:client/classes/delayCode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -5,6 +7,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
+import 'package:client/classes/delayCode.dart';
 
 import '../classes/Flight.dart';
 
@@ -13,12 +16,13 @@ class FlightForm extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    Flight flight = ModalRoute.of(context)!.settings.arguments as Flight;
+    FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
+
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
     String flightQuery = """
 query MyQuery(\$flightId: Int!) {
-  flight(id: \$flightId) {
+  flightById(id: \$flightId) {
     etd
     ata
     atd
@@ -68,7 +72,7 @@ query MyQuery(\$flightId: Int!) {
       print(result.exception.toString());
       return const SafeArea(
           child:
-              Center(child: Text("An error occurred, check the console :(")));
+          Center(child: Text("An error occurred, check the console :(")));
     }
     if (result.isLoading) {
       return const Scaffold(
@@ -97,7 +101,7 @@ query MyQuery(\$flightId: Int!) {
       sites.add(Location(id: site["id"], name: site["name"]));
     }
 
-    final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    DelayCode dropdownValue = DelayCode.A_HeliWeather;
 
     List<String> viaLocations = [];
 
@@ -148,22 +152,24 @@ query MyQuery(\$flightId: Int!) {
         text: DateFormat('HH:mm').format(formState.value['rotorStop']));
     TextEditingController controllerATA = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['ata']));
-    TextEditingController controllerDelayReason =
-        TextEditingController(text: formState.value['delayDesc']);
+    TextEditingController controllerDelayDescription = TextEditingController(
+        text: formState.value['delayDesc']);
+    TextEditingController controllerDelayReason = TextEditingController(
+        text: dropdownValue.toString());
     TextEditingController controllerPAX =
-        TextEditingController(text: formState.value['pax'].toString());
+    TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
-        TextEditingController(text: formState.value['paxTax'].toString());
+    TextEditingController(text: formState.value['paxTax'].toString());
     TextEditingController controllerCargo =
-        TextEditingController(text: formState.value['cargoPP'].toString());
+    TextEditingController(text: formState.value['cargoPP'].toString());
     TextEditingController controllerHoistCycles =
-        TextEditingController(text: formState.value['hoistCycles'].toString());
+    TextEditingController(text: formState.value['hoistCycles'].toString());
     TextEditingController controllerBlocktime =
-        TextEditingController(text: formState.value['blockTime'].toString());
+    TextEditingController(text: formState.value['blockTime'].toString());
     TextEditingController controllerFlighttime =
-        TextEditingController(text: formState.value['flightTime'].toString());
+    TextEditingController(text: formState.value['flightTime'].toString());
     TextEditingController controllerDelayMin =
-        TextEditingController(text: formState.value['delayMin'].toString());
+    TextEditingController(text: formState.value['delayMin'].toString());
 
     useEffect(() {
       return () {
@@ -242,7 +248,7 @@ query MyQuery(\$flightId: Int!) {
                     unselectedColor: Colors.lightBlueAccent,
                     selectedColor: Colors.greenAccent,
                     selectedItemsTextStyle:
-                        const TextStyle(color: Colors.white),
+                    const TextStyle(color: Colors.white),
                     separateSelectedItems: true,
                     buttonText: const Text("Select locations"),
                     title: Text("Locations",
@@ -338,7 +344,7 @@ query MyQuery(\$flightId: Int!) {
                                       formState.value['etd'] = newDateTime;
 
                                       TimeOfDay etd =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
                                       TimeOfDay atd = TimeOfDay.fromDateTime(
                                           formState.value['atd']);
 
@@ -484,7 +490,8 @@ query MyQuery(\$flightId: Int!) {
                                       formState.value['atd'] = newDateTime;
 
                                       TimeOfDay atd =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
+
                                       TimeOfDay ata = TimeOfDay.fromDateTime(
                                           formState.value['ata']);
 
@@ -634,10 +641,11 @@ query MyQuery(\$flightId: Int!) {
                                           newDateTime;
 
                                       TimeOfDay rotorStart =
-                                          TimeOfDay.fromDateTime(
-                                              formState.value['rotorStart']);
+                                      TimeOfDay.fromDateTime(
+                                          formState.value['rotorStart']);
                                       TimeOfDay rotorStopTime =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
+
 
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
@@ -709,7 +717,7 @@ query MyQuery(\$flightId: Int!) {
                                       TimeOfDay atd = TimeOfDay.fromDateTime(
                                           formState.value['atd']);
                                       TimeOfDay ata =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
 
                                       int difference = ata.hour * 60 +
                                           ata.minute -
@@ -841,7 +849,7 @@ query MyQuery(\$flightId: Int!) {
                             children: [
                               Text("Minutes",
                                   style:
-                                      Theme.of(context).textTheme.titleLarge),
+                                  Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 10),
                               SizedBox(
                                 // Delay amount
@@ -881,34 +889,39 @@ query MyQuery(\$flightId: Int!) {
                             children: [
                               Text("Delay Reason",
                                   style:
-                                      Theme.of(context).textTheme.titleLarge),
+                                  Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 10),
                               SizedBox(
                                 // Delay Reason
                                 width: 150,
                                 height: 60,
-                                child: DropdownButtonFormField<String>(
-                                  value: formState.value['dropdownValue']
-                                      .toString(),
+                                child: DropdownButtonFormField<DelayCode>(
+                                  value: dropdownValue,
                                   icon: const Icon(Icons.arrow_downward),
                                   dropdownColor: Colors.white,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (String? value) {
+                                  onChanged: (DelayCode? value) {
                                     // This is called when the user selects an item.
                                     formState.value['dropdownValue'] = value!;
                                     formState.value = {...formState.value};
                                   },
-                                  items: delayCodes
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
+                                  items: DelayCode.values
+                                      .map<DropdownMenuItem<DelayCode>>(
+                                          (DelayCode value) {
+                                        return DropdownMenuItem<DelayCode>(
+                                          value: value,
+                                          child: Text(
+                                              value
+                                                  .toString()
+                                                  .split('.')
+                                                  .last
+                                                  .replaceAll('_',
+                                                  ' ')),
+                                        );
+                                      }).toList(),
                                 ),
                               ),
                             ],
@@ -1084,7 +1097,7 @@ query MyQuery(\$flightId: Int!) {
                                 return "Hoist Cycles cannot be negative";
                               }
                             } catch (e) {
-                              return "Filed must be a number";
+                              return "This field must be a number";
                             }
                             return null;
                           },
@@ -1143,7 +1156,7 @@ class CardWidget extends StatelessWidget {
       height: 30,
       decoration: BoxDecoration(
         border:
-            Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
+        Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
         borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Align(

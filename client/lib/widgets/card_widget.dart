@@ -26,10 +26,10 @@ class CardWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 45,
-                    backgroundColor: Colors.purple[100],
+                    backgroundColor: const Color.fromRGBO(9,166,215, 1),
                     child: const Icon(
                       Icons.flight,
-                      color: Colors.deepPurple,
+                      color: Color.fromRGBO(0, 66, 106, 1),
                       size: 60,
                     ),
                   ),
