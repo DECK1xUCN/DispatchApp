@@ -24,24 +24,9 @@ void main() async {
       child: MaterialApp(
           title: 'Deck1 Dispatch App',
           theme: ThemeData(
-            // Define the default brightness and colors.
             brightness: Brightness.dark,
             primaryColor: const Color.fromRGBO(9, 166, 215, 1),
-
-            // Define the default font family.
             fontFamily: 'Lato',
-
-            // Define the default `decoration` for the Input fields
-            inputDecorationTheme: const InputDecorationTheme(
-              // TODO: Further designing choices are needed
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-              ),
-              hintStyle: TextStyle(fontFamily: 'Hind', color: Colors.black),
-            ),
-
-            // Define the default `TextTheme`. Use this to specify the default
-            // text styling for headlines, titles, bodies of text, and more.
             textTheme: const TextTheme(
               displayLarge:
                   TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
