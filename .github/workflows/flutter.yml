@@ -17,6 +17,8 @@ jobs:
       with:
         flutter-version: '3.7.7'
     - name: Get packages
+      working-directory: ./client
       run: flutter pub get
     - name: Build app
+      working-directory: ./client
       run: flutter build apk
