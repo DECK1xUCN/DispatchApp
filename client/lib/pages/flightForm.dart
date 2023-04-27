@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:client/classes/FlightSimple.dart';
 import 'package:client/classes/delayCode.dart';
 import 'package:flutter/material.dart';
@@ -19,52 +21,59 @@ class FlightForm extends HookWidget {
     FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
 
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
+    final now = DateTime.now();
 
     String flightQuery = """
-query MyQuery(\$flightId: Int!) {
+query MyQuery(\$flightId: Int!, \$siteId: Int!) {
   flightById(id: \$flightId) {
-    etd
     ata
     atd
     blockTime
     cargoPP
+    date
     delay
     delayCode
-    delayDesc
-    delayMin
+    delayNote
+    delayTime
     eta
     flightTime
     hoistCycles
-    notes
+    note
     pax
     paxTax
     rotorStart
     rotorStop
-    from {
+    site {
       id
+      name
     }
+    etd
+    flightNumber
     via {
       id
       name
     }
     to {
       id
+      name
+    }
+    from {
+      id
+      name
     }
   }
-  heliports {
-    name
+  locoationsPerSite(siteId: \$siteId) {
     id
-  }
-  sites {
     name
-    id
+    type
   }
 }
   """;
 
     final readFlight = useQuery(
       QueryOptions(
-          document: gql(flightQuery), variables: {'flightId': flight.id}),
+          document: gql(flightQuery),
+          variables: {'flightId': flight.id, 'siteId': flight.siteId}),
     );
     final result = readFlight.result;
 
@@ -87,58 +96,105 @@ query MyQuery(\$flightId: Int!) {
     }
 
     List<Location> locations = [];
-    List<Location> sites = [];
+    List<Location> via = [];
 
-    List? listHeliports = result.data?["heliports"];
-    List? listSites = result.data?["sites"];
+    List? listHeliports =
+        result.data?["locoationsPerSite"]; //This was for from and to
 
     // Load the data from the query into the _locations list
     for (var location in listHeliports!) {
-      locations.add(Location(id: location["id"], name: location["name"]));
-    }
-
-    for (var site in listSites!) {
-      sites.add(Location(id: site["id"], name: site["name"]));
+      if (location["type"] == "VIA") {
+        via.add(Location(id: location["id"], name: location["name"]));
+      } else {
+        locations.add(Location(id: location["id"], name: location["name"]));
+      }
     }
 
     DelayCode dropdownValue = DelayCode.A_HeliWeather;
 
     List<String> viaLocations = [];
+    List<int> selectedViaIds = [];
 
-    for (var via in result.data?["flight"]["via"]) {
+    for (var via in result.data?["flightById"]["via"]) {
       viaLocations.add(via["name"]);
     }
 
     final formState = useState({
-      'selectedFrom': locations
-          .indexWhere((obj) => obj.id == result.data?['flight']['from']['id']),
-      'selectedTo': locations
-          .indexWhere((obj) => obj.id == result.data?['flight']['to']['id']),
+      'selectedFrom': locations.indexWhere(
+          (obj) => obj.id == result.data?['flightById']['from']['id']),
+      'selectedTo': locations.indexWhere(
+          (obj) => obj.id == result.data?['flightById']['to']['id']),
       'via': viaLocations,
       'dropdownValue': delayCodes.first,
-      'ata': DateTime.parse(result.data?["flight"]["ata"]),
-      'atd': DateTime.parse(result.data?["flight"]["atd"]),
-      'etd': DateTime.parse(result.data?["flight"]["etd"]),
-      'blockTime': result.data?["flight"]["blockTime"],
-      'cargoPP': result.data?["flight"]["cargoPP"],
-      'delay': result.data?["flight"]["delay"],
-      'delayCode': result.data?["flight"]["delayCode"],
-      'delayDesc': result.data?["flight"]["delayDesc"],
-      'delayMin': result.data?["flight"]["delayMin"],
-      'eta': DateTime.parse(result.data?["flight"]["eta"]),
-      'flightTime': result.data?["flight"]["flightTime"],
-      'hoistCycles': result.data?["flight"]["hoistCycles"],
-      'notes': result.data?["flight"]["notes"],
-      'pax': result.data?["flight"]["pax"],
-      'paxTax': result.data?["flight"]["paxTax"],
-      'rotorStart': DateTime.parse(result.data?["flight"]["rotorStart"]),
-      'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
+      'ata': DateTime.parse(result.data?["flightById"]["ata"]),
+      'atd': DateTime.parse(result.data?["flightById"]["atd"]),
+      'etd': DateTime.parse(result.data?["flightById"]["etd"]),
+      'blockTime': result.data?["flightById"]["blockTime"],
+      'flightTime': result.data?["flightById"]["flightTime"],
+      'cargoPP': result.data?["flightById"]["cargoPP"],
+      'delay': result.data?["flightById"]["delay"],
+      'delayCode': result.data?["flightById"]["delayCode"],
+      'delayDesc': result.data?["flightById"]["delayNote"],
+      'delayMin': result.data?["flightById"]["delayTime"],
+      'eta': DateTime.parse(result.data?["flightById"]["eta"]),
+      'hoistCycles': result.data?["flightById"]["hoistCycles"],
+      'notes': result.data?["flightById"]["note"],
+      'pax': result.data?["flightById"]["pax"],
+      'paxTax': result.data?["flightById"]["paxTax"],
+      'rotorStart': DateTime.parse(result.data?["flightById"]["rotorStart"]),
+      'rotorStop': DateTime.parse(result.data?["flightById"]["rotorStop"]),
     });
 
-    final isDelayed = useState(false);
+    final isDelayed = useState(formState.value['delay']);
     void toggleDelay(value) {
       isDelayed.value = !isDelayed.value;
     }
+
+    // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
+    // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
+    String flightMutation = """
+mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$toId: Int!, \$viaIds: [Int!] = 10, \$id: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!) {
+  updateFlight(
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, viaIds: \$viaIds, toId: \$toId}
+    id: \$id
+  ) {
+    ata
+    atd
+    blockTime
+    cargoPP
+    eta
+    etd
+    flightTime
+    from {
+      id
+    }
+    hoistCycles
+    id
+    note
+    pax
+    paxTax
+    rotorStart
+    rotorStop
+    to {
+      id
+    }
+    via {
+      id
+    }
+  }
+}
+    """;
+
+    final readMutation = useMutation(
+      MutationOptions(
+        document: gql(flightMutation),
+        onCompleted: (dynamic resultData) {
+          print(resultData);
+          //Navigator.pop(context);
+          print(result.exception);
+        },
+      ),
+    );
 
     TextEditingController controllerETD = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['etd']));
@@ -152,10 +208,10 @@ query MyQuery(\$flightId: Int!) {
         text: DateFormat('HH:mm').format(formState.value['rotorStop']));
     TextEditingController controllerATA = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['ata']));
-    TextEditingController controllerDelayDescription = TextEditingController(
-        text: formState.value['delayDesc']);
-    TextEditingController controllerDelayReason = TextEditingController(
-        text: dropdownValue.toString());
+    TextEditingController controllerDelayReason =
+        TextEditingController(text: formState.value['delayDesc']);
+    TextEditingController controllerNotes =
+        TextEditingController(text: formState.value['notes']);
     TextEditingController controllerPAX =
     TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
@@ -226,7 +282,7 @@ query MyQuery(\$flightId: Int!) {
                   const SizedBox(height: 10),
                   MultiSelectDialogField<String>(
                     initialValue: formState.value['via'],
-                    items: sites
+                    items: via
                         .map((e) => MultiSelectItem(e.toString(), e.toString()))
                         .toList(),
                     validator: (value) {
@@ -421,7 +477,8 @@ query MyQuery(\$flightId: Int!) {
                                       TimeOfDay rotorStopTime =
                                           TimeOfDay.fromDateTime(
                                               formState.value['rotorStop']);
-
+                                      print(formState.value['rotorStart']
+                                          .toIso8601String());
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
                                           rotorStart.hour * 60 -
@@ -762,7 +819,7 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   try {
                                     int newVal = int.parse(value);
-                                    if( newVal < 0) {
+                                    if (newVal < 0) {
                                       return "Block Time cannot be negative";
                                     }
                                   } catch (e) {
@@ -802,7 +859,7 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   try {
                                     int newVal = int.parse(value);
-                                    if( newVal < 0) {
+                                    if (newVal < 0) {
                                       return "Flight Time cannot be negative";
                                     }
                                   } catch (e) {
@@ -865,7 +922,7 @@ query MyQuery(\$flightId: Int!) {
                                       }
                                       try {
                                         int newVal = int.parse(value);
-                                        if( newVal < 0) {
+                                        if (newVal < 0) {
                                           return "Delay Time cannot be negative";
                                         }
                                       } catch (e) {
@@ -944,6 +1001,10 @@ query MyQuery(\$flightId: Int!) {
                               width: 400,
                               height: 200,
                               child: TextFormField(
+                                onChanged: (value) {
+                                  formState.value['delayDesc'] = value;
+                                  formState.value = {...formState.value};
+                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "This field must not be empty";
@@ -979,13 +1040,23 @@ query MyQuery(\$flightId: Int!) {
                             width: 150,
                             height: 50,
                             child: TextFormField(
+                              onChanged: (value) {
+                                var newValue;
+                                try {
+                                  newValue = int.parse(value);
+                                } catch (e) {
+                                  return;
+                                }
+                                formState.value['pax'] = newValue;
+                                formState.value = {...formState.value};
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
                                 }
                                 try {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "PAX cannot be negative";
                                   }
                                 } catch (e) {
@@ -1014,13 +1085,23 @@ query MyQuery(\$flightId: Int!) {
                             width: 150,
                             height: 50,
                             child: TextFormField(
+                              onChanged: (value) {
+                                var newValue;
+                                try {
+                                  newValue = int.parse(value);
+                                } catch (e) {
+                                  return;
+                                }
+                                formState.value['paxTax'] = newValue;
+                                formState.value = {...formState.value};
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
                                 }
                                 try {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "PAX Tax cannot be negative";
                                   }
                                 } catch (e) {
@@ -1049,6 +1130,16 @@ query MyQuery(\$flightId: Int!) {
                             width: 150,
                             height: 50,
                             child: TextFormField(
+                              onChanged: (value) {
+                                var newValue;
+                                try {
+                                  newValue = int.parse(value);
+                                } catch (e) {
+                                  return;
+                                }
+                                formState.value['cargoPP'] = newValue;
+                                formState.value = {...formState.value};
+                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1057,7 +1148,7 @@ query MyQuery(\$flightId: Int!) {
                                   int.parse(value);
                                 } catch (e) {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "Cargo cannot be negative";
                                   }
                                 }
@@ -1087,13 +1178,23 @@ query MyQuery(\$flightId: Int!) {
                         width: 150,
                         height: 50,
                         child: TextFormField(
+                          onChanged: (value) {
+                            var newValue;
+                            try {
+                              newValue = int.parse(value);
+                            } catch (e) {
+                              return;
+                            }
+                            formState.value['hoistCycles'] = newValue;
+                            formState.value = {...formState.value};
+                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "This field must not be empty";
                             }
                             try {
                               int newVal = int.parse(value);
-                              if( newVal < 0) {
+                              if (newVal < 0) {
                                 return "Hoist Cycles cannot be negative";
                               }
                             } catch (e) {
@@ -1112,21 +1213,108 @@ query MyQuery(\$flightId: Int!) {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Additional Notes",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: 10),
+                      Scrollbar(
+                        // Delay desc
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          child: SizedBox(
+                            width: 400,
+                            height: 200,
+                            child: TextFormField(
+                              onChanged: (value) {
+                                formState.value['notes'] = value;
+                                formState.value = {...formState.value};
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field must not be empty";
+                                }
+                                return null;
+                              },
+                              controller: controllerNotes,
+                              maxLines: 100,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
+                        //print(formState.value['hoistCycles'] as String);
                         // Validate returns true if the form is valid, or false otherwise.
                         if (formKey.currentState!.validate() &&
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
+                          // print(formState.value['pax'] as String);
+                          for (var v in via) {
+                            if (formState.value['via'].contains(v.name)) {
+                              selectedViaIds.add(v.id);
+                            }
+                          }
 
-                          print(formState.value);
+                          print(formState.value['ata'].toIso8601String());
+                          print(formState.value['atd'].toIso8601String());
+                          print(formState.value['blockTime']);
+                          print(formState.value['blockTime'] is int);
+                          print(formState.value['cargoPP']);
+                          print(formState.value['cargoPP'] is int);
+                          print(formState.value['eta'].toIso8601String());
+                          print(formState.value['etd'].toIso8601String());
+                          print(formState.value['flightTime'] is int);
+                          print(locations[formState.value['selectedFrom']].id);
+                          print(formState.value['hoistCycles'] is int);
+                          print(formState.value['notes'] is String);
+                          print(selectedViaIds);
+                          print(locations[formState.value['selectedTo']].id);
+                          print(locations[formState.value['selectedFrom']].id);
+                          print(formState.value['pax'] is int);
+                          print(formState.value['paxTax'] is int);
+                          print(
+                              formState.value['rotorStart'].toIso8601String());
+                          print(formState.value['rotorStop'].toIso8601String());
+
+                          readMutation.runMutation({
+                            'cargoPP': formState.value['cargoPP'],
+                            'blockTime': formState.value['blockTime'],
+                            'atd': formState.value['atd'].toIso8601String(),
+                            'ata': formState.value['ata'].toIso8601String(),
+                            'eta': formState.value['eta'].toIso8601String(),
+                            'etd': formState.value['etd'].toIso8601String(),
+                            'flightTime': formState.value['flightTime'],
+                            'fromId':
+                                locations[formState.value['selectedFrom']].id,
+                            'hoistCycles': formState.value['hoistCycles'],
+                            'note': formState.value['notes'],
+                            'pax': formState.value['pax'],
+                            'paxTax': formState.value['paxTax'],
+                            'toId': locations[formState.value['selectedTo']].id,
+                            "viaIds": [3, 4, 5],
+                            'id': flight.id,
+                            'rotorStart':
+                                formState.value['rotorStart'].toIso8601String(),
+                            'rotorStop':
+                                formState.value['rotorStop'].toIso8601String(),
+
+                            /*'delayBool': isDelayed.value,
+                            'delayCode': formState.value['delayCode'],
+                            'delayDesc': formState.value['delayNote'],
+                            'delayAmount': formState.value['delayMin'],*/
+                          });
                         }
                       },
                       child: const Text('Submit'),

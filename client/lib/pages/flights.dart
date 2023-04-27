@@ -53,7 +53,6 @@ query MyQuery {
       ),
     );
 
-
     final readFlights = useQuery(
       QueryOptions(
         document: gql(flightsQuery),
