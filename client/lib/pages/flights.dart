@@ -7,6 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../classes/Site.dart';
+
 class Flights extends HookWidget {
   const Flights({Key? key}) : super(key: key);
 
@@ -16,11 +18,13 @@ class Flights extends HookWidget {
       List<Flight> flights = [];
 
       for (var flight in list) {
-        List<Location> via = [];
+        List<Site> via = [];
 
         for (var location in flight['via']) {
-          via.add(Location(id: location['id'], name: location['name']));
+          via.add(Site(id: location['id'], name: location['name']));
         }
+/*
+        This is broken
 
         flights.add(Flight(
             id: flight['id'],
@@ -30,6 +34,7 @@ class Flights extends HookWidget {
                 id: flight['from']['id'], name: flight['from']['name']),
             via: via,
             to: Location(id: flight['to']['id'], name: flight['to']['name'])));
+*/
       }
 
       List<Widget> rows = [];

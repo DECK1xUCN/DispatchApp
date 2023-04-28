@@ -7,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 
 import '../classes/Flight.dart';
+import '../classes/Site.dart';
 
 class FlightForm extends HookWidget {
   const FlightForm({Key? key}) : super(key: key);
@@ -81,20 +82,20 @@ query MyQuery(\$flightId: Int!) {
         ),
       );
     }
-
-    List<Location> locations = [];
-    List<Location> sites = [];
+//Sites/Locations are broken and idk what to do pls fix
+    List<Site> locations = [];
+    List<Site> sites = [];
 
     List? listHeliports = result.data?["heliports"];
     List? listSites = result.data?["sites"];
 
     // Load the data from the query into the _locations list
     for (var location in listHeliports!) {
-      locations.add(Location(id: location["id"], name: location["name"]));
+      locations.add(Site(id: location["id"], name: location["name"]));
     }
 
     for (var site in listSites!) {
-      sites.add(Location(id: site["id"], name: site["name"]));
+      sites.add(Site(id: site["id"], name: site["name"]));
     }
 
     final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];

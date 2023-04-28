@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../classes/Location.dart';
+import '../classes/Site.dart';
 
 class Sites extends HookWidget {
   const Sites({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class Sites extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    String selectedId = '';
 
     String sitesQuery = """
 query MyQuery {
@@ -20,6 +22,22 @@ query MyQuery {
   }
 }
   """;
+
+    String locationQuerry = """   
+query MyQuery {
+  locations {
+    id
+    name
+    lat
+    lng
+    type
+    site {
+      id
+      name
+    }
+  }
+}
+    """;
 
     String createSite = """   
 mutation MyMutation(\$siteName: String!) {
@@ -32,7 +50,7 @@ mutation MyMutation(\$siteName: String!) {
 
     final readSites = useQuery(
       QueryOptions(
-        document: gql(sitesQuery), // this is the query string you just created
+        document: gql(sitesQuery),
         pollInterval: const Duration(seconds: 10),
       ),
     );
@@ -44,7 +62,25 @@ mutation MyMutation(\$siteName: String!) {
           child:
               Center(child: Text("An error occurred, check the console :(")));
     }
-    if (result.isLoading) {
+
+    final readLocations = useQuery(
+      QueryOptions(
+        document: gql(locationQuerry), // this is the query string you ju st created
+        pollInterval: const Duration(seconds: 10),
+      ),
+    );
+
+    final locationResult = readLocations.result;
+
+    if (locationResult.hasException) {
+      print(locationResult.exception.toString());
+      return const SafeArea(
+          child:
+          Center(child: Text("An error occurred, check the console :(")));
+    }
+
+
+    if (result.isLoading && locationResult.isLoading) {
       return const Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -56,7 +92,9 @@ mutation MyMutation(\$siteName: String!) {
       );
     }
 
+    List? locationList = locationResult.data?["locations"];
     List? sitesList = result.data?["sites"];
+    final dropdownValue = useState(sitesList![0]['id']);
 
     final addSite = useMutation(
       MutationOptions(
@@ -64,54 +102,96 @@ mutation MyMutation(\$siteName: String!) {
       ),
     );
 
+
+
     List<Widget> generateRows(list) {
-      List<Location> sites = [];
+
+
+      List<Site> sites = [];
 
       for (var site in list) {
-        sites.add(Location(
+        sites.add(Site(
           id: site['id'],
           name: site['name'],
         ));
       }
 
+   List<Location> locs = [];
+      for (var location in list) {
+        locs.add(Location(
+            id: location['id'],
+            name: location['name'],
+            lat: location['lat'],
+            lon: location['lng'],
+            type: location['type'],
+            site: Site(
+              id: location['site']['id'],
+              name: location['site']['name'],
+            ),
+          ),
+        );
+      }
+
+
       List<Widget> rows = [];
-      for (var site in sites) {
-        rows.add(GestureDetector(
-          onTap: () {
-            // Navigator.pushNamed(context, '/flightform', arguments: flight);
-          },
-          child: Container(
-              height: 50,
-              decoration: const BoxDecoration(),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      site.id.toString(),
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
-                  Expanded(
-                    child: Center(
-                        child: Text(
-                      site.name,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    )),
-                  ),
-                ],
-              )),
-        ));
+      for (var location in locs) {
+        if (location.site.id.toString() == dropdownValue.value.toString()) {
+          rows.add(GestureDetector(
+            onTap: () {},
+            child: Container(
+                height: 50,
+                decoration: const BoxDecoration(),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: Center(
+                          child: Text(
+                            location.name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                          )),
+                    ),
+                    Expanded(
+                      child: Center(
+                          child: Text(
+                            location.site.id.toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                          )),
+                    ),
+                    Expanded(
+                      child: Center(
+                          child: Text(
+                            location.lon.toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                          )),
+                    ),
+                    Expanded(
+                      child: Center(
+                          child: Text(
+                            'Lat: ${location.lat}, Lon: ${location.lon}',
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                          )),
+                    ),
+
+                  ],
+                )),
+          ));
+        }
       }
       return rows;
     }
 
+
     return Scaffold(
+
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'sitesButton',
@@ -195,9 +275,38 @@ mutation MyMutation(\$siteName: String!) {
                     color: Color.fromRGBO(163, 160, 251, 1),
                   )),
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 15, 10),
+              child: DropdownButton<String>(
+
+                value: dropdownValue.value.toString(),
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+                dropdownColor: Colors.white,
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? value) {
+                  // This is called when the user selects an item.
+                  dropdownValue.value = value!.toString();
+                },
+                items:  sitesList
+                    .map<DropdownMenuItem<String>>((site) => DropdownMenuItem<String>(
+                  value: site['id'].toString(),
+                  child: Text(site['name'].toString()),
+                ))
+                    .toList(),
+              ),
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -212,55 +321,81 @@ mutation MyMutation(\$siteName: String!) {
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
                     color: Colors.white,
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        Container(
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom:
-                                  BorderSide(width: 1.5, color: Colors.white),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(width: 1.5, color: Colors.white),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: const [
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'ID',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'Type',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'Name',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'Location',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    'ID',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: Text(
-                                    'Name',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        ...generateRows(sitesList)
-                      ],
+                          ...generateRows(locationList),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
+
+
           ],
         ),
       ),
     );
   }
+
+
 }
