@@ -1,0 +1,21 @@
+query ($id: Int!) {
+  dailyUpdate(id: $id) {
+    id
+    flight {
+      id
+      flightNumber
+    }
+    wasFlight
+    delay
+    delayCode
+    delayTime
+    delayDesc
+    maintenance
+    plannedMaintenance
+    unplannedMaintenance
+    otherMaintenance
+    maintenanceNote
+    baseAndEquipment
+    note
+  }
+}

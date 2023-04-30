@@ -1,0 +1,6 @@
+query {
+  dailyReports {
+    id
+    date
+  }
+}

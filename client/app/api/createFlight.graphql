@@ -1,0 +1,51 @@
+mutation (
+  $flightNumber: Int!
+  $date: DateTime!
+  $helicopterId: Int!
+  $pilotId: Int!
+  $hoistOperatorId: Int!
+  $siteId: Int!
+  $fromId: Int!
+  $viaIds: [Int!]!
+  $toId: Int!
+  $etd: DateTime!
+  $rotorStart: DateTime!
+  $eta: DateTime!
+  $atd: DateTime!
+  $rotorStop: DateTime!
+  $ata: DateTime!
+  $flightTime: Int!
+  $blockTime: Int!
+  $pax: Int!
+  $paxTax: Int!
+  $cargoPP: Int!
+  $hoistCycles: Int!
+) {
+  createFlight(
+    data: {
+      flightNumber: $flightNumber
+      date: $date
+      helicopterId: $helicopterId
+      pilotId: $pilotId
+      hoistOperatorId: $hoistOperatorId
+      siteId: $siteId
+      fromId: $fromId
+      viaIds: $viaIds
+      toId: $toId
+      etd: $etd
+      rotorStart: $rotorStart
+      eta: $eta
+      atd: $atd
+      rotorStop: $rotorStop
+      ata: $ata
+      flightTime: $flightTime
+      blockTime: $blockTime
+      pax: $pax
+      paxTax: $paxTax
+      cargoPP: $cargoPP
+      hoistCycles: $hoistCycles
+    }
+  ) {
+    id
+  }
+}

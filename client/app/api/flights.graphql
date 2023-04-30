@@ -1,0 +1,18 @@
+query {
+  flights {
+    id
+    eta
+    etd
+    flightNumber
+    to {
+      name
+    }
+    from {
+      name
+    }
+    site {
+      name
+    }
+    delay
+  }
+}
