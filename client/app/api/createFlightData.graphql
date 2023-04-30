@@ -1,0 +1,19 @@
+query {
+  sites {
+    id
+    name
+  }
+  pilots {
+    id
+    name
+  }
+  hoistOperators {
+    id
+    name
+  }
+  helicopters {
+    id
+    model
+    manufacturer
+  }
+}

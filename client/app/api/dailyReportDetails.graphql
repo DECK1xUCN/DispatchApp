@@ -1,0 +1,10 @@
+query ($id: Int!) {
+  dailyReportsById(id: $id) {
+    id
+    date
+    flights {
+      id
+      flightNumber
+    }
+  }
+}

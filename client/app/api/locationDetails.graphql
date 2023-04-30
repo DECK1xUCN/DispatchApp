@@ -1,0 +1,13 @@
+query ($id: Int!) {
+  location(id: $id) {
+    id
+    name
+    lat
+    lng
+    type
+    site {
+      id
+      name
+    }
+  }
+}
