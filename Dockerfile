@@ -23,7 +23,7 @@ ENV PORT=4000
 # Expose the port the server will listen on
 EXPOSE $PORT
 
-RUN npx prisma db push --schema ./src/prisma/schema.prisma
+RUN npx prisma generate --schema ./src/prisma/schema.prisma
 
 # Start the server
-CMD ["ts-node", "src/index.ts"]
+CMD ["ts-node", "-r", "tsconfig-paths/register", "src/index.ts"]
