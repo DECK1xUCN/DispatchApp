@@ -42,6 +42,15 @@ const dailyUpdateTypeDefs = gql`
   type Mutation {
     createDailyUpdate(input: CreateDailyUpdate!): DailyUpdate!
   }
+
+  type Query {
+    dailyUpdate(id: Int!): DailyUpdate!
+    dailyUpdates: [DailyUpdate!]!
+  }
+
+  type Mutation {
+    createDailyUpdate(input: CreateDailyUpdate!): DailyUpdate!
+  }
 `;
 
 export default dailyUpdateTypeDefs;
