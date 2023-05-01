@@ -47,13 +47,13 @@ const flightsTypeDefs = gql`
     viaIds: [Int!]!
     toId: Int!
     etd: DateTime!
-    rotorStart: DateTime!
-    atd: DateTime!
+    rotorStart: DateTime
+    atd: DateTime
     eta: DateTime!
-    rotorStop: DateTime!
-    ata: DateTime!
-    flightTime: Int!
-    blockTime: Int!
+    rotorStop: DateTime
+    ata: DateTime
+    flightTime: Int
+    blockTime: Int
     pax: Int
     paxTax: Int
     cargoPP: Int
@@ -93,9 +93,12 @@ const flightsTypeDefs = gql`
     updateFlight(id: Int!, data: updateFlight!): Flight!
   }
   type Query {
-    flights: [Flight!]!
+    flight(id: Int, flightNumber: String): Flight!
+    flights(siteId: Int, date: DateTime!): [Flight!]!
     flightsBySiteId(siteId: Int!): [Flight!]!
     flightsPerDay(date: DateTime!): [Flight!]!
+    flightsWhereDuIsNull: [Flight!]!
+    flightsWhereDfrIsNull: [Flight!]!
     flightById(id: Int!): Flight!
     flightByFlightNumber(flightNumber: String!): Flight!
   }
