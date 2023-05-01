@@ -9,7 +9,7 @@ const dailyReportResolver = {
       return dailyReport;
     },
 
-    dailyReportsByDate: async (parent: any, args: { date: string }) => {
+    dailyReportByDate: async (parent: any, args: { date: string }) => {
       const dailyReport = await DailyReportService.getDailyReportByDate(
         args.date
       );

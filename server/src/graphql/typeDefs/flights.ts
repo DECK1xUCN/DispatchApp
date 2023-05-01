@@ -96,6 +96,8 @@ const flightsTypeDefs = gql`
     flights: [Flight!]!
     flightsBySiteId(siteId: Int!): [Flight!]!
     flightsPerDay(date: DateTime!): [Flight!]!
+    flightsWhereDuIsNull: [Flight!]!
+    flightsWhereDfrIsNull: [Flight!]!
     flightById(id: Int!): Flight!
     flightByFlightNumber(flightNumber: String!): Flight!
   }

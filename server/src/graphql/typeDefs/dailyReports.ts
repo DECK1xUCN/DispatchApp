@@ -11,7 +11,7 @@ const dailyReportTypeDefs = gql`
 
   type Query {
     dailyReportsById(id: Int!): DailyReport!
-    dailyReportsByDate(date: DateTime!): [DailyReport!]!
+    dailyReportByDate(date: DateTime!): [DailyReport!]!
     dailyReports: [DailyReport!]!
   }
 `;

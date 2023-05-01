@@ -31,6 +31,20 @@ const flightResolver = {
       return flight;
     },
 
+    flightsWhereDuIsNull: async () => {
+      const flights = await FlightService.getFlightsWhereDuIsNull();
+      if (!flights || flights.length === 0)
+        throw createGraphQLError("No flights found");
+      return flights;
+    },
+
+    flightsWhereDfrIsNull: async () => {
+      const flights = await FlightService.getFlightsWhereDfrIsNull();
+      if (!flights || flights.length === 0)
+        throw createGraphQLError("No flights found");
+      return flights;
+    },
+
     flightByFlightNumber: async (
       parent: any,
       args: { flightNumber: string }

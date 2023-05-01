@@ -88,6 +88,58 @@ export default {
     return flights;
   },
 
+  getFlightsWhereDuIsNull: async () => {
+    const flights = await ctx.prisma.flight
+      .findMany({
+        where: {
+          dailyUpdate: {
+            is: null,
+          },
+        },
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    return flights;
+  },
+
+  getFlightsWhereDfrIsNull: async () => {
+    const flights = await ctx.prisma.flight
+      .findMany({
+        where: {
+          dailyReport: {
+            is: null,
+          },
+        },
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    return flights;
+  },
+
   getFlightById: async (id: number) => {
     const flight = await ctx.prisma.flight
       .findUnique({
