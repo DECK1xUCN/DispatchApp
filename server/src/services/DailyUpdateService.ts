@@ -71,7 +71,7 @@ export default {
           },
         })
         .catch(() => {
-          throw createGraphQLError("Daily update could not be created");
+          throw createGraphQLError("Database exception");
         });
 
       return dailyUpdate;

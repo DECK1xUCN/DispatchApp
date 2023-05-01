@@ -149,3 +149,4 @@ migrations/
 server/src/ssl/private.key
 server/src/ssl/ca_bundle.crt
 .gitignore
+server/src/ssl/certificate.crt

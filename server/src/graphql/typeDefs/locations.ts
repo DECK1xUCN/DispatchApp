@@ -14,7 +14,7 @@ const locationsTypeDefs = gql`
   }
   type Query {
     location(id: Int!): Location!
-    locations: [Location!]!
+    locations(siteId: Int, type: String): [Location!]!
     locoationsPerSite(siteId: Int!): [Location!]!
     heliportsPerSite(siteId: Int!): [Location!]!
     viaPerSite(siteId: Int!): [Location!]!
