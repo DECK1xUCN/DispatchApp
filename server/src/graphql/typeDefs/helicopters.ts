@@ -16,7 +16,7 @@ const helicopterTypeDefs = gql`
   type Query {
     helicopter(id: Int!): Helicopter!
     helicoptersWhereModel(model: String!): [Helicopter!]!
-    helicopters: [Helicopter!]!
+    helicopters(model: String): [Helicopter!]!
   }
   type Mutation {
     createHelicopter(data: CreateHelicopterInput!): Helicopter!

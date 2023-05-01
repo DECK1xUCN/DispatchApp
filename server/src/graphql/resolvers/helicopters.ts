@@ -13,6 +13,7 @@ const helicopterResolver = {
       return helicopter;
     },
 
+    // depracted
     helicoptersWhereModel: async (parent: any, args: { model: string }) => {
       const helicopters = HelicopterService.getHelicoptersWhereModel(
         args.model
@@ -24,8 +25,13 @@ const helicopterResolver = {
       return helicopters;
     },
 
-    helicopters: async () => {
-      const helicopters = HelicopterService.getHelicopters();
+    helicopters: async (parent: any, args: { model?: string }) => {
+      let helicopters;
+      if (args.model) {
+        helicopters = HelicopterService.getHelicoptersWhereModel(args.model);
+      } else {
+        helicopters = HelicopterService.getHelicopters();
+      }
       if (!helicopters) throw createGraphQLError("No helicopters found");
       return helicopters;
     },
