@@ -31,6 +31,38 @@ export default {
     return locations;
   },
 
+  getLocationsWhereType: async (type: string) => {
+    if (!isLocationType(type)) {
+      throw createGraphQLError("Invalid location type");
+    }
+    const locations = await ctx.prisma.location
+      .findMany({
+        where: { type },
+        include: { site: true, from: true, via: true, to: true },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    if (!locations) throw createGraphQLError("Locations not found");
+    return locations;
+  },
+
+  getLocationsWhereTypeAndId: async (type: string, id: number) => {
+    if (!isLocationType(type)) {
+      throw createGraphQLError("Invalid location type");
+    }
+    const locations = await ctx.prisma.location
+      .findMany({
+        where: { type, id },
+        include: { site: true, from: true, via: true, to: true },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    if (!locations) throw createGraphQLError("Locations not found");
+    return locations;
+  },
+
   getLocationsPerSite: async (siteId: number) => {
     const locations = await ctx.prisma.location
       .findMany({
