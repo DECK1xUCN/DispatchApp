@@ -20,17 +20,17 @@ const dailyUpdateTypeDefs = gql`
 
   input CreateDailyUpdate {
     flightId: Int
-    wasFlight: Boolean
-    delay: Boolean
+    wasFlight: Boolean!
+    delay: Boolean!
     delayCode: String
     delayTime: Int
     delayDesc: String
-    maintenance: Boolean
+    maintenance: Boolean!
     plannedMaintenance: Boolean
     unplannedMaintenance: Boolean
     otherMaintenance: Boolean
     maintenanceNote: String
-    baseAndEquipment: Boolean
+    baseAndEquipment: Boolean!
     note: String
   }
 
