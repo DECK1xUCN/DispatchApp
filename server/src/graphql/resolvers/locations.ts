@@ -4,17 +4,20 @@ import { createGraphQLError } from "graphql-yoga";
 
 const locationsResolver = {
   Query: {
-    locations: async (parent: any, args: { id?: number; type?: string }) => {
+    locations: async (
+      parent: any,
+      args: { siteId?: number; type?: string }
+    ) => {
       let locations;
-      if (args.id) {
-        locations = await LocationService.getLocation(args.id);
-      } else if (args.type) {
-        locations = await LocationService.getLocationsWhereType(args.type);
-      } else if (args.id && args.type) {
+      if (args.siteId && args.type) {
         locations = await LocationService.getLocationsWhereTypeAndId(
           args.type,
-          args.id
+          args.siteId
         );
+      } else if (args.type) {
+        locations = await LocationService.getLocationsWhereType(args.type);
+      } else if (args.siteId) {
+        locations = await LocationService.getLocationsPerSite(args.siteId);
       } else {
         locations = await LocationService.getLocations();
       }

@@ -94,7 +94,7 @@ const flightsTypeDefs = gql`
   }
   type Query {
     flight(id: Int, flightNumber: String): Flight!
-    flights(siteId: Int, date: DateTime!): [Flight!]!
+    flights(siteId: Int, date: DateTime): [Flight!]!
     flightsBySiteId(siteId: Int!): [Flight!]!
     flightsPerDay(date: DateTime!): [Flight!]!
     flightsWhereDuIsNull: [Flight!]!
