@@ -88,6 +88,58 @@ export default {
     return flights;
   },
 
+  getFlightsWhereDuIsNull: async () => {
+    const flights = await ctx.prisma.flight
+      .findMany({
+        where: {
+          dailyUpdate: {
+            is: null,
+          },
+        },
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    return flights;
+  },
+
+  getFlightsWhereDfrIsNull: async () => {
+    const flights = await ctx.prisma.flight
+      .findMany({
+        where: {
+          dailyReport: {
+            is: null,
+          },
+        },
+        include: {
+          helicopter: true,
+          pilot: true,
+          hoistOperator: true,
+          site: true,
+          from: true,
+          via: true,
+          to: true,
+          dailyUpdate: true,
+          dailyReport: true,
+        },
+      })
+      .catch(() => {
+        throw createGraphQLError("Database exception");
+      });
+    return flights;
+  },
+
   getFlightById: async (id: number) => {
     const flight = await ctx.prisma.flight
       .findUnique({
@@ -160,13 +212,6 @@ export default {
         "TO location must be either Heliport or Airport"
       );
 
-    if (isAfter(formatDate(data.etd), formatDate(data.atd)))
-      throw createGraphQLError("ETD must be before ATD");
-    if (isAfter(formatDate(data.eta), formatDate(data.ata)))
-      throw createGraphQLError("ETA must be before ATA");
-    if (isAfter(formatDate(data.rotorStart), formatDate(data.rotorStop)))
-      throw createGraphQLError("Rotor start must be before rotor stop");
-
     const flight = await ctx.prisma.flight
       .create({
         data: {
@@ -182,11 +227,11 @@ export default {
           },
           toId: data.toId,
           etd: formatDate(data.etd),
-          rotorStart: formatDate(data.rotorStart),
-          atd: formatDate(data.atd),
+          rotorStart: formatDate(data.etd),
+          atd: formatDate(data.etd),
           eta: formatDate(data.eta),
-          rotorStop: formatDate(data.rotorStop),
-          ata: formatDate(data.ata),
+          rotorStop: formatDate(data.eta),
+          ata: formatDate(data.eta),
           flightTime: data.flightTime ? validateFlightTime(data.flightTime) : 0,
           blockTime: data.blockTime ? validateFlightTime(data.blockTime) : 0,
           pax: data.pax,
@@ -215,7 +260,7 @@ export default {
   },
 
   updateFlight: async (id: number, data: UpdateFlight) => {
-    const originalFlight = await ctx.prisma.flight
+    const flight = await ctx.prisma.flight
       .findUnique({
         where: { id },
         include: {
@@ -233,8 +278,8 @@ export default {
       .catch(() => {
         throw createGraphQLError("Database exception");
       });
-    if (!originalFlight) throw createGraphQLError("Flight not found");
-    if (validateDateBeforeNow(formatDate(originalFlight.date.toString())))
+    if (!flight) throw createGraphQLError("Flight not found");
+    if (validateDateBeforeNow(formatDate(flight.date.toString())))
       throw createGraphQLError("Flight is not editable");
 
     if (data.viaIds) {
@@ -243,19 +288,6 @@ export default {
       });
       if (data.viaIds.length > 0 && via.length !== data.viaIds.length)
         throw createGraphQLError("Enter valid locations for VIA");
-    }
-
-    if (data.etd && isAfter(formatDate(data.etd), formatDate(data.atd))) {
-      throw createGraphQLError("ETD must be before ATD");
-    }
-    if (data.eta && isAfter(formatDate(data.eta), formatDate(data.ata))) {
-      throw createGraphQLError("ETA must be before ATA");
-    }
-    if (
-      data.rotorStart &&
-      isAfter(formatDate(data.rotorStart), formatDate(data.rotorStop))
-    ) {
-      throw createGraphQLError("Rotor start must be before rotor stop");
     }
 
     // validate landable
@@ -278,7 +310,7 @@ export default {
         );
     }
 
-    const flight = await ctx.prisma.flight
+    const updatedFlight = await ctx.prisma.flight
       .update({
         where: { id },
         data: {
@@ -320,6 +352,7 @@ export default {
       .catch(() => {
         throw createGraphQLError("Database exception");
       });
-    return flight;
+    if (!updatedFlight) throw createGraphQLError("Flight not updated");
+    return updatedFlight;
   },
 };

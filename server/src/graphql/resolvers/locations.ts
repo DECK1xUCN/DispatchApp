@@ -4,8 +4,23 @@ import { createGraphQLError } from "graphql-yoga";
 
 const locationsResolver = {
   Query: {
-    locations: async (parent: any) => {
-      const locations = await LocationService.getLocations();
+    locations: async (
+      parent: any,
+      args: { siteId?: number; type?: string }
+    ) => {
+      let locations;
+      if (args.siteId && args.type) {
+        locations = await LocationService.getLocationsWhereTypeAndId(
+          args.type,
+          args.siteId
+        );
+      } else if (args.type) {
+        locations = await LocationService.getLocationsWhereType(args.type);
+      } else if (args.siteId) {
+        locations = await LocationService.getLocationsPerSite(args.siteId);
+      } else {
+        locations = await LocationService.getLocations();
+      }
 
       if (!locations) throw createGraphQLError("Locations not found");
       return locations;
