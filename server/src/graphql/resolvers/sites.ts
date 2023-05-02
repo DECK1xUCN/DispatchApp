@@ -1,5 +1,5 @@
-import SiteService from "@/services/SiteService";
-import { CreateSite } from "@/types/sites";
+import SiteService from "../../services/SiteService";
+import { CreateSite } from "../../types/sites";
 import { createGraphQLError } from "graphql-yoga";
 
 const siteResolver = {

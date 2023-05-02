@@ -1,7 +1,7 @@
-import { CreateHelicopter } from "@/types/helicopters";
-import { ctx } from "@/utils/context";
-import { validateEmptyString } from "@/utils/validators";
-import { validateModel, validateReg } from "@/utils/validators";
+import { CreateHelicopter } from "../types/helicopters";
+import { ctx } from "../utils/context";
+import { validateEmptyString } from "../utils/validators";
+import { validateModel, validateReg } from "../utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {

@@ -1,5 +1,5 @@
-import FlightService from "@/services/FlightService";
-import { CreateFlight, UpdateFlight } from "@/types/flights";
+import FlightService from "../../services/FlightService";
+import { CreateFlight, UpdateFlight } from "../../types/flights";
 import { createGraphQLError } from "graphql-yoga";
 
 const flightResolver = {

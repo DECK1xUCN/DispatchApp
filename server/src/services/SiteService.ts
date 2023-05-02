@@ -1,4 +1,4 @@
-import { validateEmptyString } from "@/utils/validators";
+import { validateEmptyString } from "../utils/validators";
 import { ctx } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
 

@@ -1,4 +1,4 @@
-import HoistOperatorService from "@/services/HoistOperatorService";
+import HoistOperatorService from "../../services/HoistOperatorService";
 import { createGraphQLError } from "graphql-yoga";
 
 const hoistOperatorResolver = {

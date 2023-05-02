@@ -1,13 +1,13 @@
-import { CreateFlight, UpdateFlight } from "@/types/flights";
-import { ctx } from "@/utils/context";
+import { CreateFlight, UpdateFlight } from "../types/flights";
+import { ctx } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
-import { formatDate } from "@/utils/dateHelper";
+import { formatDate } from "../utils/dateHelper";
 import {
   isAfter,
   validateDateBeforeNow,
   validateFlightNumber,
   validateFlightTime,
-} from "@/utils/validators";
+} from "../utils/validators";
 import LocationService from "./LocationService";
 
 export default {

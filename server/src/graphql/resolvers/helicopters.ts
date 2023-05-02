@@ -1,5 +1,5 @@
-import HelicopterService from "@/services/HelicopterService";
-import { CreateHelicopter } from "@/types/helicopters";
+import HelicopterService from "../../services/HelicopterService";
+import { CreateHelicopter } from "../../types/helicopters";
 import { createGraphQLError } from "graphql-yoga";
 
 const helicopterResolver = {

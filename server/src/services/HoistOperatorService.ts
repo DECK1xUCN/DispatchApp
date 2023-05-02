@@ -1,5 +1,5 @@
-import { ctx } from "@/utils/context";
-import { validateName } from "@/utils/validators";
+import { ctx } from "../utils/context";
+import { validateName } from "../utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {

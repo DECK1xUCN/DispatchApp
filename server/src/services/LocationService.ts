@@ -2,10 +2,10 @@ import {
   CreateLocation,
   LocationType,
   UpdateLocation,
-} from "@/types/locations";
-import { ctx } from "@/utils/context";
-import { isLocationType } from "@/utils/locationValidator";
-import { validateLocationName } from "@/utils/validators";
+} from "../types/locations";
+import { ctx } from "../utils/context";
+import { isLocationType } from "../utils/locationValidator";
+import { validateLocationName } from "../utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {

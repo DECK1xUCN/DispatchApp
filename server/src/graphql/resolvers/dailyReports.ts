@@ -1,4 +1,4 @@
-import DailyReportService from "@/services/DailyReportService";
+import DailyReportService from "../../services/DailyReportService";
 import { createGraphQLError } from "graphql-yoga";
 
 const dailyReportResolver = {

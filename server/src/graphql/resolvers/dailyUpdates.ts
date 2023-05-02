@@ -1,5 +1,5 @@
-import DailyUpdateService from "@/services/DailyUpdateService";
-import { CreateDailyUpdate } from "@/types/dailyUpdates";
+import DailyUpdateService from "../../services/DailyUpdateService";
+import { CreateDailyUpdate } from "../../types/dailyUpdates";
 import { createGraphQLError } from "graphql-yoga";
 
 const dailyUpdateResolver = {

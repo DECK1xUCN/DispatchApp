@@ -1,5 +1,5 @@
-import LocationService from "@/services/LocationService";
-import { CreateLocation, UpdateLocation } from "@/types/locations";
+import LocationService from "../../services/LocationService";
+import { CreateLocation, UpdateLocation } from "../../types/locations";
 import { createGraphQLError } from "graphql-yoga";
 
 const locationsResolver = {
