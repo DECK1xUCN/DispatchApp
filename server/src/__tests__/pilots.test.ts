@@ -1,4 +1,3 @@
-import { mock } from "node:test";
 import PilotService from "../services/PilotService";
 import { MockContext, createMockContext } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
@@ -120,6 +119,65 @@ describe("PilotService", () => {
       name: "PLT1",
       flights: [],
     };
-    mockCtx.prisma.pilot.update.mockResolvedValue(testPilot);
+
+    const updatedPilot = {
+      id: 1,
+      name: "PLT2",
+      flights: [],
+    };
+
+    mockCtx.prisma.pilot.findUnique.mockResolvedValue(testPilot);
+    mockCtx.prisma.pilot.update.mockResolvedValue(updatedPilot);
+
+    // Act
+    const pilot = await PilotService.updatePilot(
+      { id: 1, name: "PLT2" },
+      mockCtx
+    );
+
+    // Assert
+    expect(pilot).toEqual(updatedPilot);
+  });
+
+  test("should throw error when updating a pilot with empty name", async () => {
+    const testPilot = {
+      id: 1,
+      name: "PLT1",
+      flights: [],
+    };
+
+    // Arrange
+    mockCtx.prisma.pilot.findUnique.mockResolvedValue(testPilot);
+    mockCtx.prisma.pilot.update.mockImplementation();
+
+    // Act & Assert
+    await expect(
+      PilotService.updatePilot({ id: 1, name: "" }, mockCtx)
+    ).rejects.toThrow(
+      createGraphQLError(
+        "Name must be 4 characters or less and cannot be empty"
+      )
+    );
+  });
+
+  test("should throw error when updating a pilot with name longer than 4 characters", async () => {
+    // Arrange
+    const testPilot = {
+      id: 1,
+      name: "PLT1",
+      flights: [],
+    };
+
+    mockCtx.prisma.pilot.findUnique.mockResolvedValue(testPilot);
+    mockCtx.prisma.pilot.update.mockImplementation();
+
+    // Act & Assert
+    await expect(
+      PilotService.updatePilot({ id: 1, name: "PLT123" }, mockCtx)
+    ).rejects.toThrow(
+      createGraphQLError(
+        "Name must be 4 characters or less and cannot be empty"
+      )
+    );
   });
 });

@@ -1,9 +1,9 @@
-import { ctx } from "../utils/context";
+import { Context, ctx } from "../utils/context";
 import { validateName } from "../utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
-  getHoistOperators: async () => {
+  getHoistOperators: async (ctx: Context) => {
     const hoistOperators = await ctx.prisma.hoistOperator
       .findMany({ include: { flights: true } })
       .catch(() => {
@@ -12,7 +12,7 @@ export default {
     return hoistOperators;
   },
 
-  getHoistOperatorById: async (id: number) => {
+  getHoistOperatorById: async (id: number, ctx: Context) => {
     const hoistOperator = await ctx.prisma.hoistOperator
       .findUnique({ where: { id }, include: { flights: true } })
       .catch(() => {
@@ -21,7 +21,7 @@ export default {
     return hoistOperator;
   },
 
-  createHoistOperator: async (name: string) => {
+  createHoistOperator: async (name: string, ctx: Context) => {
     const hoistOperator = await ctx.prisma.hoistOperator
       .create({
         data: { name: validateName(name) },
@@ -33,7 +33,10 @@ export default {
     return hoistOperator;
   },
 
-  updateHoistOperator: async (data: { id: number; name: string }) => {
+  updateHoistOperator: async (
+    data: { id: number; name: string },
+    ctx: Context
+  ) => {
     const hoistOperator = await ctx.prisma.hoistOperator
       .update({
         where: { id: data.id },

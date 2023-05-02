@@ -1,17 +1,19 @@
+import { ctx } from "@/utils/context";
 import HoistOperatorService from "../../services/HoistOperatorService";
 import { createGraphQLError } from "graphql-yoga";
 
 const hoistOperatorResolver = {
   Query: {
     hoistOperators: async () => {
-      const hoistOperators = await HoistOperatorService.getHoistOperators();
+      const hoistOperators = await HoistOperatorService.getHoistOperators(ctx);
       if (!hoistOperators) throw createGraphQLError("No hoist operators found");
       return hoistOperators;
     },
 
     hoistOperator: async (parent: any, args: { id: number }) => {
       const hoistOperator = await HoistOperatorService.getHoistOperatorById(
-        args.id
+        args.id,
+        ctx
       );
       if (!hoistOperator) throw createGraphQLError("No hoist operator found");
       return hoistOperator;
@@ -21,7 +23,8 @@ const hoistOperatorResolver = {
   Mutation: {
     createHoistOperator: async (parent: any, args: { name: string }) => {
       const hoistOperator = await HoistOperatorService.createHoistOperator(
-        args.name
+        args.name,
+        ctx
       );
       if (!hoistOperator)
         throw createGraphQLError("Could not create hoist operator");
@@ -32,10 +35,13 @@ const hoistOperatorResolver = {
       parent: any,
       args: { id: number; name: string }
     ) => {
-      const hoistOperator = await HoistOperatorService.updateHoistOperator({
-        id: args.id,
-        name: args.name,
-      });
+      const hoistOperator = await HoistOperatorService.updateHoistOperator(
+        {
+          id: args.id,
+          name: args.name,
+        },
+        ctx
+      );
       if (!hoistOperator)
         throw createGraphQLError("Could not update hoist operator");
       return hoistOperator;
