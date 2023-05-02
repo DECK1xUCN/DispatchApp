@@ -1,4 +1,4 @@
-import { Context, MockContext } from "../utils/context";
+import { Context } from "../utils/context";
 import { validateName } from "../utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 

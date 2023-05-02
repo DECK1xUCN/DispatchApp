@@ -4,10 +4,7 @@ import { createGraphQLError } from "graphql-yoga";
 
 const locationsResolver = {
   Query: {
-    locations: async (
-      parent: any,
-      args: { siteId?: number; type?: string }
-    ) => {
+    locations: async (_: any, args: { siteId?: number; type?: string }) => {
       let locations;
       if (args.siteId && args.type) {
         locations = await LocationService.getLocationsWhereTypeAndId(
@@ -26,14 +23,14 @@ const locationsResolver = {
       return locations;
     },
 
-    location: async (parent: any, args: { id: number }) => {
+    location: async (_: any, args: { id: number }) => {
       const location = await LocationService.getLocation(args.id);
 
       if (!location)
         throw createGraphQLError("Location with id " + args.id + " not found");
       return location;
     },
-    locoationsPerSite: async (parent: any, args: { siteId: number }) => {
+    locoationsPerSite: async (_: any, args: { siteId: number }) => {
       const locations = await LocationService.getLocationsPerSite(args.siteId);
 
       if (!locations)
@@ -42,7 +39,7 @@ const locationsResolver = {
         );
       return locations;
     },
-    heliportsPerSite: async (parent: any, args: { siteId: number }) => {
+    heliportsPerSite: async (_: any, args: { siteId: number }) => {
       const locations = await LocationService.getHeliportsPerSite(args.siteId);
 
       if (!locations)
@@ -51,7 +48,7 @@ const locationsResolver = {
         );
       return locations;
     },
-    viaPerSite: async (parent: any, args: { siteId: number }) => {
+    viaPerSite: async (_: any, args: { siteId: number }) => {
       const locations = await LocationService.getViaPerSite(args.siteId);
 
       if (!locations)
@@ -63,7 +60,7 @@ const locationsResolver = {
   },
 
   Mutation: {
-    createLocation: async (parent: any, args: { data: CreateLocation }) => {
+    createLocation: async (_: any, args: { data: CreateLocation }) => {
       const location = await LocationService.createLocation(args.data);
 
       if (!location) throw createGraphQLError("Location could not be created");
@@ -71,7 +68,7 @@ const locationsResolver = {
     },
 
     updateLocation: async (
-      parent: any,
+      _: any,
       args: { id: number; data: UpdateLocation }
     ) => {
       const location = await LocationService.updateLocation(args.id, args.data);

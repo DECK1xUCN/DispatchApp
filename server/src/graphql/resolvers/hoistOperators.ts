@@ -1,4 +1,4 @@
-import { ctx } from "@/utils/context";
+import { ctx } from "../../utils/context";
 import HoistOperatorService from "../../services/HoistOperatorService";
 import { createGraphQLError } from "graphql-yoga";
 
@@ -10,7 +10,7 @@ const hoistOperatorResolver = {
       return hoistOperators;
     },
 
-    hoistOperator: async (parent: any, args: { id: number }) => {
+    hoistOperator: async (_: any, args: { id: number }) => {
       const hoistOperator = await HoistOperatorService.getHoistOperatorById(
         args.id,
         ctx
@@ -21,7 +21,7 @@ const hoistOperatorResolver = {
   },
 
   Mutation: {
-    createHoistOperator: async (parent: any, args: { name: string }) => {
+    createHoistOperator: async (_: any, args: { name: string }) => {
       const hoistOperator = await HoistOperatorService.createHoistOperator(
         args.name,
         ctx
@@ -31,10 +31,7 @@ const hoistOperatorResolver = {
       return hoistOperator;
     },
 
-    updateHoistOperator: async (
-      parent: any,
-      args: { id: number; name: string }
-    ) => {
+    updateHoistOperator: async (_: any, args: { id: number; name: string }) => {
       const hoistOperator = await HoistOperatorService.updateHoistOperator(
         {
           id: args.id,

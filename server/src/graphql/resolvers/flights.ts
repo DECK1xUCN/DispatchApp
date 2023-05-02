@@ -4,9 +4,8 @@ import { createGraphQLError } from "graphql-yoga";
 
 const flightResolver = {
   Query: {
-    flights: async (parent: any, args: { siteId?: number; date?: string }) => {
+    flights: async (_: any, args: { siteId?: number; date?: string }) => {
       let flights;
-      // const flights = await FlightService.getFlights();
       if (args.siteId) {
         flights = await FlightService.getFlightsBySiteId(args.siteId);
       } else if (args.date) {
@@ -20,7 +19,7 @@ const flightResolver = {
     },
 
     // deprecated
-    flightsBySiteId: async (parent: any, args: { siteId: number }) => {
+    flightsBySiteId: async (_: any, args: { siteId: number }) => {
       const flights = await FlightService.getFlightsBySiteId(args.siteId);
       if (!flights || flights.length === 0)
         throw createGraphQLError("No flights found");
@@ -28,7 +27,7 @@ const flightResolver = {
     },
 
     // deprecated
-    flightsPerDay: async (parent: any, args: { date: string }) => {
+    flightsPerDay: async (_: any, args: { date: string }) => {
       const flights = await FlightService.getFlightsPerDay(args.date);
       if (!flights || flights.length === 0)
         throw createGraphQLError("No flights found");
@@ -42,10 +41,7 @@ const flightResolver = {
       return flights;
     },
 
-    flight: async (
-      parent: any,
-      args: { id?: number; flightNumber?: string }
-    ) => {
+    flight: async (_: any, args: { id?: number; flightNumber?: string }) => {
       let flight;
       if (args.id) {
         flight = await FlightService.getFlightById(args.id);
@@ -58,7 +54,7 @@ const flightResolver = {
       return flight;
     },
 
-    flightById: async (parent: any, args: { id: number }) => {
+    flightById: async (_: any, args: { id: number }) => {
       const flight = await FlightService.getFlightById(args.id);
       if (!flight) throw createGraphQLError("No flight found");
       return flight;
@@ -73,10 +69,7 @@ const flightResolver = {
     },
 
     // deprecated
-    flightByFlightNumber: async (
-      parent: any,
-      args: { flightNumber: string }
-    ) => {
+    flightByFlightNumber: async (_: any, args: { flightNumber: string }) => {
       const flight = await FlightService.getFlightByFlightNumber(
         args.flightNumber
       );
@@ -86,16 +79,13 @@ const flightResolver = {
   },
 
   Mutation: {
-    createFlight: async (parent: any, args: { data: CreateFlight }) => {
+    createFlight: async (_: any, args: { data: CreateFlight }) => {
       const flight = await FlightService.createFlight(args.data);
       if (!flight) throw createGraphQLError("No flight created");
       return flight;
     },
 
-    updateFlight: async (
-      parent: any,
-      args: { id: number; data: UpdateFlight }
-    ) => {
+    updateFlight: async (_: any, args: { id: number; data: UpdateFlight }) => {
       const flight = await FlightService.updateFlight(args.id, args.data);
       if (!flight) throw createGraphQLError("No flight updated");
       return flight;

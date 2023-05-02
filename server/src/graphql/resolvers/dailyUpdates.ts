@@ -4,7 +4,7 @@ import { createGraphQLError } from "graphql-yoga";
 
 const dailyUpdateResolver = {
   Query: {
-    dailyUpdate: async (parent: any, args: { id: number }) => {
+    dailyUpdate: async (_: any, args: { id: number }) => {
       const dailyUpdate = await DailyUpdateService.getDailyUpdateById(args.id);
       if (!dailyUpdate) throw createGraphQLError("No daily update found");
       return dailyUpdate;
@@ -18,10 +18,7 @@ const dailyUpdateResolver = {
   },
 
   Mutation: {
-    createDailyUpdate: async (
-      parent: any,
-      args: { input: CreateDailyUpdate }
-    ) => {
+    createDailyUpdate: async (_: any, args: { input: CreateDailyUpdate }) => {
       const dailyUpdate = await DailyUpdateService.createDailyUpdate(
         args.input
       );

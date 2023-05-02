@@ -4,7 +4,7 @@ import { createGraphQLError } from "graphql-yoga";
 
 const helicopterResolver = {
   Query: {
-    helicopter: async (parent: any, args: { id: number }) => {
+    helicopter: async (_: any, args: { id: number }) => {
       const helicopter = HelicopterService.getHelicopter(args.id);
       if (!helicopter)
         throw createGraphQLError(
@@ -14,7 +14,7 @@ const helicopterResolver = {
     },
 
     // depracted
-    helicoptersWhereModel: async (parent: any, args: { model: string }) => {
+    helicoptersWhereModel: async (_: any, args: { model: string }) => {
       const helicopters = HelicopterService.getHelicoptersWhereModel(
         args.model
       );
@@ -25,7 +25,7 @@ const helicopterResolver = {
       return helicopters;
     },
 
-    helicopters: async (parent: any, args: { model?: string }) => {
+    helicopters: async (_: any, args: { model?: string }) => {
       let helicopters;
       if (args.model) {
         helicopters = HelicopterService.getHelicoptersWhereModel(args.model);
@@ -37,7 +37,7 @@ const helicopterResolver = {
     },
   },
   Mutation: {
-    createHelicopter: async (parent: any, args: { data: CreateHelicopter }) => {
+    createHelicopter: async (_: any, args: { data: CreateHelicopter }) => {
       const helicopter = HelicopterService.createHelicopter(args.data);
       if (!helicopter) throw createGraphQLError("Failed to create helicopter");
       return helicopter;
