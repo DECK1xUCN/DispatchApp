@@ -53,6 +53,13 @@ void main() async {
                   fontFamily: 'Lato',
                   color: Color.fromRGBO(28, 28, 28, 1)),
             ),
+            // Define the default `decoration` for the Input fields
+            inputDecorationTheme: const InputDecorationTheme(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              hintStyle: TextStyle(fontFamily: 'Lato', color: Colors.black),
+            ),
           ),
           initialRoute: '/',
           routes: {
