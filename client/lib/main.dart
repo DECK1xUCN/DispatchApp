@@ -1,8 +1,8 @@
 import 'package:client/pages/dailyUpdateForm.dart';
 import 'package:client/pages/flightForm.dart';
+import 'package:client/pages/home.dart';
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
-import 'pages/home.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {
