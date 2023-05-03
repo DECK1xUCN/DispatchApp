@@ -1,3 +1,4 @@
+import { ctx } from "../../utils/context";
 import LocationService from "../../services/LocationService";
 import { CreateLocation, UpdateLocation } from "../../types/locations";
 import { createGraphQLError } from "graphql-yoga";
@@ -8,15 +9,18 @@ const locationsResolver = {
       let locations;
       if (args.siteId && args.type) {
         locations = await LocationService.getLocationsWhereTypeAndId(
-          args.type,
-          args.siteId
+          {
+            type: args.type,
+            id: args.siteId,
+          },
+          ctx
         );
       } else if (args.type) {
-        locations = await LocationService.getLocationsWhereType(args.type);
+        locations = await LocationService.getLocationsWhereType(args.type, ctx);
       } else if (args.siteId) {
-        locations = await LocationService.getLocationsPerSite(args.siteId);
+        locations = await LocationService.getLocationsPerSite(args.siteId, ctx);
       } else {
-        locations = await LocationService.getLocations();
+        locations = await LocationService.getLocations(ctx);
       }
 
       if (!locations) throw createGraphQLError("Locations not found");
@@ -24,14 +28,17 @@ const locationsResolver = {
     },
 
     location: async (_: any, args: { id: number }) => {
-      const location = await LocationService.getLocation(args.id);
+      const location = await LocationService.getLocation(args.id, ctx);
 
       if (!location)
         throw createGraphQLError("Location with id " + args.id + " not found");
       return location;
     },
     locoationsPerSite: async (_: any, args: { siteId: number }) => {
-      const locations = await LocationService.getLocationsPerSite(args.siteId);
+      const locations = await LocationService.getLocationsPerSite(
+        args.siteId,
+        ctx
+      );
 
       if (!locations)
         throw createGraphQLError(
@@ -40,7 +47,10 @@ const locationsResolver = {
       return locations;
     },
     heliportsPerSite: async (_: any, args: { siteId: number }) => {
-      const locations = await LocationService.getHeliportsPerSite(args.siteId);
+      const locations = await LocationService.getHeliportsPerSite(
+        args.siteId,
+        ctx
+      );
 
       if (!locations)
         throw createGraphQLError(
@@ -49,7 +59,7 @@ const locationsResolver = {
       return locations;
     },
     viaPerSite: async (_: any, args: { siteId: number }) => {
-      const locations = await LocationService.getViaPerSite(args.siteId);
+      const locations = await LocationService.getViaPerSite(args.siteId, ctx);
 
       if (!locations)
         throw createGraphQLError(
@@ -61,7 +71,7 @@ const locationsResolver = {
 
   Mutation: {
     createLocation: async (_: any, args: { data: CreateLocation }) => {
-      const location = await LocationService.createLocation(args.data);
+      const location = await LocationService.createLocation(args.data, ctx);
 
       if (!location) throw createGraphQLError("Location could not be created");
       return location;
@@ -71,7 +81,10 @@ const locationsResolver = {
       _: any,
       args: { id: number; data: UpdateLocation }
     ) => {
-      const location = await LocationService.updateLocation(args.id, args.data);
+      const location = await LocationService.updateLocation(
+        { id: args.id, input: args.data },
+        ctx
+      );
 
       if (!location) throw createGraphQLError("Location could not be updated");
       return location;
