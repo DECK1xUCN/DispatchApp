@@ -1,0 +1,13 @@
+mutation (
+  $name: String!
+  $lat: Float!
+  $lng: Float!
+  $type: String!
+  $siteId: Int!
+) {
+  createLocation(
+    data: { name: $name, lat: $lat, lng: $lng, type: $type, siteId: $siteId }
+  ) {
+    id
+  }
+}

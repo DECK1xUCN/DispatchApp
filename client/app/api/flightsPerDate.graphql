@@ -1,0 +1,21 @@
+query ($date: DateTime!) {
+  flightsPerDay(date: $date) {
+    id
+    flightNumber
+    from {
+      id
+      name
+    }
+    to {
+      id
+      name
+    }
+    etd
+    eta
+    site {
+      id
+      name
+    }
+    delay
+  }
+}

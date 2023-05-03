@@ -1,0 +1,5 @@
+mutation ($siteName: String!) {
+  createSite(data: { name: $siteName }) {
+    id
+  }
+}

@@ -1,0 +1,11 @@
+query ($id: Int!) {
+  site(id: $id) {
+    id
+    name
+    locations {
+      id
+      name
+      type
+    }
+  }
+}
