@@ -11,16 +11,15 @@
   "devDependencies": {
     "@headlessui/vue": "^1.7.13",
     "@nuxtjs/apollo": "5.0.0-alpha.6",
-    "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/tailwindcss": "^6.6.7",
-    "@types/node": "^18.16.1",
+    "@types/node": "^18.16.3",
     "@vite-pwa/nuxt": "^0.0.7",
     "dayjs": "^1.11.7",
-    "nuxt": "^3.4.2"
+    "nuxt": "^3.4.3"
   },
   "dependencies": {
+    "@nuxtjs/sentry": "^7.2.3",
     "@sentry/tracing": "^7.50.0",
-    "@sentry/vue": "^7.50.0",
     "graphql-tag": "^2.12.6",
     "nuxt-graphql-client": "^0.2.27",
     "nuxt-icon": "^0.4.0"
