@@ -19,6 +19,8 @@
     "nuxt": "^3.4.2"
   },
   "dependencies": {
+    "@sentry/tracing": "^7.50.0",
+    "@sentry/vue": "^7.50.0",
     "graphql-tag": "^2.12.6",
     "nuxt-graphql-client": "^0.2.27",
     "nuxt-icon": "^0.4.0"
