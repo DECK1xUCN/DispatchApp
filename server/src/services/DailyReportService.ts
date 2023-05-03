@@ -1,5 +1,5 @@
-import { ctx } from "@/utils/context";
-import { formatDate } from "@/utils/dateHelper";
+import { ctx } from "../utils/context";
+import { formatDate } from "../utils/dateHelper";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {

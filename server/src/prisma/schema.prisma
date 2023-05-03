@@ -1,6 +1,7 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "darwin", "darwin-arm64"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "darwin", "darwin-arm64"]
+  previewFeatures = ["jsonProtocol"] // performance upgrade since prisma 4.11
 }
 
 datasource db {
