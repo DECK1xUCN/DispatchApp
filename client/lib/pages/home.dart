@@ -50,6 +50,7 @@ class HomeB extends State<Home> {
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset(
                         "assets/deck1Logo.png",
+                        color: Colors.white,
                       ),
                     ),
                   ),
