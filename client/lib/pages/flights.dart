@@ -109,6 +109,7 @@ query MyQuery {
       for (var flight in flights) {
         rows.add(GestureDetector(
           onTap: () {
+            if (flight.hasDU) return;
             Navigator.pushNamed(context, '/flightform', arguments: flight);
           },
           child: Container(
