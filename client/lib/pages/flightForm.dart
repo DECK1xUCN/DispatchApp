@@ -56,7 +56,7 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
       name
     }
   }
-  locoationsPerSite(siteId: \$siteId) {
+  locations(siteId: \$siteId) {
     id
     name
     type
@@ -93,7 +93,7 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     List<Location> via = [];
 
     List? listHeliports =
-        result.data?["locoationsPerSite"]; //This was for from and to
+        result.data?["locations"]; //This was for from and to
 
     // Load the data from the query into the _locations list
     for (var location in listHeliports!) {
