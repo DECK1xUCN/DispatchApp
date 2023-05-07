@@ -1,17 +1,17 @@
-import { CreateFlight, UpdateFlight } from "@/types/flights";
-import { ctx } from "@/utils/context";
+import { CreateFlight, UpdateFlight } from "../types/flights";
+import { Context } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
-import { formatDate } from "@/utils/dateHelper";
+import { formatDate } from "../utils/dateHelper";
 import {
   isAfter,
   validateDateBeforeNow,
   validateFlightNumber,
   validateFlightTime,
-} from "@/utils/validators";
+} from "../utils/validators";
 import LocationService from "./LocationService";
 
 export default {
-  getFlights: async () => {
+  getFlights: async (ctx: Context) => {
     const flights = await ctx.prisma.flight
       .findMany({
         include: {
@@ -32,7 +32,7 @@ export default {
     return flights;
   },
 
-  getFlightsBySiteId: async (siteId: number) => {
+  getFlightsBySiteId: async (siteId: number, ctx: Context) => {
     const flights = await ctx.prisma.flight
       .findMany({
         where: { siteId },
@@ -54,7 +54,7 @@ export default {
     return flights;
   },
 
-  getFlightsPerDay: async (inputDate: string) => {
+  getFlightsPerDay: async (inputDate: string, ctx: Context) => {
     const date = formatDate(inputDate);
     const datePlusOne = new Date(
       date.getFullYear(),
@@ -88,7 +88,7 @@ export default {
     return flights;
   },
 
-  getFlightsWhereDuIsNull: async () => {
+  getFlightsWhereDuIsNull: async (ctx: Context) => {
     const flights = await ctx.prisma.flight
       .findMany({
         where: {
@@ -114,7 +114,7 @@ export default {
     return flights;
   },
 
-  getFlightsWhereDfrIsNull: async () => {
+  getFlightsWhereDfrIsNull: async (ctx: Context) => {
     const flights = await ctx.prisma.flight
       .findMany({
         where: {
@@ -140,7 +140,7 @@ export default {
     return flights;
   },
 
-  getFlightById: async (id: number) => {
+  getFlightById: async (id: number, ctx: Context) => {
     const flight = await ctx.prisma.flight
       .findUnique({
         where: { id },
@@ -162,7 +162,7 @@ export default {
     return flight;
   },
 
-  getFlightByFlightNumber: async (flightNumber: string) => {
+  getFlightByFlightNumber: async (flightNumber: string, ctx: Context) => {
     const flight = await ctx.prisma.flight
       .findUnique({
         where: { flightNumber },
@@ -184,7 +184,7 @@ export default {
     return flight;
   },
 
-  createFlight: async (data: CreateFlight) => {
+  createFlight: async (data: CreateFlight, ctx: Context) => {
     // when creating a flight, check if the date is in the past
     // if so, set editable to false
     let isEditable: boolean = true;
@@ -192,16 +192,18 @@ export default {
 
     // check if all via locations exist
     // if not, return null
-    const via = await LocationService.getViaByIds(data.viaIds);
+    const via = await LocationService.getViaByIds(data.viaIds, ctx);
     if (data.viaIds.length > 0 && via.length !== data.viaIds.length)
       throw createGraphQLError("Enter valid locations for VIA");
 
     // check if to and from have valid location types
     const isFromLandable: boolean = await LocationService.validateLandable(
-      data.fromId
+      data.fromId,
+      ctx
     );
     const isToLandable: boolean = await LocationService.validateLandable(
-      data.toId
+      data.toId,
+      ctx
     );
     if (!isFromLandable)
       throw createGraphQLError(
@@ -259,7 +261,7 @@ export default {
     return flight;
   },
 
-  updateFlight: async (id: number, data: UpdateFlight) => {
+  updateFlight: async (id: number, data: UpdateFlight, ctx: Context) => {
     const flight = await ctx.prisma.flight
       .findUnique({
         where: { id },
@@ -283,9 +285,11 @@ export default {
       throw createGraphQLError("Flight is not editable");
 
     if (data.viaIds) {
-      const via = await LocationService.getViaByIds(data.viaIds).catch(() => {
-        throw createGraphQLError("Database exception");
-      });
+      const via = await LocationService.getViaByIds(data.viaIds, ctx).catch(
+        () => {
+          throw createGraphQLError("Database exception");
+        }
+      );
       if (data.viaIds.length > 0 && via.length !== data.viaIds.length)
         throw createGraphQLError("Enter valid locations for VIA");
     }
@@ -293,7 +297,8 @@ export default {
     // validate landable
     if (data.fromId) {
       const isFromLandable: boolean = await LocationService.validateLandable(
-        data.fromId
+        data.fromId,
+        ctx
       );
       if (!isFromLandable)
         throw createGraphQLError(
@@ -302,7 +307,8 @@ export default {
     }
     if (data.toId) {
       const isToLandable: boolean = await LocationService.validateLandable(
-        data.toId
+        data.toId,
+        ctx
       );
       if (!isToLandable)
         throw createGraphQLError(
@@ -322,11 +328,9 @@ export default {
           hoistOperatorId: data.hoistOperatorId ?? data.hoistOperatorId,
           siteId: data.siteId ?? data.siteId,
           fromId: data.fromId ?? data.fromId,
-          via: data.viaIds
-            ? {
-                connect: data.viaIds.map((id) => ({ id })),
-              }
-            : undefined,
+          via: {
+            connect: data.viaIds.map((id) => ({ id })),
+          },
           toId: data.toId ?? data.toId,
           etd: data.etd ?? formatDate(data.etd),
           rotorStart: data.rotorStart ?? formatDate(data.rotorStart),
@@ -336,6 +340,11 @@ export default {
           ata: data.eta ?? formatDate(data.ata),
           flightTime: data.flightTime ?? validateFlightTime(data.flightTime),
           blockTime: data.blockTime ?? validateFlightTime(data.blockTime),
+          cargoPP: data.cargoPP ?? data.cargoPP,
+          hoistCycles: data.hoistCycles ?? data.hoistCycles,
+          note: data.note ?? data.note,
+          pax: data.pax ?? data.pax,
+          paxTax: data.paxTax ?? data.paxTax,
         },
         include: {
           helicopter: true,

@@ -1,0 +1,46 @@
+query ($id: Int!) {
+  flightById(id: $id) {
+    id
+    ata
+    atd
+    blockTime
+    cargoPP
+    date
+    delay
+    delayCode
+    delayNote
+    delayTime
+    editable
+    eta
+    etd
+    flightNumber
+    flightTime
+    from {
+      name
+    }
+    hoistCycles
+    id
+    note
+    pax
+    hoistOperator {
+      name
+    }
+    paxTax
+    pilot {
+      name
+    }
+    rotorStart
+    rotorStop
+    site {
+      name
+      id
+    }
+    to {
+      name
+    }
+    via {
+      id
+      name
+    }
+  }
+}

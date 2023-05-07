@@ -1,0 +1,27 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@headlessui/vue": "^1.7.13",
+    "@nuxtjs/apollo": "5.0.0-alpha.6",
+    "@nuxtjs/tailwindcss": "^6.6.7",
+    "@types/node": "^18.16.4",
+    "@vite-pwa/nuxt": "^0.0.7",
+    "dayjs": "^1.11.7",
+    "nuxt": "^3.4.3"
+  },
+  "dependencies": {
+    "@nuxtjs/sentry": "^7.2.3",
+    "@sentry/tracing": "^7.51.0",
+    "graphql-tag": "^2.12.6",
+    "nuxt-graphql-client": "^0.2.27",
+    "nuxt-icon": "^0.4.0"
+  }
+}

@@ -2,14 +2,14 @@ import {
   CreateLocation,
   LocationType,
   UpdateLocation,
-} from "@/types/locations";
-import { ctx } from "@/utils/context";
-import { isLocationType } from "@/utils/locationValidator";
-import { validateLocationName } from "@/utils/validators";
+} from "../types/locations";
+import { Context } from "../utils/context";
+import { isLocationType } from "../utils/locationValidator";
+import { validateLocationName } from "../utils/validators";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
-  getLocation: async (id: number) => {
+  getLocation: async (id: number, ctx: Context) => {
     const location = await ctx.prisma.location
       .findUnique({
         where: { id },
@@ -21,7 +21,7 @@ export default {
     return location;
   },
 
-  getLocations: async () => {
+  getLocations: async (ctx: Context) => {
     const locations = await ctx.prisma.location
       .findMany({ include: { site: true, from: true, via: true, to: true } })
       .catch(() => {
@@ -31,7 +31,7 @@ export default {
     return locations;
   },
 
-  getLocationsWhereType: async (type: string) => {
+  getLocationsWhereType: async (type: string, ctx: Context) => {
     if (!isLocationType(type)) {
       throw createGraphQLError("Invalid location type");
     }
@@ -47,13 +47,16 @@ export default {
     return locations;
   },
 
-  getLocationsWhereTypeAndId: async (type: string, id: number) => {
-    if (!isLocationType(type)) {
+  getLocationsWhereTypeAndId: async (
+    data: { type: string; id: number },
+    ctx: Context
+  ) => {
+    if (!isLocationType(data.type)) {
       throw createGraphQLError("Invalid location type");
     }
     const locations = await ctx.prisma.location
       .findMany({
-        where: { type, id },
+        where: { type: data.type, id: data.id },
         include: { site: true, from: true, via: true, to: true },
       })
       .catch(() => {
@@ -63,7 +66,7 @@ export default {
     return locations;
   },
 
-  getLocationsPerSite: async (siteId: number) => {
+  getLocationsPerSite: async (siteId: number, ctx: Context) => {
     const locations = await ctx.prisma.location
       .findMany({
         where: { siteId },
@@ -75,7 +78,7 @@ export default {
     return locations;
   },
 
-  getHeliportsPerSite: async (siteId: number) => {
+  getHeliportsPerSite: async (siteId: number, ctx: Context) => {
     const locations = await ctx.prisma.location
       .findMany({
         where: { siteId, type: { in: ["HELIPORT", "AIRPORT"] } },
@@ -87,7 +90,7 @@ export default {
     return locations;
   },
 
-  getViaPerSite: async (siteId: number) => {
+  getViaPerSite: async (siteId: number, ctx: Context) => {
     const locations = await ctx.prisma.location
       .findMany({
         where: { siteId, type: "VIA" },
@@ -99,7 +102,7 @@ export default {
     return locations;
   },
 
-  getViaByIds: async (ids: number[]) => {
+  getViaByIds: async (ids: number[], ctx: Context) => {
     const locations = await ctx.prisma.location
       .findMany({
         where: { id: { in: ids }, type: "VIA" },
@@ -111,7 +114,7 @@ export default {
     return locations;
   },
 
-  createLocation: async (input: CreateLocation) => {
+  createLocation: async (input: CreateLocation, ctx: Context) => {
     if (!isLocationType(input.type))
       throw createGraphQLError("Location type is not valid");
 
@@ -132,16 +135,19 @@ export default {
     return location;
   },
 
-  updateLocation: async (id: number, input: UpdateLocation) => {
-    if (input.name) validateLocationName(input.name);
+  updateLocation: async (
+    data: { id: number; input: UpdateLocation },
+    ctx: Context
+  ) => {
+    if (data.input.name) validateLocationName(data.input.name);
 
     const location = await ctx.prisma.location
       .update({
-        where: { id },
+        where: { id: data.id },
         data: {
-          name: input.name,
-          lat: input.lat,
-          lng: input.lng,
+          name: data.input.name,
+          lat: data.input.lat,
+          lng: data.input.lng,
         },
         include: { site: true, from: true, via: true, to: true },
       })
@@ -151,7 +157,7 @@ export default {
     return location;
   },
 
-  validateLandable: async (id: number) => {
+  validateLandable: async (id: number, ctx: Context) => {
     const location = await ctx.prisma.location
       .findUnique({
         where: { id },

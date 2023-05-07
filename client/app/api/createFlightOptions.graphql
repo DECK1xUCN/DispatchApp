@@ -1,0 +1,10 @@
+query ($siteId: Int!) {
+  heliportsPerSite(siteId: $siteId) {
+    id
+    name
+  }
+  viaPerSite(siteId: $siteId) {
+    id
+    name
+  }
+}

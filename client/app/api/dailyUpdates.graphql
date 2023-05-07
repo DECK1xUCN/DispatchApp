@@ -1,0 +1,11 @@
+query {
+  dailyUpdates {
+    id
+    flight {
+      id
+      flightNumber
+      date
+    }
+    delay
+  }
+}

@@ -1,9 +1,9 @@
-import { validateEmptyString } from "@/utils/validators";
-import { ctx } from "../utils/context";
+import { validateEmptyString } from "../utils/validators";
+import { Context } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
-  getSites: async () => {
+  getSites: async (ctx: Context) => {
     const sites = await ctx.prisma.site
       .findMany({
         include: { locations: true, flights: true },
@@ -15,7 +15,7 @@ export default {
     return sites;
   },
 
-  getSite: async (id: number) => {
+  getSite: async (id: number, ctx: Context) => {
     const site = await ctx.prisma.site
       .findUnique({
         where: {
@@ -30,7 +30,7 @@ export default {
     return site;
   },
 
-  createSite: async (name: string) => {
+  createSite: async (name: string, ctx: Context) => {
     const createdSite = await ctx.prisma.site
       .create({
         data: { name: validateEmptyString(name) },
@@ -43,11 +43,11 @@ export default {
     return createdSite;
   },
 
-  updateSite: async (id: number, name: string) => {
+  updateSite: async (data: { id: number; name: string }, ctx: Context) => {
     const updatedSite = await ctx.prisma.site
       .update({
-        where: { id },
-        data: { name: validateEmptyString(name) },
+        where: { id: data.id },
+        data: { name: validateEmptyString(data.name) },
         include: { locations: true, flights: true },
       })
       .catch(() => {

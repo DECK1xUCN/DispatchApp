@@ -1,0 +1,35 @@
+mutation (
+  $flightId: Int
+  $wasFlight: Boolean!
+  $delay: Boolean
+  $delayCode: String
+  $delayTime: Int
+  $delayDesc: String
+  $maintenance: Boolean!
+  $plannedMaintenance: Boolean
+  $unplannedMaintenance: Boolean
+  $otherMaintenance: Boolean
+  $maintenanceNote: String
+  $baseAndEquipment: Boolean!
+  $note: String
+) {
+  createDailyUpdate(
+    input: {
+      flightId: $flightId
+      wasFlight: $wasFlight
+      delay: $delay
+      delayCode: $delayCode
+      delayTime: $delayTime
+      delayDesc: $delayDesc
+      maintenance: $maintenance
+      plannedMaintenance: $plannedMaintenance
+      unplannedMaintenance: $unplannedMaintenance
+      otherMaintenance: $otherMaintenance
+      maintenanceNote: $maintenanceNote
+      baseAndEquipment: $baseAndEquipment
+      note: $note
+    }
+  ) {
+    id
+  }
+}

@@ -1,0 +1,18 @@
+query {
+  sites {
+    id
+    name
+  }
+  heliportsPerSite(siteId: 1) {
+    id
+    name
+    type
+  }
+  viaPerSite(siteId: 1) {
+    id
+    name
+    lat
+    lng
+    type
+  }
+}

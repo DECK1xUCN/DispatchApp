@@ -1,5 +1,5 @@
-import { CreateDailyUpdate } from "@/types/dailyUpdates";
-import { ctx } from "@/utils/context";
+import { CreateDailyUpdate } from "../types/dailyUpdates";
+import { ctx } from "../utils/context";
 import { createGraphQLError } from "graphql-yoga";
 
 export default {
