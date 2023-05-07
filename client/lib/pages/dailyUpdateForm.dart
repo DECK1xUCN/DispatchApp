@@ -13,16 +13,16 @@ class DailyUpdateForm extends HookWidget {
         ModalRoute.of(context)!.settings.arguments as FlightSimple;
 
     String updateMutation = """
-mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!) {
+mutation MyMutation(\$flightId: Int!, \$delay: Boolean!, \$baseAndEquipment: Boolean!, \$maintenance: Boolean!, \$wasFlight: Boolean = false, \$delayCode: String!, \$delayDesc: String!) {
   createDailyUpdate(
-    input: {wasFlight: false, flightId: \$flightId, delayCode: \$delayCode, delayDesc: \$delayDesc}
+    input: {flightId: \$flightId, delay: \$delay, wasFlight: \$wasFlight, maintenance: \$maintenance, baseAndEquipment: \$baseAndEquipment, delayDesc: \$delayDesc, delayCode: \$delayCode}
   ) {
     wasFlight
+    delayCode
+    delayDesc
     flight {
       id
     }
-    delayCode
-    delayDesc
   }
 }
     """;
@@ -41,8 +41,8 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
       'cancelationDescription': '',
     });
 
-    TextEditingController cancelationDescriptionController = TextEditingController();
-
+    TextEditingController cancelationDescriptionController =
+        TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -57,7 +57,8 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
               key: formKey,
               child: Column(
                 children: [
-                  const Text('Cancelation code:', style: TextStyle(fontSize: 16)),
+                  const Text('Cancelation code:',
+                      style: TextStyle(fontSize: 16)),
                   SizedBox(
                     // Delay Reason
                     width: 150,
@@ -76,23 +77,21 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
                         formState.value = {...formState.value};
                       },
                       items: DelayCode.values
-                          .map<DropdownMenuItem<DelayCode>>(
-                              (DelayCode value) {
-                            return DropdownMenuItem<DelayCode>(
-                              value: value,
-                              child: Text(
-                                  value
-                                      .toString()
-                                      .split('.')
-                                      .last
-                                      .replaceAll('_',
-                                      ' ')),
-                            );
-                          }).toList(),
+                          .map<DropdownMenuItem<DelayCode>>((DelayCode value) {
+                        return DropdownMenuItem<DelayCode>(
+                          value: value,
+                          child: Text(value
+                              .toString()
+                              .split('.')
+                              .last
+                              .replaceAll('_', ' ')),
+                        );
+                      }).toList(),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Cancellation description:', style: TextStyle(fontSize: 16)),
+                  const Text('Cancellation description:',
+                      style: TextStyle(fontSize: 16)),
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -109,18 +108,24 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                      Theme.of(context).primaryColor,
+                      backgroundColor: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        formState.value['cancelationDescription'] = cancelationDescriptionController.text;
-                        print(formState.value);
-                        print(flight.id);
+                        formState.value['cancelationDescription'] =
+                            cancelationDescriptionController.text;
+
                         readMutation.runMutation({
                           'flightId': flight.id,
-                          'delayDesc': formState.value['cancelationDescription'],
-                          'delayCode': formState.value['cancelationCode'].toString().split('.').last,
+                          'delayDesc':
+                              formState.value['cancelationDescription'],
+                          'delayCode': formState.value['cancelationCode']
+                              .toString()
+                              .split('.')
+                              .last,
+                          'delay': false,
+                          'baseAndEquipment': false,
+                          'maintenance': false,
                         });
                         Navigator.pop(context);
                       }
@@ -128,8 +133,8 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
                     child: Text(
                       'Submit',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.white,
-                      ),
+                            color: Colors.white,
+                          ),
                     ),
                   ),
                 ],
