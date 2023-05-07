@@ -328,11 +328,9 @@ export default {
           hoistOperatorId: data.hoistOperatorId ?? data.hoistOperatorId,
           siteId: data.siteId ?? data.siteId,
           fromId: data.fromId ?? data.fromId,
-          via: data.viaIds
-            ? {
-                connect: data.viaIds.map((id) => ({ id })),
-              }
-            : undefined,
+          via: (data.viaIds && data.viaIds.length > 0) ?? {
+            connect: data.viaIds.map((id) => ({ id })),
+          },
           toId: data.toId ?? data.toId,
           etd: data.etd ?? formatDate(data.etd),
           rotorStart: data.rotorStart ?? formatDate(data.rotorStart),
@@ -342,6 +340,11 @@ export default {
           ata: data.eta ?? formatDate(data.ata),
           flightTime: data.flightTime ?? validateFlightTime(data.flightTime),
           blockTime: data.blockTime ?? validateFlightTime(data.blockTime),
+          cargoPP: data.cargoPP ?? data.cargoPP,
+          hoistCycles: data.hoistCycles ?? data.hoistCycles,
+          note: data.note ?? data.note,
+          pax: data.pax ?? data.pax,
+          paxTax: data.paxTax ?? data.paxTax,
         },
         include: {
           helicopter: true,
