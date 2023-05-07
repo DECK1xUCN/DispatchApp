@@ -1,5 +1,5 @@
-import 'package:client/pages/dailyUpdateForm.dart';
-import 'package:client/pages/flightForm.dart';
+import 'package:client/pages/daily_update_form.dart';
+import 'package:client/pages/flight_form.dart';
 import 'package:client/pages/home.dart';
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';

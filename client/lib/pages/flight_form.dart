@@ -1,10 +1,10 @@
-import 'package:client/classes/FlightSimple.dart';
-import 'package:client/classes/delayCode.dart';
+import 'package:client/classes/flight_simple.dart';
+import 'package:client/classes/delay_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:client/classes/Location.dart';
+import 'package:client/classes/location.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 

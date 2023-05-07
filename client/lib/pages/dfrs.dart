@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../classes/Dfr.dart';
-import 'dfrsWithId.dart';
+import '../classes/dfr.dart';
+import 'dfrs_with_id.dart';
 
 class DFRs extends StatefulWidget {
   const DFRs({Key? key}) : super(key: key);

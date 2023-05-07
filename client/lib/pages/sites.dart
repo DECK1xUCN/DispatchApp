@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-import '../classes/Location.dart';
+import '../classes/location.dart';
 
 class Sites extends HookWidget {
   const Sites({Key? key}) : super(key: key);

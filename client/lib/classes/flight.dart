@@ -1,4 +1,4 @@
-import 'package:client/classes/Location.dart';
+import 'package:client/classes/location.dart';
 
 class Flight {
   int id;

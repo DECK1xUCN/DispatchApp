@@ -1,4 +1,4 @@
-import 'package:client/classes/CardContent.dart';
+import 'package:client/classes/card_content.dart';
 import 'package:flutter/material.dart';
 
 class CardWidget extends StatelessWidget {
@@ -24,10 +24,10 @@ class CardWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 45,
-                    backgroundColor: const Color.fromRGBO(9,166,215, 1),
-                    child: const Icon(
+                    backgroundColor: Color.fromRGBO(9,166,215, 1),
+                    child: Icon(
                       Icons.flight,
                       color: Color.fromRGBO(0, 66, 106, 1),
                       size: 60,

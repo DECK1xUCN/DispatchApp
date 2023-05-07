@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:client/classes/CardContent.dart';
+import 'package:client/classes/card_content.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
