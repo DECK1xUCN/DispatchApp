@@ -275,6 +275,13 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
                   MultiSelectDialogField<String>(
+                    chipDisplay: MultiSelectChipDisplay(
+                      chipColor: Theme.of(context).colorScheme.secondary,
+                      textStyle: const TextStyle(color: Colors.black),
+                      // todo: add later functionality to remove via
+                      // icon: const Icon(Icons.close, color: Colors.black),
+                      // onTap: (value){},
+                    ),
                     initialValue: formState.value['via'],
                     items: via
                         .map((e) => MultiSelectItem(e.toString(), e.toString()))
@@ -288,27 +295,24 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                     searchable: true,
                     listType: MultiSelectListType.CHIP,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.lightBlue, width: 2),
+                      border: Border.all(color: Colors.black, width: 2),
                     ),
                     cancelText: const Text("Cancel",
                         style: TextStyle(color: Colors.black)),
                     confirmText: const Text("Select",
                         style: TextStyle(color: Colors.black)),
                     itemsTextStyle: const TextStyle(color: Colors.white),
-                    unselectedColor: Colors.lightBlueAccent,
-                    selectedColor: Colors.greenAccent,
+                    unselectedColor: const Color.fromRGBO(129, 132, 135, 1),
+                    selectedColor: Theme.of(context).colorScheme.secondary,
                     selectedItemsTextStyle:
-                    const TextStyle(color: Colors.white),
-                    separateSelectedItems: true,
+                    const TextStyle(color: Colors.black),
+                    separateSelectedItems: false,
                     buttonText: const Text("Select locations"),
                     title: Text("Locations",
                         style: Theme.of(context).textTheme.titleLarge),
                     backgroundColor: Colors.white,
                     searchIcon: const Icon(Icons.search, color: Colors.black),
-
-                    //selectedItemsTextStyle: TextStyle(color: Colors.green),
                     onConfirm: (values) {
-                      print(values);
                       formState.value['via'] = values;
                       formState.value = {...formState.value};
                     },
