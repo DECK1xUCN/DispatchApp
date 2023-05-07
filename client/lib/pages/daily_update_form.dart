@@ -73,8 +73,7 @@ mutation MyMutation(\$flightId: Int!, \$delay: Boolean!, \$baseAndEquipment: Boo
                       ),
                       onChanged: (DelayCode? value) {
                         // This is called when the user selects an item.
-                        formState.value['dropdownValue'] = value!;
-                        formState.value = {...formState.value};
+                        formState.value['cancellationCode'] = value!;
                       },
                       items: DelayCode.values
                           .map<DropdownMenuItem<DelayCode>>((DelayCode value) {
