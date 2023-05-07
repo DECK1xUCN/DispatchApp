@@ -100,7 +100,7 @@ class HomeB extends State<Home> {
                                         inherit: true,
                                         color: _selectedIndex == 0
                                             ? Colors.white
-                                            : Color.fromRGBO(129, 132, 135, 1),
+                                            : const Color.fromRGBO(129, 132, 135, 1),
                                       ),
                                 ),
                               ],
@@ -268,7 +268,7 @@ class HomeB extends State<Home> {
                                         inherit: true,
                                         color: _selectedIndex == 3
                                             ? Colors.white
-                                            : Color.fromRGBO(129, 132, 135, 1),
+                                            : const Color.fromRGBO(129, 132, 135, 1),
                                       ),
                                 ),
                               ],

@@ -37,11 +37,11 @@ mutation MyMutation(\$flightId: Int!, \$delay: Boolean!, \$baseAndEquipment: Boo
     DelayCode dropdownValue = DelayCode.A_HeliWeather;
 
     final formState = useState({
-      'cancelationCode': delayCodes.first,
-      'cancelationDescription': '',
+      'cancellationCode': delayCodes.first,
+      'cancellationDescription': '',
     });
 
-    TextEditingController cancelationDescriptionController =
+    TextEditingController cancellationDescriptionController =
         TextEditingController();
 
     return Scaffold(
@@ -57,7 +57,7 @@ mutation MyMutation(\$flightId: Int!, \$delay: Boolean!, \$baseAndEquipment: Boo
               key: formKey,
               child: Column(
                 children: [
-                  const Text('Cancelation code:',
+                  const Text('Cancellation code:',
                       style: TextStyle(fontSize: 16)),
                   SizedBox(
                     // Delay Reason
@@ -99,7 +99,7 @@ mutation MyMutation(\$flightId: Int!, \$delay: Boolean!, \$baseAndEquipment: Boo
                       }
                       return null;
                     },
-                    controller: cancelationDescriptionController,
+                    controller: cancellationDescriptionController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
@@ -112,14 +112,14 @@ mutation MyMutation(\$flightId: Int!, \$delay: Boolean!, \$baseAndEquipment: Boo
                     ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        formState.value['cancelationDescription'] =
-                            cancelationDescriptionController.text;
+                        formState.value['cancellationDescription'] =
+                            cancellationDescriptionController.text;
 
                         readMutation.runMutation({
                           'flightId': flight.id,
                           'delayDesc':
-                              formState.value['cancelationDescription'],
-                          'delayCode': formState.value['cancelationCode']
+                              formState.value['cancellationDescription'],
+                          'delayCode': formState.value['cancellationCode']
                               .toString()
                               .split('.')
                               .last,

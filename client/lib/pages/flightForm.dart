@@ -13,7 +13,8 @@ class FlightForm extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
+    FlightSimple flight =
+        ModalRoute.of(context)!.settings.arguments as FlightSimple;
 
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
@@ -75,7 +76,7 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
       print(result.exception.toString());
       return const SafeArea(
           child:
-          Center(child: Text("An error occurred, check the console :(")));
+              Center(child: Text("An error occurred, check the console :(")));
     }
     if (result.isLoading) {
       return const Scaffold(
@@ -92,8 +93,7 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     List<Location> locations = [];
     List<Location> via = [];
 
-    List? listHeliports =
-        result.data?["locations"]; //This was for from and to
+    List? listHeliports = result.data?["locations"]; //This was for from and to
 
     // Load the data from the query into the _locations list
     for (var location in listHeliports!) {
@@ -147,7 +147,7 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
     // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int! \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!], \$id: Int!) {
+mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int! \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]!, \$id: Int!) {
   updateFlight(
     data: {pax: \$pax, flightNumber: \$flightNumber, ata: \$ata, atd: \$atd, eta: \$eta, etd: \$etd, rotorStart: \$rotorStart, rotorStop: \$rotorStop, blockTime: \$blockTime, flightTime: \$flightTime, cargoPP: \$cargoPP, hoistCycles: \$hoistCycles, note: \$note, paxTax: \$paxTax, fromId: \$fromId, toId: \$toId, viaIds: \$viaIds, date: \$date}
     id: \$id
@@ -208,19 +208,19 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
     TextEditingController controllerNotes =
         TextEditingController(text: formState.value['notes']);
     TextEditingController controllerPAX =
-    TextEditingController(text: formState.value['pax'].toString());
+        TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
-    TextEditingController(text: formState.value['paxTax'].toString());
+        TextEditingController(text: formState.value['paxTax'].toString());
     TextEditingController controllerCargo =
-    TextEditingController(text: formState.value['cargoPP'].toString());
+        TextEditingController(text: formState.value['cargoPP'].toString());
     TextEditingController controllerHoistCycles =
-    TextEditingController(text: formState.value['hoistCycles'].toString());
+        TextEditingController(text: formState.value['hoistCycles'].toString());
     TextEditingController controllerBlocktime =
-    TextEditingController(text: formState.value['blockTime'].toString());
+        TextEditingController(text: formState.value['blockTime'].toString());
     TextEditingController controllerFlighttime =
-    TextEditingController(text: formState.value['flightTime'].toString());
+        TextEditingController(text: formState.value['flightTime'].toString());
     TextEditingController controllerDelayMin =
-    TextEditingController(text: formState.value['delayMin'].toString());
+        TextEditingController(text: formState.value['delayMin'].toString());
 
     useEffect(() {
       return () {
@@ -306,7 +306,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                     unselectedColor: const Color.fromRGBO(129, 132, 135, 1),
                     selectedColor: Theme.of(context).colorScheme.secondary,
                     selectedItemsTextStyle:
-                    const TextStyle(color: Colors.black),
+                        const TextStyle(color: Colors.black),
                     separateSelectedItems: false,
                     buttonText: const Text("Select locations"),
                     title: Text("Locations",
@@ -399,7 +399,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                                       formState.value['etd'] = newDateTime;
 
                                       TimeOfDay etd =
-                                      TimeOfDay.fromDateTime(newDateTime);
+                                          TimeOfDay.fromDateTime(newDateTime);
                                       TimeOfDay atd = TimeOfDay.fromDateTime(
                                           formState.value['atd']);
 
@@ -546,7 +546,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                                       formState.value['atd'] = newDateTime;
 
                                       TimeOfDay atd =
-                                      TimeOfDay.fromDateTime(newDateTime);
+                                          TimeOfDay.fromDateTime(newDateTime);
 
                                       TimeOfDay ata = TimeOfDay.fromDateTime(
                                           formState.value['ata']);
@@ -697,11 +697,10 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                                           newDateTime;
 
                                       TimeOfDay rotorStart =
-                                      TimeOfDay.fromDateTime(
-                                          formState.value['rotorStart']);
+                                          TimeOfDay.fromDateTime(
+                                              formState.value['rotorStart']);
                                       TimeOfDay rotorStopTime =
-                                      TimeOfDay.fromDateTime(newDateTime);
-
+                                          TimeOfDay.fromDateTime(newDateTime);
 
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
@@ -773,7 +772,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                                       TimeOfDay atd = TimeOfDay.fromDateTime(
                                           formState.value['atd']);
                                       TimeOfDay ata =
-                                      TimeOfDay.fromDateTime(newDateTime);
+                                          TimeOfDay.fromDateTime(newDateTime);
 
                                       int difference = ata.hour * 60 +
                                           ata.minute -
@@ -905,7 +904,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             children: [
                               Text("Minutes",
                                   style:
-                                  Theme.of(context).textTheme.titleLarge),
+                                      Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 10),
                               SizedBox(
                                 // Delay amount
@@ -945,7 +944,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             children: [
                               Text("Delay Reason",
                                   style:
-                                  Theme.of(context).textTheme.titleLarge),
+                                      Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 10),
                               SizedBox(
                                 // Delay Reason
@@ -967,17 +966,15 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                                   items: DelayCode.values
                                       .map<DropdownMenuItem<DelayCode>>(
                                           (DelayCode value) {
-                                        return DropdownMenuItem<DelayCode>(
-                                          value: value,
-                                          child: Text(
-                                              value
-                                                  .toString()
-                                                  .split('.')
-                                                  .last
-                                                  .replaceAll('_',
-                                                  ' ')),
-                                        );
-                                      }).toList(),
+                                    return DropdownMenuItem<DelayCode>(
+                                      value: value,
+                                      child: Text(value
+                                          .toString()
+                                          .split('.')
+                                          .last
+                                          .replaceAll('_', ' ')),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                             ],
@@ -1270,19 +1267,33 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                           print(formState.value['pax']);
                           print(formState.value['pax'] is int);
                           print('ata:');
-                          print(formState.value['ata'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['ata']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('atd:');
-                          print(formState.value['atd'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['atd']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('etd');
-                          print(formState.value['etd'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['etd']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('eta');
-                          print(formState.value['eta'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['eta']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('etd');
-                          print(formState.value['etd'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['etd']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('rotorStart');
-                          print(formState.value['rotorStart'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['rotorStart']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('rotorStop');
-                          print(formState.value['rotorStop'].toIso8601String().replaceAll(' ', 'T'));
+                          print(formState.value['rotorStop']
+                              .toIso8601String()
+                              .replaceAll(' ', 'T'));
                           print('blockTime');
                           print(formState.value['blockTime']);
                           print(formState.value['blockTime'] is int);
@@ -1314,15 +1325,27 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
 
                           readMutation.runMutation({
                             'pax': formState.value['pax'],
-                            'ata': formState.value['ata'].toIso8601String().replaceAll(' ', 'T'),
-                            'atd': formState.value['atd'].toIso8601String().replaceAll(' ', 'T'),
-                            'date': formState.value['etd'].toIso8601String().replaceAll(' ', 'T'),
-                            'eta': formState.value['eta'].toIso8601String().replaceAll(' ', 'T'),
-                            'etd': formState.value['etd'].toIso8601String().replaceAll(' ', 'T'),
-                            'rotorStart':
-                            formState.value['rotorStart'].toIso8601String().replaceAll(' ', 'T'),
-                            'rotorStop':
-                            formState.value['rotorStop'].toIso8601String().replaceAll(' ', 'T'),
+                            'ata': formState.value['ata']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'atd': formState.value['atd']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'date': formState.value['etd']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'eta': formState.value['eta']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'etd': formState.value['etd']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'rotorStart': formState.value['rotorStart']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'rotorStop': formState.value['rotorStop']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
                             'blockTime': formState.value['blockTime'],
                             'cargoPP': formState.value['cargoPP'],
                             'flightTime': formState.value['flightTime'],
@@ -1335,7 +1358,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             "viaIds": selectedViaIds,
                             'id': flight.id,
 
-
                             /*'delayBool': isDelayed.value,
                             'delayCode': formState.value['delayCode'],
                             'delayDesc': formState.value['delayNote'],
@@ -1344,13 +1366,12 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor
-                      ),
+                          backgroundColor: Theme.of(context).primaryColor),
                       child: Text(
                         'Submit',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.white,
-                        ),
+                              color: Colors.white,
+                            ),
                       ),
                     ),
                   ),
@@ -1378,7 +1399,7 @@ class CardWidget extends StatelessWidget {
       height: 30,
       decoration: BoxDecoration(
         border:
-        Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
+            Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
         borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Align(
