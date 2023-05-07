@@ -37,12 +37,16 @@ query MyQuery {
   """;
 
     String dailyUpdateFineMutation = """
-    mutation MyMutation(\$flightId: Int!) {
-  createDailyUpdate(input: {wasFlight: true, flightId: \$flightId}) {
-    wasFlight
+mutation MyMutation(\$flightId: Int!) {
+  createDailyUpdate(
+    input: {wasFlight: true, delay: false, maintenance: false, baseAndEquipment: false, flightId: \$flightId}
+  ) {
+    delay
     flight {
       id
     }
+    baseAndEquipment
+    maintenance
   }
 }
     """;
@@ -50,9 +54,6 @@ query MyQuery {
     final dailyUpdateFine = useMutation(
       MutationOptions(
         document: gql(dailyUpdateFineMutation),
-        onCompleted: (dynamic resultData) {
-          print(resultData);
-        },
       ),
     );
 
