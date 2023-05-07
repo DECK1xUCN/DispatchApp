@@ -92,7 +92,7 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('Cancelation description:', style: TextStyle(fontSize: 16)),
+                  const Text('Cancellation description:', style: TextStyle(fontSize: 16)),
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -104,10 +104,14 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
-                    style: const TextStyle(color: Colors.black),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                      Theme.of(context).primaryColor,
+                    ),
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         formState.value['cancelationDescription'] = cancelationDescriptionController.text;
@@ -121,7 +125,12 @@ mutation MyMutation(\$flightId: Int!, \$delayCode: String!, \$delayDesc: String!
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text('Submit'),
+                    child: Text(
+                      'Submit',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:client/classes/FlightSimple.dart';
 import 'package:client/classes/delayCode.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-import 'package:client/classes/delayCode.dart';
-
-import '../classes/Flight.dart';
 
 class FlightForm extends HookWidget {
   const FlightForm({Key? key}) : super(key: key);
@@ -21,7 +16,6 @@ class FlightForm extends HookWidget {
     FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
 
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
-    final now = DateTime.now();
 
     String flightQuery = """
 query MyQuery(\$flightId: Int!, \$siteId: Int!) {
@@ -153,28 +147,28 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
     // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$toId: Int!, \$viaIds: [Int!] = 10, \$id: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!) {
+mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int! \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!], \$id: Int!) {
   updateFlight(
-    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, eta: \$eta, etd: \$etd, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, viaIds: \$viaIds, toId: \$toId}
+    data: {pax: \$pax, flightNumber: \$flightNumber, ata: \$ata, atd: \$atd, eta: \$eta, etd: \$etd, rotorStart: \$rotorStart, rotorStop: \$rotorStop, blockTime: \$blockTime, flightTime: \$flightTime, cargoPP: \$cargoPP, hoistCycles: \$hoistCycles, note: \$note, paxTax: \$paxTax, fromId: \$fromId, toId: \$toId, viaIds: \$viaIds, date: \$date}
     id: \$id
   ) {
+    pax
     ata
     atd
-    blockTime
-    cargoPP
+    date
     eta
     etd
+    rotorStart
+    rotorStop
+    blockTime
+    cargoPP
     flightTime
+    hoistCycles
+    note
+    paxTax
     from {
       id
     }
-    hoistCycles
-    id
-    note
-    pax
-    paxTax
-    rotorStart
-    rotorStop
     to {
       id
     }
@@ -189,6 +183,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
       MutationOptions(
         document: gql(flightMutation),
         onCompleted: (dynamic resultData) {
+          print('====RESULT DATA====');
           print(resultData);
           //Navigator.pop(context);
           print(result.exception);
@@ -281,6 +276,13 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
                   MultiSelectDialogField<String>(
+                    chipDisplay: MultiSelectChipDisplay(
+                      chipColor: Theme.of(context).colorScheme.secondary,
+                      textStyle: const TextStyle(color: Colors.black),
+                      // todo: add later functionality to remove via
+                      // icon: const Icon(Icons.close, color: Colors.black),
+                      // onTap: (value){},
+                    ),
                     initialValue: formState.value['via'],
                     items: via
                         .map((e) => MultiSelectItem(e.toString(), e.toString()))
@@ -294,27 +296,24 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                     searchable: true,
                     listType: MultiSelectListType.CHIP,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.lightBlue, width: 2),
+                      border: Border.all(color: Colors.black, width: 2),
                     ),
                     cancelText: const Text("Cancel",
                         style: TextStyle(color: Colors.black)),
                     confirmText: const Text("Select",
                         style: TextStyle(color: Colors.black)),
                     itemsTextStyle: const TextStyle(color: Colors.white),
-                    unselectedColor: Colors.lightBlueAccent,
-                    selectedColor: Colors.greenAccent,
+                    unselectedColor: const Color.fromRGBO(129, 132, 135, 1),
+                    selectedColor: Theme.of(context).colorScheme.secondary,
                     selectedItemsTextStyle:
-                    const TextStyle(color: Colors.white),
-                    separateSelectedItems: true,
+                    const TextStyle(color: Colors.black),
+                    separateSelectedItems: false,
                     buttonText: const Text("Select locations"),
                     title: Text("Locations",
                         style: Theme.of(context).textTheme.titleLarge),
                     backgroundColor: Colors.white,
                     searchIcon: const Icon(Icons.search, color: Colors.black),
-
-                    //selectedItemsTextStyle: TextStyle(color: Colors.green),
                     onConfirm: (values) {
-                      print(values);
                       formState.value['via'] = values;
                       formState.value = {...formState.value};
                     },
@@ -1041,7 +1040,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                var newValue;
+                                int newValue;
                                 try {
                                   newValue = int.parse(value);
                                 } catch (e) {
@@ -1086,7 +1085,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                var newValue;
+                                int newValue;
                                 try {
                                   newValue = int.parse(value);
                                 } catch (e) {
@@ -1131,7 +1130,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                var newValue;
+                                int newValue;
                                 try {
                                   newValue = int.parse(value);
                                 } catch (e) {
@@ -1179,7 +1178,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                         height: 50,
                         child: TextFormField(
                           onChanged: (value) {
-                            var newValue;
+                            int newValue;
                             try {
                               newValue = int.parse(value);
                             } catch (e) {
@@ -1267,48 +1266,75 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             }
                           }
 
-                          print(formState.value['ata'].toIso8601String());
-                          print(formState.value['atd'].toIso8601String());
+                          print('pax:');
+                          print(formState.value['pax']);
+                          print(formState.value['pax'] is int);
+                          print('ata:');
+                          print(formState.value['ata'].toIso8601String().replaceAll(' ', 'T'));
+                          print('atd:');
+                          print(formState.value['atd'].toIso8601String().replaceAll(' ', 'T'));
+                          print('etd');
+                          print(formState.value['etd'].toIso8601String().replaceAll(' ', 'T'));
+                          print('eta');
+                          print(formState.value['eta'].toIso8601String().replaceAll(' ', 'T'));
+                          print('etd');
+                          print(formState.value['etd'].toIso8601String().replaceAll(' ', 'T'));
+                          print('rotorStart');
+                          print(formState.value['rotorStart'].toIso8601String().replaceAll(' ', 'T'));
+                          print('rotorStop');
+                          print(formState.value['rotorStop'].toIso8601String().replaceAll(' ', 'T'));
+                          print('blockTime');
                           print(formState.value['blockTime']);
                           print(formState.value['blockTime'] is int);
+                          print('cargoPP');
                           print(formState.value['cargoPP']);
                           print(formState.value['cargoPP'] is int);
-                          print(formState.value['eta'].toIso8601String());
-                          print(formState.value['etd'].toIso8601String());
+                          print('flightTime');
+                          print(formState.value['flightTime']);
                           print(formState.value['flightTime'] is int);
-                          print(locations[formState.value['selectedFrom']].id);
+                          print('hoistCycles');
+                          print(formState.value['hoistCycles']);
                           print(formState.value['hoistCycles'] is int);
+                          print('notes');
+                          print(formState.value['notes']);
                           print(formState.value['notes'] is String);
-                          print(selectedViaIds);
-                          print(locations[formState.value['selectedTo']].id);
-                          print(locations[formState.value['selectedFrom']].id);
-                          print(formState.value['pax'] is int);
+                          print('paxTax');
+                          print(formState.value['paxTax']);
                           print(formState.value['paxTax'] is int);
-                          print(
-                              formState.value['rotorStart'].toIso8601String());
-                          print(formState.value['rotorStop'].toIso8601String());
+                          print('selectedFrom');
+                          print(formState.value['selectedFrom']);
+                          print(formState.value['selectedFrom'] is int);
+                          print('selectedTo');
+                          print(formState.value['selectedTo']);
+                          print(formState.value['selectedTo'] is int);
+                          print('selectedViaIds');
+                          print(selectedViaIds);
+                          print('flight id');
+                          print(flight.id);
 
                           readMutation.runMutation({
-                            'cargoPP': formState.value['cargoPP'],
+                            'pax': formState.value['pax'],
+                            'ata': formState.value['ata'].toIso8601String().replaceAll(' ', 'T'),
+                            'atd': formState.value['atd'].toIso8601String().replaceAll(' ', 'T'),
+                            'date': formState.value['etd'].toIso8601String().replaceAll(' ', 'T'),
+                            'eta': formState.value['eta'].toIso8601String().replaceAll(' ', 'T'),
+                            'etd': formState.value['etd'].toIso8601String().replaceAll(' ', 'T'),
+                            'rotorStart':
+                            formState.value['rotorStart'].toIso8601String().replaceAll(' ', 'T'),
+                            'rotorStop':
+                            formState.value['rotorStop'].toIso8601String().replaceAll(' ', 'T'),
                             'blockTime': formState.value['blockTime'],
-                            'atd': formState.value['atd'].toIso8601String(),
-                            'ata': formState.value['ata'].toIso8601String(),
-                            'eta': formState.value['eta'].toIso8601String(),
-                            'etd': formState.value['etd'].toIso8601String(),
+                            'cargoPP': formState.value['cargoPP'],
                             'flightTime': formState.value['flightTime'],
-                            'fromId':
-                                locations[formState.value['selectedFrom']].id,
                             'hoistCycles': formState.value['hoistCycles'],
                             'note': formState.value['notes'],
-                            'pax': formState.value['pax'],
                             'paxTax': formState.value['paxTax'],
+                            'fromId':
+                                locations[formState.value['selectedFrom']].id,
                             'toId': locations[formState.value['selectedTo']].id,
-                            "viaIds": [3, 4, 5],
+                            "viaIds": selectedViaIds,
                             'id': flight.id,
-                            'rotorStart':
-                                formState.value['rotorStart'].toIso8601String(),
-                            'rotorStop':
-                                formState.value['rotorStop'].toIso8601String(),
+
 
                             /*'delayBool': isDelayed.value,
                             'delayCode': formState.value['delayCode'],
@@ -1317,7 +1343,15 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                           });
                         }
                       },
-                      child: const Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).primaryColor
+                      ),
+                      child: Text(
+                        'Submit',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],

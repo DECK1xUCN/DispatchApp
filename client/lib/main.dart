@@ -1,8 +1,8 @@
 import 'package:client/pages/dailyUpdateForm.dart';
 import 'package:client/pages/flightForm.dart';
+import 'package:client/pages/home.dart';
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
-import 'pages/home.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() async {
@@ -24,38 +24,48 @@ void main() async {
       child: MaterialApp(
           title: 'Deck1 Dispatch App',
           theme: ThemeData(
-            // Define the default brightness and colors.
+            useMaterial3: true,
             brightness: Brightness.dark,
-            primaryColor: Colors.lightBlue[800],
-
-            // Define the default font family.
-            fontFamily: 'Roboto',
-
+            primaryColor: const Color.fromRGBO(9, 166, 215, 1),
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromRGBO(9, 166, 215, 1),
+              secondary: Color.fromRGBO(89, 178, 102, 1),
+              error: Color.fromRGBO(252, 129, 129, 1),
+            ),
+            fontFamily: 'Lato',
+            textTheme: const TextTheme(
+              displayLarge: TextStyle(
+                  fontSize: 36.0,
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(28, 28, 28, 1)),
+              titleLarge: TextStyle(
+                  fontSize: 25.0,
+                  fontFamily: 'Roboto',
+                  color: Color.fromRGBO(28, 28, 28, 1)),
+              bodyLarge: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: 'Roboto',
+                  color: Color.fromRGBO(28, 28, 28, 1),
+                  fontWeight: FontWeight.bold),
+              bodyMedium: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: 'Lato',
+                  color: Color.fromRGBO(28, 28, 28, 1)),
+            ),
             // Define the default `decoration` for the Input fields
             inputDecorationTheme: const InputDecorationTheme(
-              // TODO: Further designing choices are needed
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.black),
               ),
-              hintStyle: TextStyle(fontFamily: 'Hind', color: Colors.black),
-            ),
-
-            // Define the default `TextTheme`. Use this to specify the default
-            // text styling for headlines, titles, bodies of text, and more.
-            textTheme: const TextTheme(
-              displayLarge:
-                  TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-              titleLarge: TextStyle(
-                  fontSize: 25.0, fontFamily: 'Hind', color: Colors.black),
-              bodyMedium: TextStyle(
-                  fontSize: 14.0, fontFamily: 'Hind', color: Colors.black),
+              hintStyle: TextStyle(fontFamily: 'Lato', color: Colors.black),
             ),
           ),
           initialRoute: '/',
           routes: {
-            '/': (context) => Loading(),
-            '/home': (context) => Home(),
-            '/flightform': (context) => FlightForm(),
-            '/dailyUpdateForm': (context) => DailyUpdateForm(),
+            '/': (context) => const Loading(),
+            '/home': (context) => const Home(),
+            '/flightform': (context) => const FlightForm(),
+            '/dailyUpdateForm': (context) => const DailyUpdateForm(),
           })));
 }
