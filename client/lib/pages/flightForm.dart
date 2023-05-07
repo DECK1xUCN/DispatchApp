@@ -1317,11 +1317,6 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                           });
                         }
                       },
-                      child: const Text('Submit'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                        Theme.of(context).primaryColor,
-                      ),
                       child: Text(
                         'Submit',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
