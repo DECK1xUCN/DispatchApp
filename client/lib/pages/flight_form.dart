@@ -147,28 +147,30 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
     // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$note: String!, \$pax: Int! \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]!, \$id: Int!) {
+mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$id: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]) {
   updateFlight(
-    data: {pax: \$pax, flightNumber: \$flightNumber, ata: \$ata, atd: \$atd, eta: \$eta, etd: \$etd, rotorStart: \$rotorStart, rotorStop: \$rotorStop, blockTime: \$blockTime, flightTime: \$flightTime, cargoPP: \$cargoPP, hoistCycles: \$hoistCycles, note: \$note, paxTax: \$paxTax, fromId: \$fromId, toId: \$toId, viaIds: \$viaIds, date: \$date}
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, date: \$date, eta: \$eta, etd: \$etd, flightNumber: \$flightNumber, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, viaIds: \$viaIds}
     id: \$id
   ) {
-    pax
     ata
     atd
+    blockTime
+    cargoPP
     date
     eta
     etd
-    rotorStart
-    rotorStop
-    blockTime
-    cargoPP
+    flightNumber
     flightTime
-    hoistCycles
-    note
-    paxTax
     from {
       id
     }
+    hoistCycles
+    id
+    note
+    pax
+    paxTax
+    rotorStart
+    rotorStop
     to {
       id
     }
@@ -997,10 +999,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                               width: 400,
                               height: 200,
                               child: TextFormField(
-                                onChanged: (value) {
-                                  formState.value['delayDesc'] = value;
-                                  formState.value = {...formState.value};
-                                },
                                 validator: (value) {
                                   if (value!.isEmpty) {
                                     return "This field must not be empty";
@@ -1036,16 +1034,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             width: 150,
                             height: 50,
                             child: TextFormField(
-                              onChanged: (value) {
-                                int newValue;
-                                try {
-                                  newValue = int.parse(value);
-                                } catch (e) {
-                                  return;
-                                }
-                                formState.value['pax'] = newValue;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1081,16 +1069,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             width: 150,
                             height: 50,
                             child: TextFormField(
-                              onChanged: (value) {
-                                int newValue;
-                                try {
-                                  newValue = int.parse(value);
-                                } catch (e) {
-                                  return;
-                                }
-                                formState.value['paxTax'] = newValue;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1126,16 +1104,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             width: 150,
                             height: 50,
                             child: TextFormField(
-                              onChanged: (value) {
-                                int newValue;
-                                try {
-                                  newValue = int.parse(value);
-                                } catch (e) {
-                                  return;
-                                }
-                                formState.value['cargoPP'] = newValue;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1174,16 +1142,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                         width: 150,
                         height: 50,
                         child: TextFormField(
-                          onChanged: (value) {
-                            int newValue;
-                            try {
-                              newValue = int.parse(value);
-                            } catch (e) {
-                              return;
-                            }
-                            formState.value['hoistCycles'] = newValue;
-                            formState.value = {...formState.value};
-                          },
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "This field must not be empty";
@@ -1216,7 +1174,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                           style: Theme.of(context).textTheme.titleLarge),
                       const SizedBox(height: 10),
                       Scrollbar(
-                        // Delay desc
+                        // Delay notes
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           reverse: true,
@@ -1224,10 +1182,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             width: 400,
                             height: 200,
                             child: TextFormField(
-                              onChanged: (value) {
-                                formState.value['notes'] = value;
-                                formState.value = {...formState.value};
-                              },
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "This field must not be empty";
@@ -1262,6 +1216,15 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                               selectedViaIds.add(v.id);
                             }
                           }
+
+                          // Set formState values
+                          formState.value['pax'] = int.parse(controllerPAX.text);
+                          formState.value['paxTax'] = int.parse(controllerPAXTax.text);
+                          formState.value['cargoPP'] = int.parse(controllerCargo.text);
+                          formState.value['hoistCycles'] = int.parse(controllerHoistCycles.text);
+
+                          formState.value['notes'] = controllerNotes.text;
+                          formState.value['delayDesc'] = controllerDelayReason.text;
 
                           print('pax:');
                           print(formState.value['pax']);
