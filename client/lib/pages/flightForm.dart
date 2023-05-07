@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:client/classes/FlightSimple.dart';
 import 'package:client/classes/delayCode.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,6 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:client/classes/Location.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-import 'package:client/classes/delayCode.dart';
-
-import '../classes/Flight.dart';
 
 class FlightForm extends HookWidget {
   const FlightForm({Key? key}) : super(key: key);
@@ -21,7 +16,6 @@ class FlightForm extends HookWidget {
     FlightSimple flight = ModalRoute.of(context)!.settings.arguments as FlightSimple;
 
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
-    final now = DateTime.now();
 
     String flightQuery = """
 query MyQuery(\$flightId: Int!, \$siteId: Int!) {
@@ -1041,7 +1035,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                var newValue;
+                                int newValue;
                                 try {
                                   newValue = int.parse(value);
                                 } catch (e) {
@@ -1086,7 +1080,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                var newValue;
+                                int newValue;
                                 try {
                                   newValue = int.parse(value);
                                 } catch (e) {
@@ -1131,7 +1125,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                             height: 50,
                             child: TextFormField(
                               onChanged: (value) {
-                                var newValue;
+                                int newValue;
                                 try {
                                   newValue = int.parse(value);
                                 } catch (e) {
@@ -1179,7 +1173,7 @@ mutation MyMutation(\$cargoPP: Int!, \$blockTime: Int!, \$atd: DateTime!, \$ata:
                         height: 50,
                         child: TextFormField(
                           onChanged: (value) {
-                            var newValue;
+                            int newValue;
                             try {
                               newValue = int.parse(value);
                             } catch (e) {
