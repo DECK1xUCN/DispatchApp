@@ -1,7 +1,6 @@
 import 'package:client/pages/daily_update_form.dart';
 import 'package:client/pages/flight_form.dart';
 import 'package:client/pages/home.dart';
-import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
@@ -61,9 +60,8 @@ void main() async {
               hintStyle: TextStyle(fontFamily: 'Lato', color: Colors.black),
             ),
           ),
-          initialRoute: '/',
+          initialRoute: '/home',
           routes: {
-            '/': (context) => const Loading(),
             '/home': (context) => const Home(),
             '/flightform': (context) => const FlightForm(),
             '/dailyUpdateForm': (context) => const DailyUpdateForm(),
