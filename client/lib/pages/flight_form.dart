@@ -187,8 +187,8 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
         onCompleted: (dynamic resultData) {
           print('====RESULT DATA====');
           print(resultData);
-          //Navigator.pop(context);
           print(result.exception);
+          Navigator.pop(context);
         },
       ),
     );
@@ -1218,13 +1218,18 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                           }
 
                           // Set formState values
-                          formState.value['pax'] = int.parse(controllerPAX.text);
-                          formState.value['paxTax'] = int.parse(controllerPAXTax.text);
-                          formState.value['cargoPP'] = int.parse(controllerCargo.text);
-                          formState.value['hoistCycles'] = int.parse(controllerHoistCycles.text);
+                          formState.value['pax'] =
+                              int.parse(controllerPAX.text);
+                          formState.value['paxTax'] =
+                              int.parse(controllerPAXTax.text);
+                          formState.value['cargoPP'] =
+                              int.parse(controllerCargo.text);
+                          formState.value['hoistCycles'] =
+                              int.parse(controllerHoistCycles.text);
 
                           formState.value['notes'] = controllerNotes.text;
-                          formState.value['delayDesc'] = controllerDelayReason.text;
+                          formState.value['delayDesc'] =
+                              controllerDelayReason.text;
 
                           print('pax:');
                           print(formState.value['pax']);
