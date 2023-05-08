@@ -73,7 +73,6 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     final result = readFlight.result;
 
     if (result.hasException) {
-      print(result.exception.toString());
       return const SafeArea(
           child:
               Center(child: Text("An error occurred, check the console :(")));
@@ -179,9 +178,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
       MutationOptions(
         document: gql(flightMutation),
         onCompleted: (dynamic resultData) {
-          print('====RESULT DATA====');
-          print(resultData);
-          print(result.exception);
           Navigator.pop(context);
         },
       ),
@@ -472,8 +468,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                                       TimeOfDay rotorStopTime =
                                           TimeOfDay.fromDateTime(
                                               formState.value['rotorStop']);
-                                      print(formState.value['rotorStart']
-                                          .toIso8601String());
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
                                           rotorStart.hour * 60 -
@@ -1199,12 +1193,9 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        //print(formState.value['hoistCycles'] as String);
-                        // Validate returns true if the form is valid, or false otherwise.
                         if (formKey.currentState!.validate() &&
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
-                          // print(formState.value['pax'] as String);
                           for (var v in via) {
                             if (formState.value['via'].contains(v.name)) {
                               selectedViaIds.add(v.id);
@@ -1224,66 +1215,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                           formState.value['notes'] = controllerNotes.text;
                           formState.value['delayDesc'] =
                               controllerDelayReason.text;
-
-                          print('pax:');
-                          print(formState.value['pax']);
-                          print(formState.value['pax'] is int);
-                          print('ata:');
-                          print(formState.value['ata']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('atd:');
-                          print(formState.value['atd']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('etd');
-                          print(formState.value['etd']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('eta');
-                          print(formState.value['eta']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('etd');
-                          print(formState.value['etd']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('rotorStart');
-                          print(formState.value['rotorStart']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('rotorStop');
-                          print(formState.value['rotorStop']
-                              .toIso8601String()
-                              .replaceAll(' ', 'T'));
-                          print('blockTime');
-                          print(formState.value['blockTime']);
-                          print(formState.value['blockTime'] is int);
-                          print('cargoPP');
-                          print(formState.value['cargoPP']);
-                          print(formState.value['cargoPP'] is int);
-                          print('flightTime');
-                          print(formState.value['flightTime']);
-                          print(formState.value['flightTime'] is int);
-                          print('hoistCycles');
-                          print(formState.value['hoistCycles']);
-                          print(formState.value['hoistCycles'] is int);
-                          print('notes');
-                          print(formState.value['notes']);
-                          print(formState.value['notes'] is String);
-                          print('paxTax');
-                          print(formState.value['paxTax']);
-                          print(formState.value['paxTax'] is int);
-                          print('selectedFrom');
-                          print(formState.value['selectedFrom']);
-                          print(formState.value['selectedFrom'] is int);
-                          print('selectedTo');
-                          print(formState.value['selectedTo']);
-                          print(formState.value['selectedTo'] is int);
-                          print('selectedViaIds');
-                          print(selectedViaIds);
-                          print('flight id');
-                          print(flight.id);
 
                           readMutation.runMutation({
                             'pax': formState.value['pax'],

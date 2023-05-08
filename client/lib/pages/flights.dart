@@ -66,7 +66,6 @@ mutation MyMutation(\$flightId: Int!) {
     final result = readFlights.result;
 
     if (result.hasException) {
-      print(result.exception.toString());
       return const SafeArea(
           child:
               Center(child: Text("An error occurred, check the console :(")));
