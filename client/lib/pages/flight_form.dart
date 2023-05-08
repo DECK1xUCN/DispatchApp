@@ -147,9 +147,9 @@ query MyQuery(\$flightId: Int!, \$siteId: Int!) {
     // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
     // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
     String flightMutation = """
-mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$fromId: Int!, \$hoistCycles: Int!, \$id: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$toId: Int!, \$viaIds: [Int!]) {
+mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$hoistCycles: Int!, \$id: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$viaIds: [Int!]) {
   updateFlight(
-    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, date: \$date, eta: \$eta, etd: \$etd, flightNumber: \$flightNumber, flightTime: \$flightTime, fromId: \$fromId, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, toId: \$toId, viaIds: \$viaIds}
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, date: \$date, eta: \$eta, etd: \$etd, flightNumber: \$flightNumber, flightTime: \$flightTime, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, viaIds: \$viaIds}
     id: \$id
   ) {
     ata
@@ -171,12 +171,6 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
     paxTax
     rotorStart
     rotorStop
-    to {
-      id
-    }
-    via {
-      id
-    }
   }
 }
     """;
@@ -1325,11 +1319,7 @@ mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$car
                             'toId': locations[formState.value['selectedTo']].id,
                             "viaIds": selectedViaIds,
                             'id': flight.id,
-
-                            /*'delayBool': isDelayed.value,
-                            'delayCode': formState.value['delayCode'],
-                            'delayDesc': formState.value['delayNote'],
-                            'delayAmount': formState.value['delayMin'],*/
+                            'flightNumber': flight.flightnumber,
                           });
                         }
                       },
