@@ -72,11 +72,11 @@ mutation MyMutation(\$flightId: Int!) {
     }
 
     if (result.isLoading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: SpinKitFoldingCube(
-            color: Color.fromRGBO(163, 160, 251, 1),
+            color: Theme.of(context).primaryColor,
             size: 50.0,
           ),
         ),
