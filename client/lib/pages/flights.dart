@@ -246,8 +246,7 @@ mutation MyMutation(\$flightId: Int!) {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'flightsButton',
         onPressed: () {
-          // flights.every((obj) => obj.hasDU == true)
-          if (true) {
+          if (flights.every((obj) => obj.hasDU == true)) {
             final snackBar = SnackBar(
               backgroundColor: Theme.of(context).colorScheme.secondary,
               content: Text('Daily Flight Report has been generated!',
