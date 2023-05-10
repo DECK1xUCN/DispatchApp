@@ -70,6 +70,7 @@ mutation MyMutation(\$flightId: Int!) {
           child:
               Center(child: Text("An error occurred, check the console :(")));
     }
+
     if (result.isLoading) {
       return const Scaffold(
         backgroundColor: Colors.white,
@@ -244,8 +245,29 @@ mutation MyMutation(\$flightId: Int!) {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'flightsButton',
-        onPressed: () {},
-        backgroundColor: const Color.fromRGBO(9, 166, 215, 1),
+        onPressed: () {
+          // flights.every((obj) => obj.hasDU == true)
+          if (true) {
+            final snackBar = SnackBar(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              content: Text('Daily Flight Report has been generated!',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold
+                  )),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          } else {
+            final snackBar = SnackBar(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              content: Text('Not all flights have a daily update!',
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.bold
+                  )),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+        },
+        backgroundColor: Theme.of(context).primaryColor,
         label: Text('Generate DFR',
             style: Theme.of(context)
                 .textTheme
