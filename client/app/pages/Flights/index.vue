@@ -6,26 +6,29 @@
         secondaryText="for date"
         class="flex flex-col gap-0.5"
       >
-        <input
-          type="date"
-          id="date"
-          name="date"
-          v-model="searchDate"
-          class="border-2 border-gray-100 w-64 h-10 rounded-md text-lg text-center"
-        />
-        <div class="flex gap-2 mt-2 items-center">
-          <BackButton
-            text="Reset"
-            :displayIcon="false"
-            @click.prevent="resetFlights"
+        <form @submit.prevent="getData">
+          <input
+            type="date"
+            id="date"
+            name="date"
+            v-model="inputSearchDate"
+            class="border-2 border-gray-100 w-64 h-10 rounded-md text-lg text-center"
           />
-          <ButtonReusable
-            text="Search"
-            :loading="isLoading.flights"
-            :displayIcon="false"
-            @click.prevent="getData"
-          />
-        </div>
+          <div class="flex gap-2 mt-2 items-center">
+            <BackButton
+              text="Reset"
+              type="button"
+              :displayIcon="false"
+              @click.prevent="resetFlights"
+            />
+            <ButtonReusable
+              text="Search"
+              type="submit"
+              :loading="isLoading.flights"
+              :displayIcon="false"
+            />
+          </div>
+        </form>
       </PageTitle>
       <ButtonReusable
         text="New Flight"
@@ -56,7 +59,7 @@
           >
         </TableData>
       </TableRow>
-      <TableBody v-if="flights.length === 0">
+      <TableBody v-if="flights && flights.length === 0">
         <TableRow
           class="flex-auto bg-gray-50 text-center border-t border-slate-150 h-12"
         >
@@ -75,15 +78,16 @@ import TableRow from "@/components/Tables/TableRow.vue";
 import TableData from "@/components/Tables/TableData.vue";
 import { Ref, onBeforeMount, ref } from "vue";
 import TimeFormat from "@/components/Helpers/TimeFormat.vue";
-import { graphqlDateFormat } from "@/utils/dateFormat";
 import BackButton from "@/components/Buttons/BackButton.vue";
+import { validateEmptyString } from "@/utils/validators";
 import query from "~/api/flights.graphql";
+import perDateQuery from "~/api/flightsPerDate.graphql";
 
 const router = useRouter();
 
 const flights: Ref<Types.Flight[]> = ref([]);
 
-const searchDate: Ref<string> = ref(graphqlDateFormat(new Date()));
+const inputSearchDate: Ref<string> = ref("");
 
 const isLoading = ref({
   flights: false,
@@ -98,15 +102,25 @@ onBeforeMount(() => {
 });
 
 async function getData() {
-  const { data } = await useAsyncQuery(query);
-  if (data.value)
-    // @ts-expect-error
-    flights.value = data.value.flights as Types.Flight[];
+  flights.value = [];
+  if (validateEmptyString(inputSearchDate.value)) {
+    const { data } = await useAsyncQuery(perDateQuery, {
+      date: inputSearchDate.value,
+    });
+    if (data.value)
+      // @ts-expect-error
+      flights.value = data.value.flights as Types.Flight[];
+  } else {
+    const { data } = await useAsyncQuery(query);
+    if (data.value)
+      // @ts-expect-error
+      flights.value = data.value.flights as Types.Flight[];
+  }
 }
 
 function resetFlights() {
   flights.value = [];
-  searchDate.value = graphqlDateFormat(new Date());
+  inputSearchDate.value = "";
   getData();
 }
 

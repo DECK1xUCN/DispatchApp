@@ -22,6 +22,7 @@
     "@sentry/tracing": "^7.51.0",
     "graphql-tag": "^2.12.6",
     "nuxt-graphql-client": "^0.2.27",
-    "nuxt-icon": "^0.4.0"
+    "nuxt-icon": "^0.4.0",
+    "zod": "^3.21.4"
   }
 }

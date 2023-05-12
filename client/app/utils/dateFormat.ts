@@ -12,7 +12,9 @@ export const timeFormat = (date: string | Date) => {
 };
 
 export const graphqlDateFormat = (date: string | Date) => {
-  return dayjs(date).format("YYYY-MM-DD");
+  const dateFormat = dayjs(date).format("YYYY-MM-DD");
+  const dateISO = new Date(dateFormat).toISOString();
+  return dateISO;
 };
 
 export const inputDateFormat = (date: string | Date) => {

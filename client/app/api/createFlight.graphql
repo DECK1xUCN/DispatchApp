@@ -1,5 +1,5 @@
 mutation (
-  $flightNumber: Int!
+  $flightNumber: String!
   $date: DateTime!
   $helicopterId: Int!
   $pilotId: Int!
@@ -9,13 +9,7 @@ mutation (
   $viaIds: [Int!]!
   $toId: Int!
   $etd: DateTime!
-  $rotorStart: DateTime!
   $eta: DateTime!
-  $atd: DateTime!
-  $rotorStop: DateTime!
-  $ata: DateTime!
-  $flightTime: Int!
-  $blockTime: Int!
   $pax: Int!
   $paxTax: Int!
   $cargoPP: Int!
@@ -33,13 +27,7 @@ mutation (
       viaIds: $viaIds
       toId: $toId
       etd: $etd
-      rotorStart: $rotorStart
       eta: $eta
-      atd: $atd
-      rotorStop: $rotorStop
-      ata: $ata
-      flightTime: $flightTime
-      blockTime: $blockTime
       pax: $pax
       paxTax: $paxTax
       cargoPP: $cargoPP
@@ -47,5 +35,8 @@ mutation (
     }
   ) {
     id
+    date
+    eta
+    etd
   }
 }

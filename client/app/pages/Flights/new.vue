@@ -1,7 +1,10 @@
 <template>
-  <div class="m-14 w-full">
+  <div class="flex flex-col gap-4 m-14 w-full">
     <PageTitle primaryText="Flight" />
-    <form class="flex flex-col gap-12 w-full mt-6" @submit.prevent="submit">
+    <form
+      class="flex flex-col gap-12 w-full mt-6 bg-white rounded-md shadow-md p-5"
+      @submit.prevent="submit"
+    >
       <!-- Flight number -->
       <div class="flex flex-wrap gap-x-10 gap-y-4">
         <div>
@@ -172,6 +175,20 @@
         <ButtonReusable type="submit" text="Create Flight" />
       </div>
     </form>
+    <div v-if="success || error">
+      <div
+        v-if="success"
+        class="text-green-600 bg-green-50 w-max text-2xl p-3 py-2 rounded-md"
+      >
+        Flight created successfully! You will be redirected
+      </div>
+      <div
+        v-if="error"
+        class="text-red-600 bg-red-50 w-max text-2xl p-3 py-2 rounded-md"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -198,6 +215,10 @@ const via: Ref<Types.Location[]> = ref([]);
 const pilots: Ref<Types.Pilot[]> = ref([]);
 const hoistOperators: Ref<Types.HoistOperator[]> = ref([]);
 
+const success = ref(false);
+const error = ref(false);
+const errorMessage = ref("");
+
 watch(
   () => newFlight.value.siteId,
   (siteId) => {
@@ -211,7 +232,24 @@ watch(
   () => newFlight.value.pax,
   (pax) => {
     if (pax) {
+      newFlight.value.pax = Number(pax);
       newFlight.value.paxTax = pax * 10;
+    }
+  }
+);
+watch(
+  () => newFlight.value.cargoPP,
+  (cargoPP) => {
+    if (cargoPP) {
+      newFlight.value.cargoPP = Number(cargoPP);
+    }
+  }
+);
+watch(
+  () => newFlight.value.hoistCycles,
+  (hoistCycles) => {
+    if (hoistCycles) {
+      newFlight.value.hoistCycles = Number(hoistCycles);
     }
   }
 );
@@ -246,14 +284,16 @@ function submit() {
   useMutation(mutation, {
     variables: {
       flightNumber: newFlight.value.flightNumber,
+      date: newFlight.value.date,
       siteId: newFlight.value.siteId,
       helicopterId: newFlight.value.helicopterId,
+      pilotId: newFlight.value.pilotId,
+      hoistOperatorId: newFlight.value.hoistOperatorId,
       fromId: newFlight.value.fromId,
       toId: newFlight.value.toId,
       viaIds: newFlight.value.viaIds,
-      date: newFlight.value.date,
-      etd: newFlight.value.etd,
-      eta: newFlight.value.eta,
+      etd: "2023-05-07T21:00:00.002Z",
+      eta: "2023-05-07T21:00:00.002Z",
       pax: newFlight.value.pax,
       paxTax: newFlight.value.paxTax,
       cargoPP: newFlight.value.cargoPP,
@@ -261,11 +301,20 @@ function submit() {
     },
   })
     .mutate()
-    .then((data) => {
-      console.log(data);
+    .then(() => {
+      success.value = true;
     })
     .catch((err) => {
-      console.log(err);
+      error.value = true;
+      errorMessage.value = err.message;
+    })
+    .finally(() => {
+      setTimeout(() => {
+        success.value = false;
+        error.value = false;
+        errorMessage.value = "";
+        router.push("/flights");
+      }, 4000);
     });
 }
 </script>
