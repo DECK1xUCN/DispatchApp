@@ -4,19 +4,19 @@ import 'Site.dart';
 class Location {
   int id;
   String name;
-  double lat;
-  double lon;
-  Site site;
-  String type;
+  double? lat;
+  double? lon;
+  Site? site;
+  String? type;
 
 
   Location({
     required this.id,
     required this.name,
-    required this.lat,
-    required this.lon,
-    required this.site,
-    required this.type,
+    this.lat,
+    this.lon,
+    this.site,
+    this.type,
   });
 
   @override

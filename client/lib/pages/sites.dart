@@ -39,6 +39,8 @@ query MyQuery {
 }
     """;
 
+
+
     String createSite = """   
 mutation MyMutation(\$siteName: String!) {
   createSite(data: {name: \$siteName}) {
@@ -135,7 +137,7 @@ mutation MyMutation(\$siteName: String!) {
 
       List<Widget> rows = [];
       for (var location in locs) {
-        if (location.site.id.toString() == dropdownValue.value.toString()) {
+        if (location.site?.id.toString() == dropdownValue.value.toString()) {
           rows.add(GestureDetector(
             onTap: () {},
             child: Container(
@@ -156,7 +158,7 @@ mutation MyMutation(\$siteName: String!) {
                     Expanded(
                       child: Center(
                           child: Text(
-                            location.site.id.toString(),
+                            location.type ?? 'No type',
                             style: const TextStyle(
                               color: Colors.black,
                             ),
@@ -165,7 +167,7 @@ mutation MyMutation(\$siteName: String!) {
                     Expanded(
                       child: Center(
                           child: Text(
-                            location.lon.toString(),
+                            location.site?.name ?? 'No site',
                             style: const TextStyle(
                               color: Colors.black,
                             ),

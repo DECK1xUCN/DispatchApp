@@ -1,5 +1,6 @@
 import 'package:client/classes/Flight.dart';
 import 'package:client/classes/Location.dart';
+import 'package:client/classes/LocationButImLasy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -18,13 +19,12 @@ class Flights extends HookWidget {
       List<Flight> flights = [];
 
       for (var flight in list) {
-        List<Site> via = [];
+        List<Location> via = [];
 
         for (var location in flight['via']) {
-          via.add(Site(id: location['id'], name: location['name']));
+          via.add(Location(id: location['id'], name: location['name']));
         }
-/*
-        This is broken
+
 
         flights.add(Flight(
             id: flight['id'],
@@ -34,7 +34,6 @@ class Flights extends HookWidget {
                 id: flight['from']['id'], name: flight['from']['name']),
             via: via,
             to: Location(id: flight['to']['id'], name: flight['to']['name'])));
-*/
       }
 
       List<Widget> rows = [];
