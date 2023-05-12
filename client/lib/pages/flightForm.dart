@@ -1,141 +1,187 @@
+import 'package:client/classes/flight_simple.dart';
+import 'package:client/classes/delay_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:client/classes/Location.dart';
+import 'package:client/classes/location.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
-
-import '../classes/Flight.dart';
-import '../classes/Site.dart';
 
 class FlightForm extends HookWidget {
   const FlightForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Flight flight = ModalRoute.of(context)!.settings.arguments as Flight;
+    FlightSimple flight =
+    ModalRoute.of(context)!.settings.arguments as FlightSimple;
+
     final formKey = useMemoized(() => GlobalKey<FormState>(), []);
 
     String flightQuery = """
-query MyQuery(\$flightId: Int!) {
-  flight(id: \$flightId) {
-    etd
+query MyQuery(\$flightId: Int!, \$siteId: Int!) {
+  flightById(id: \$flightId) {
     ata
     atd
     blockTime
     cargoPP
+    date
     delay
     delayCode
-    delayDesc
-    delayMin
+    delayNote
+    delayTime
     eta
     flightTime
     hoistCycles
-    notes
+    note
     pax
     paxTax
     rotorStart
     rotorStop
-    from {
+    site {
       id
+      name
     }
+    etd
+    flightNumber
     via {
       id
       name
     }
     to {
       id
+      name
+    }
+    from {
+      id
+      name
     }
   }
-  heliports {
-    name
+  locations(siteId: \$siteId) {
     id
-  }
-  sites {
     name
-    id
+    type
   }
 }
   """;
 
     final readFlight = useQuery(
       QueryOptions(
-          document: gql(flightQuery), variables: {'flightId': flight.id}),
+          document: gql(flightQuery),
+          variables: {'flightId': flight.id, 'siteId': flight.siteId}),
     );
     final result = readFlight.result;
 
     if (result.hasException) {
-      print(result.exception.toString());
       return const SafeArea(
           child:
-              Center(child: Text("An error occurred, check the console :(")));
+          Center(child: Text("An error occurred, check the console :(")));
     }
     if (result.isLoading) {
-      return const Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
           child: SpinKitFoldingCube(
-            color: Color.fromRGBO(163, 160, 251, 1),
+            color: Theme.of(context).primaryColor,
             size: 50.0,
           ),
         ),
       );
     }
-//Sites/Locations are broken and idk what to do pls fix
-    List<Site> locations = [];
-    List<Site> sites = [];
 
-    List? listHeliports = result.data?["heliports"];
-    List? listSites = result.data?["sites"];
+    List<Location> locations = [];
+    List<Location> via = [];
+
+    List? listHeliports = result.data?["locations"]; //This was for from and to
 
     // Load the data from the query into the _locations list
     for (var location in listHeliports!) {
-      locations.add(Site(id: location["id"], name: location["name"]));
+      if (location["type"] == "VIA") {
+        via.add(Location(id: location["id"], name: location["name"]));
+      } else {
+        locations.add(Location(id: location["id"], name: location["name"]));
+      }
     }
 
-    for (var site in listSites!) {
-      sites.add(Site(id: site["id"], name: site["name"]));
-    }
-
-    final List<String> delayCodes = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    DelayCode dropdownValue = DelayCode.A_HeliWeather;
 
     List<String> viaLocations = [];
+    List<int> selectedViaIds = [];
 
-    for (var via in result.data?["flight"]["via"]) {
+    for (var via in result.data?["flightById"]["via"]) {
       viaLocations.add(via["name"]);
     }
 
     final formState = useState({
-      'selectedFrom': locations
-          .indexWhere((obj) => obj.id == result.data?['flight']['from']['id']),
-      'selectedTo': locations
-          .indexWhere((obj) => obj.id == result.data?['flight']['to']['id']),
+      'selectedFrom': locations.indexWhere(
+              (obj) => obj.id == result.data?['flightById']['from']['id']),
+      'selectedTo': locations.indexWhere(
+              (obj) => obj.id == result.data?['flightById']['to']['id']),
       'via': viaLocations,
       'dropdownValue': delayCodes.first,
-      'ata': DateTime.parse(result.data?["flight"]["ata"]),
-      'atd': DateTime.parse(result.data?["flight"]["atd"]),
-      'etd': DateTime.parse(result.data?["flight"]["etd"]),
-      'blockTime': result.data?["flight"]["blockTime"],
-      'cargoPP': result.data?["flight"]["cargoPP"],
-      'delay': result.data?["flight"]["delay"],
-      'delayCode': result.data?["flight"]["delayCode"],
-      'delayDesc': result.data?["flight"]["delayDesc"],
-      'delayMin': result.data?["flight"]["delayMin"],
-      'eta': DateTime.parse(result.data?["flight"]["eta"]),
-      'flightTime': result.data?["flight"]["flightTime"],
-      'hoistCycles': result.data?["flight"]["hoistCycles"],
-      'notes': result.data?["flight"]["notes"],
-      'pax': result.data?["flight"]["pax"],
-      'paxTax': result.data?["flight"]["paxTax"],
-      'rotorStart': DateTime.parse(result.data?["flight"]["rotorStart"]),
-      'rotorStop': DateTime.parse(result.data?["flight"]["rotorStop"]),
+      'ata': DateTime.parse(result.data?["flightById"]["ata"]),
+      'atd': DateTime.parse(result.data?["flightById"]["atd"]),
+      'etd': DateTime.parse(result.data?["flightById"]["etd"]),
+      'blockTime': result.data?["flightById"]["blockTime"],
+      'flightTime': result.data?["flightById"]["flightTime"],
+      'cargoPP': result.data?["flightById"]["cargoPP"],
+      'delay': result.data?["flightById"]["delay"],
+      'delayCode': result.data?["flightById"]["delayCode"],
+      'delayDesc': result.data?["flightById"]["delayNote"],
+      'delayMin': result.data?["flightById"]["delayTime"],
+      'eta': DateTime.parse(result.data?["flightById"]["eta"]),
+      'hoistCycles': result.data?["flightById"]["hoistCycles"],
+      'notes': result.data?["flightById"]["note"],
+      'pax': result.data?["flightById"]["pax"],
+      'paxTax': result.data?["flightById"]["paxTax"],
+      'rotorStart': DateTime.parse(result.data?["flightById"]["rotorStart"]),
+      'rotorStop': DateTime.parse(result.data?["flightById"]["rotorStop"]),
     });
 
-    final isDelayed = useState(false);
+    final isDelayed = useState(formState.value['delay']);
     void toggleDelay(value) {
       isDelayed.value = !isDelayed.value;
     }
+
+    // The delay is not in the updateFlight mutation, but it is inside the createDailyUpdate
+    // \$delayBool: Boolean!, \$delayCode: String!, \$delayDesc: String!, \$delayAmount: Int!,
+    String flightMutation = """
+mutation MyMutation(\$ata: DateTime!, \$atd: DateTime!, \$blockTime: Int!, \$cargoPP: Int!, \$date: DateTime!, \$eta: DateTime!, \$etd: DateTime!, \$flightNumber: String!, \$flightTime: Int!, \$hoistCycles: Int!, \$id: Int!, \$note: String!, \$pax: Int!, \$paxTax: Int!, \$rotorStart: DateTime!, \$rotorStop: DateTime!, \$viaIds: [Int!]) {
+  updateFlight(
+    data: {ata: \$ata, atd: \$atd, blockTime: \$blockTime, cargoPP: \$cargoPP, date: \$date, eta: \$eta, etd: \$etd, flightNumber: \$flightNumber, flightTime: \$flightTime, hoistCycles: \$hoistCycles, note: \$note, pax: \$pax, paxTax: \$paxTax, rotorStart: \$rotorStart, rotorStop: \$rotorStop, viaIds: \$viaIds}
+    id: \$id
+  ) {
+    ata
+    atd
+    blockTime
+    cargoPP
+    date
+    eta
+    etd
+    flightNumber
+    flightTime
+    from {
+      id
+    }
+    hoistCycles
+    id
+    note
+    pax
+    paxTax
+    rotorStart
+    rotorStop
+  }
+}
+    """;
+
+    final readMutation = useMutation(
+      MutationOptions(
+        document: gql(flightMutation),
+        onCompleted: (dynamic resultData) {
+          Navigator.pop(context);
+        },
+      ),
+    );
 
     TextEditingController controllerETD = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['etd']));
@@ -150,21 +196,23 @@ query MyQuery(\$flightId: Int!) {
     TextEditingController controllerATA = TextEditingController(
         text: DateFormat('HH:mm').format(formState.value['ata']));
     TextEditingController controllerDelayReason =
-        TextEditingController(text: formState.value['delayDesc']);
+    TextEditingController(text: formState.value['delayDesc']);
+    TextEditingController controllerNotes =
+    TextEditingController(text: formState.value['notes']);
     TextEditingController controllerPAX =
-        TextEditingController(text: formState.value['pax'].toString());
+    TextEditingController(text: formState.value['pax'].toString());
     TextEditingController controllerPAXTax =
-        TextEditingController(text: formState.value['paxTax'].toString());
+    TextEditingController(text: formState.value['paxTax'].toString());
     TextEditingController controllerCargo =
-        TextEditingController(text: formState.value['cargoPP'].toString());
+    TextEditingController(text: formState.value['cargoPP'].toString());
     TextEditingController controllerHoistCycles =
-        TextEditingController(text: formState.value['hoistCycles'].toString());
+    TextEditingController(text: formState.value['hoistCycles'].toString());
     TextEditingController controllerBlocktime =
-        TextEditingController(text: formState.value['blockTime'].toString());
+    TextEditingController(text: formState.value['blockTime'].toString());
     TextEditingController controllerFlighttime =
-        TextEditingController(text: formState.value['flightTime'].toString());
+    TextEditingController(text: formState.value['flightTime'].toString());
     TextEditingController controllerDelayMin =
-        TextEditingController(text: formState.value['delayMin'].toString());
+    TextEditingController(text: formState.value['delayMin'].toString());
 
     useEffect(() {
       return () {
@@ -206,7 +254,7 @@ query MyQuery(\$flightId: Int!) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
                       locations.length,
-                      (index) => GestureDetector(
+                          (index) => GestureDetector(
                           onTap: () {
                             formState.value['selectedFrom'] = index;
                             formState.value = {...formState.value};
@@ -220,8 +268,15 @@ query MyQuery(\$flightId: Int!) {
                   Text("Via", style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 10),
                   MultiSelectDialogField<String>(
+                    chipDisplay: MultiSelectChipDisplay(
+                      chipColor: Theme.of(context).colorScheme.secondary,
+                      textStyle: const TextStyle(color: Colors.black),
+                      // todo: add later functionality to remove via
+                      // icon: const Icon(Icons.close, color: Colors.black),
+                      // onTap: (value){},
+                    ),
                     initialValue: formState.value['via'],
-                    items: sites
+                    items: via
                         .map((e) => MultiSelectItem(e.toString(), e.toString()))
                         .toList(),
                     validator: (value) {
@@ -233,27 +288,24 @@ query MyQuery(\$flightId: Int!) {
                     searchable: true,
                     listType: MultiSelectListType.CHIP,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.lightBlue, width: 2),
+                      border: Border.all(color: Colors.black, width: 2),
                     ),
                     cancelText: const Text("Cancel",
                         style: TextStyle(color: Colors.black)),
                     confirmText: const Text("Select",
                         style: TextStyle(color: Colors.black)),
                     itemsTextStyle: const TextStyle(color: Colors.white),
-                    unselectedColor: Colors.lightBlueAccent,
-                    selectedColor: Colors.greenAccent,
+                    unselectedColor: const Color.fromRGBO(129, 132, 135, 1),
+                    selectedColor: Theme.of(context).colorScheme.secondary,
                     selectedItemsTextStyle:
-                        const TextStyle(color: Colors.white),
-                    separateSelectedItems: true,
+                    const TextStyle(color: Colors.black),
+                    separateSelectedItems: false,
                     buttonText: const Text("Select locations"),
                     title: Text("Locations",
                         style: Theme.of(context).textTheme.titleLarge),
                     backgroundColor: Colors.white,
                     searchIcon: const Icon(Icons.search, color: Colors.black),
-
-                    //selectedItemsTextStyle: TextStyle(color: Colors.green),
                     onConfirm: (values) {
-                      print(values);
                       formState.value['via'] = values;
                       formState.value = {...formState.value};
                     },
@@ -265,7 +317,7 @@ query MyQuery(\$flightId: Int!) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
                       locations.length,
-                      (index) => GestureDetector(
+                          (index) => GestureDetector(
                         onTap: () {
                           formState.value['selectedTo'] = index;
                           formState.value = {...formState.value};
@@ -339,7 +391,7 @@ query MyQuery(\$flightId: Int!) {
                                       formState.value['etd'] = newDateTime;
 
                                       TimeOfDay etd =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
                                       TimeOfDay atd = TimeOfDay.fromDateTime(
                                           formState.value['atd']);
 
@@ -412,11 +464,10 @@ query MyQuery(\$flightId: Int!) {
                                           newDateTime;
 
                                       TimeOfDay rotorStart =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
                                       TimeOfDay rotorStopTime =
-                                          TimeOfDay.fromDateTime(
-                                              formState.value['rotorStop']);
-
+                                      TimeOfDay.fromDateTime(
+                                          formState.value['rotorStop']);
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
                                           rotorStart.hour * 60 -
@@ -485,7 +536,8 @@ query MyQuery(\$flightId: Int!) {
                                       formState.value['atd'] = newDateTime;
 
                                       TimeOfDay atd =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
+
                                       TimeOfDay ata = TimeOfDay.fromDateTime(
                                           formState.value['ata']);
 
@@ -635,10 +687,10 @@ query MyQuery(\$flightId: Int!) {
                                           newDateTime;
 
                                       TimeOfDay rotorStart =
-                                          TimeOfDay.fromDateTime(
-                                              formState.value['rotorStart']);
+                                      TimeOfDay.fromDateTime(
+                                          formState.value['rotorStart']);
                                       TimeOfDay rotorStopTime =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
 
                                       int difference = rotorStopTime.hour * 60 +
                                           rotorStopTime.minute -
@@ -710,7 +762,7 @@ query MyQuery(\$flightId: Int!) {
                                       TimeOfDay atd = TimeOfDay.fromDateTime(
                                           formState.value['atd']);
                                       TimeOfDay ata =
-                                          TimeOfDay.fromDateTime(newDateTime);
+                                      TimeOfDay.fromDateTime(newDateTime);
 
                                       int difference = ata.hour * 60 +
                                           ata.minute -
@@ -755,7 +807,7 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   try {
                                     int newVal = int.parse(value);
-                                    if( newVal < 0) {
+                                    if (newVal < 0) {
                                       return "Block Time cannot be negative";
                                     }
                                   } catch (e) {
@@ -795,7 +847,7 @@ query MyQuery(\$flightId: Int!) {
                                   }
                                   try {
                                     int newVal = int.parse(value);
-                                    if( newVal < 0) {
+                                    if (newVal < 0) {
                                       return "Flight Time cannot be negative";
                                     }
                                   } catch (e) {
@@ -842,7 +894,7 @@ query MyQuery(\$flightId: Int!) {
                             children: [
                               Text("Minutes",
                                   style:
-                                      Theme.of(context).textTheme.titleLarge),
+                                  Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 10),
                               SizedBox(
                                 // Delay amount
@@ -858,7 +910,7 @@ query MyQuery(\$flightId: Int!) {
                                       }
                                       try {
                                         int newVal = int.parse(value);
-                                        if( newVal < 0) {
+                                        if (newVal < 0) {
                                           return "Delay Time cannot be negative";
                                         }
                                       } catch (e) {
@@ -882,34 +934,37 @@ query MyQuery(\$flightId: Int!) {
                             children: [
                               Text("Delay Reason",
                                   style:
-                                      Theme.of(context).textTheme.titleLarge),
+                                  Theme.of(context).textTheme.titleLarge),
                               const SizedBox(height: 10),
                               SizedBox(
                                 // Delay Reason
                                 width: 150,
                                 height: 60,
-                                child: DropdownButtonFormField<String>(
-                                  value: formState.value['dropdownValue']
-                                      .toString(),
+                                child: DropdownButtonFormField<DelayCode>(
+                                  value: dropdownValue,
                                   icon: const Icon(Icons.arrow_downward),
                                   dropdownColor: Colors.white,
                                   style: const TextStyle(color: Colors.black),
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                   ),
-                                  onChanged: (String? value) {
+                                  onChanged: (DelayCode? value) {
                                     // This is called when the user selects an item.
                                     formState.value['dropdownValue'] = value!;
                                     formState.value = {...formState.value};
                                   },
-                                  items: delayCodes
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
+                                  items: DelayCode.values
+                                      .map<DropdownMenuItem<DelayCode>>(
+                                          (DelayCode value) {
+                                        return DropdownMenuItem<DelayCode>(
+                                          value: value,
+                                          child: Text(value
+                                              .toString()
+                                              .split('.')
+                                              .last
+                                              .replaceAll('_', ' ')),
+                                        );
+                                      }).toList(),
                                 ),
                               ),
                             ],
@@ -973,7 +1028,7 @@ query MyQuery(\$flightId: Int!) {
                                 }
                                 try {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "PAX cannot be negative";
                                   }
                                 } catch (e) {
@@ -1008,7 +1063,7 @@ query MyQuery(\$flightId: Int!) {
                                 }
                                 try {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "PAX Tax cannot be negative";
                                   }
                                 } catch (e) {
@@ -1045,7 +1100,7 @@ query MyQuery(\$flightId: Int!) {
                                   int.parse(value);
                                 } catch (e) {
                                   int newVal = int.parse(value);
-                                  if( newVal < 0) {
+                                  if (newVal < 0) {
                                     return "Cargo cannot be negative";
                                   }
                                 }
@@ -1081,11 +1136,11 @@ query MyQuery(\$flightId: Int!) {
                             }
                             try {
                               int newVal = int.parse(value);
-                              if( newVal < 0) {
+                              if (newVal < 0) {
                                 return "Hoist Cycles cannot be negative";
                               }
                             } catch (e) {
-                              return "Filed must be a number";
+                              return "This field must be a number";
                             }
                             return null;
                           },
@@ -1100,24 +1155,113 @@ query MyQuery(\$flightId: Int!) {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Additional Notes",
+                          style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: 10),
+                      Scrollbar(
+                        // Delay notes
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          child: SizedBox(
+                            width: 400,
+                            height: 200,
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "This field must not be empty";
+                                }
+                                return null;
+                              },
+                              controller: controllerNotes,
+                              maxLines: 100,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   Align(
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Validate returns true if the form is valid, or false otherwise.
                         if (formKey.currentState!.validate() &&
                             formState.value['selectedFrom'] != -1 &&
                             formState.value['selectedTo'] != -1) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
+                          for (var v in via) {
+                            if (formState.value['via'].contains(v.name)) {
+                              selectedViaIds.add(v.id);
+                            }
+                          }
 
-                          print(formState.value);
+                          // Set formState values
+                          formState.value['pax'] =
+                              int.parse(controllerPAX.text);
+                          formState.value['paxTax'] =
+                              int.parse(controllerPAXTax.text);
+                          formState.value['cargoPP'] =
+                              int.parse(controllerCargo.text);
+                          formState.value['hoistCycles'] =
+                              int.parse(controllerHoistCycles.text);
+
+                          formState.value['notes'] = controllerNotes.text;
+                          formState.value['delayDesc'] =
+                              controllerDelayReason.text;
+
+                          readMutation.runMutation({
+                            'pax': formState.value['pax'],
+                            'ata': formState.value['ata']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'atd': formState.value['atd']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'date': formState.value['etd']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'eta': formState.value['eta']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'etd': formState.value['etd']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'rotorStart': formState.value['rotorStart']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'rotorStop': formState.value['rotorStop']
+                                .toIso8601String()
+                                .replaceAll(' ', 'T'),
+                            'blockTime': formState.value['blockTime'],
+                            'cargoPP': formState.value['cargoPP'],
+                            'flightTime': formState.value['flightTime'],
+                            'hoistCycles': formState.value['hoistCycles'],
+                            'note': formState.value['notes'],
+                            'paxTax': formState.value['paxTax'],
+                            'fromId':
+                            locations[formState.value['selectedFrom']].id,
+                            'toId': locations[formState.value['selectedTo']].id,
+                            "viaIds": selectedViaIds,
+                            'id': flight.id,
+                            'flightNumber': flight.flightnumber,
+                          });
                         }
                       },
-                      child: const Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor),
+                      child: Text(
+                        'Submit',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -1144,7 +1288,7 @@ class CardWidget extends StatelessWidget {
       height: 30,
       decoration: BoxDecoration(
         border:
-            Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
+        Border.all(color: selected ? Colors.lightBlueAccent : Colors.black),
         borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Align(
