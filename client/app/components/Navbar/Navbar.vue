@@ -1,7 +1,7 @@
 <template>
   <div class="w-max my-8" :class="minimized ? 'ml-5' : ''">
     <div
-      class="flex flex-col justify-between items-center h-full bg-rose-50 px-4 rounded-xl"
+      class="flex flex-col justify-between items-center h-full bg-[#adcae6] px-4 rounded-xl"
     >
       <!-- <div
       class="flex w-max px-4 bg-rose-50 h-screen flex-col justify-between items-center mb-4"

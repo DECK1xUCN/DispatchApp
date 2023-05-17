@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col m-14 gap-12 w-full">
+  <section class="flex flex-col m-14 gap-12 w-full" v-if="!isLoading">
     <div class="flex justify-between items-end">
       <PageTitle primaryText="Daily Updates" />
       <ButtonReusable
@@ -36,7 +36,10 @@
         </TableRow>
       </TableBody>
     </Table>
-  </div>
+  </section>
+  <section v-if="isLoading" class="flex justify-center items-center w-full">
+    <Loader />
+  </section>
 </template>
 <script setup lang="ts">
 import PageTitle from "@/components/Headers/PageTitle.vue";
@@ -47,21 +50,25 @@ import TableRow from "@/components/Tables/TableRow.vue";
 import TableData from "@/components/Tables/TableData.vue";
 import { Ref, onBeforeMount, ref } from "vue";
 import DateFormat from "@/components/Helpers/DateFormat.vue";
+import Loader from "@/components/Loaders/Loader.vue";
 import query from "~/api/dailyUpdates.graphql";
 
 const router = useRouter();
 
 const dailyUpdates: Ref<Types.DailyUpdate[]> = ref([]);
+const isLoading = ref(false);
 
 onBeforeMount(() => {
   getData();
 });
 
 async function getData() {
+  isLoading.value = true;
   const { data } = await useAsyncQuery(query);
   if (data.value)
     //@ts-expect-error
     dailyUpdates.value = data.value.dailyUpdates as Types.DailyUpdate[];
+  isLoading.value = false;
 }
 
 const tableHeaders: Types.TableHeader = {

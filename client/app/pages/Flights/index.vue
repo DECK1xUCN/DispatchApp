@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col m-14 gap-12 w-full">
+  <section class="flex flex-col m-14 gap-12 w-full" v-if="!isLoading.flights">
     <div class="flex justify-between items-end">
       <PageTitle
         primaryText="Flights"
@@ -67,7 +67,13 @@
         </TableRow>
       </TableBody>
     </Table>
-  </div>
+  </section>
+  <section
+    v-if="isLoading.flights"
+    class="flex justify-center items-center w-full"
+  >
+    <Loader />
+  </section>
 </template>
 <script lang="ts" setup>
 import PageTitle from "@/components/Headers/PageTitle.vue";
@@ -79,6 +85,7 @@ import TableData from "@/components/Tables/TableData.vue";
 import { Ref, onBeforeMount, ref } from "vue";
 import TimeFormat from "@/components/Helpers/TimeFormat.vue";
 import BackButton from "@/components/Buttons/BackButton.vue";
+import Loader from "@/components/Loaders/Loader.vue";
 import { validateEmptyString } from "@/utils/validators";
 import query from "~/api/flights.graphql";
 import perDateQuery from "~/api/flightsPerDate.graphql";
@@ -102,6 +109,7 @@ onBeforeMount(() => {
 });
 
 async function getData() {
+  isLoading.value.flights = true;
   flights.value = [];
   if (validateEmptyString(inputSearchDate.value)) {
     const { data } = await useAsyncQuery(perDateQuery, {
@@ -116,6 +124,7 @@ async function getData() {
       // @ts-expect-error
       flights.value = data.value.flights as Types.Flight[];
   }
+  isLoading.value.flights = false;
 }
 
 function resetFlights() {

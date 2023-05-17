@@ -15,7 +15,7 @@
       'bg-stone-300 hover:bg-stone-400 shadow-md focus:ring-stone-400':
         editBtn === true,
     }"
-    class="inline-flex items-center rounded-lg border border-transparent bg-[#5150F4] px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 h-fit w-fit"
+    class="inline-flex items-center rounded-lg border border-transparent bg-[#00426A] px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 h-fit w-fit"
   >
     <div v-if="props.success === true && displayIcon">
       <Icon name="icon-park-outline:check-small" />

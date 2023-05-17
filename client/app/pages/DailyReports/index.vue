@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col m-14 gap-12 w-full">
+  <section class="flex flex-col m-14 gap-12 w-full" v-if="!isLoading">
     <PageTitle primaryText="Daily Reports" />
     <Table
       :tableHeaders="tableHeaders"
@@ -33,7 +33,10 @@
         </TableRow>
       </TableBody>
     </Table>
-  </div>
+  </section>
+  <section v-if="isLoading" class="flex justify-center items-center w-full">
+    <Loader />
+  </section>
 </template>
 <script setup lang="ts">
 import PageTitle from "@/components/Headers/PageTitle.vue";
@@ -43,6 +46,7 @@ import { dateFormat } from "@/utils/dateFormat";
 import TableRow from "@/components/Tables/TableRow.vue";
 import TableBody from "@/components/Tables/TableBody.vue";
 import TableData from "@/components/Tables/TableData.vue";
+import Loader from "~/components/Loaders/Loader.vue";
 import query from "~/api/dailyReports.graphql";
 
 const dailyReports: Ref<Types.DailyReport[]> = ref([]);
@@ -56,10 +60,12 @@ onBeforeMount(() => {
 const isLoading = ref(false);
 
 async function getData() {
+  isLoading.value = true;
   const { data } = await useAsyncQuery(query);
   if (data.value)
     //@ts-expect-error
     dailyReports.value = data.value.dailyReports as Types.DailyReport[];
+  isLoading.value = false;
 }
 
 const tableHeaders: Types.TableHeader = {

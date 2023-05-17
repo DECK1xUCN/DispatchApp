@@ -1,5 +1,5 @@
 <template>
-  <div class="m-14 w-full">
+  <section class="m-14 w-full" v-if="!isLoading">
     <div class="flex justify-between items-center">
       <div class="flex flex-col gap-2">
         <PageTitle :primaryText="'Locations'" />
@@ -64,7 +64,10 @@
         </TableBody>
       </Table>
     </div>
-  </div>
+  </section>
+  <section v-if="isLoading" class="flex justify-center items-center w-full">
+    <Loader />
+  </section>
 </template>
 <script setup lang="ts">
 import PageTitle from "@/components/Headers/PageTitle.vue";
@@ -73,6 +76,7 @@ import Table from "@/components/Tables/TableReusable.vue";
 import TableRow from "@/components/Tables/TableRow.vue";
 import TableData from "@/components/Tables/TableData.vue";
 import TabButton from "@/components/Buttons/TabButton.vue";
+import Loader from "@/components/Loaders/Loader.vue";
 import query from "~/api/locations.graphql";
 
 const router = useRouter();
@@ -84,12 +88,14 @@ const via: Ref<Types.Location[]> = ref([]);
 
 const activeTab: Ref<"sites" | "heliports" | "other"> = ref("sites");
 const tableHeaders: Ref<Types.TableHeader> = ref({});
+const isLoading: Ref<boolean> = ref(true);
 
 onBeforeMount(() => {
   getData();
 });
 
 async function getData() {
+  isLoading.value = true;
   const { data } = await useAsyncQuery(query);
   if (data.value) {
     //@ts-expect-error
@@ -104,6 +110,7 @@ async function getData() {
     id: "ID",
     name: "Name",
   };
+  isLoading.value = false;
 }
 
 watch(activeTab, (newVal) => {

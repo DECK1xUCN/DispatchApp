@@ -1,5 +1,5 @@
 <template>
-  <div class="m-14 h-max">
+  <section class="m-14 h-max" v-if="flight">
     <div class="flex justify-between">
       <PageTitle primaryText="Flight" :secondaryText="flight?.flightNumber" />
       <ButtonReusable
@@ -183,7 +183,12 @@
         <BackButton @click.prevent="router.go(-1)" />
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- loader -->
+  <section v-if="isLoading" class="flex justify-center items-center w-full">
+    <Loader />
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -199,6 +204,7 @@ import BackButton from "@/components/Buttons/BackButton.vue";
 import ToggleSwitch from "@/components/Input/ToggleSwitch.vue";
 import { timeFormat } from "@/utils/dateFormat";
 import DateInput from "@/components/Input/DateInput.vue";
+import Loader from "~/components/Loaders/Loader.vue";
 import ButtonReusable from "@/components/Buttons/ButtonReusable.vue";
 
 const route = useRoute();
@@ -207,16 +213,19 @@ const router = useRouter();
 const id = Number(route.params.id);
 
 const flight: Ref<Types.Flight | null> = ref(null);
+const isLoading = ref(false);
 
 onBeforeMount(() => {
   getData();
 });
 
 async function getData() {
+  isLoading.value = true;
   const { data } = await useAsyncQuery(query, { id: id });
   if (data) {
     // @ts-expect-error
     flight.value = data.value.flightById as Types.Flight;
   }
+  isLoading.value = false;
 }
 </script>
