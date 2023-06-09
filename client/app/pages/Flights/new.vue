@@ -178,9 +178,10 @@
     <div v-if="success || error">
       <div
         v-if="success"
-        class="text-green-600 bg-green-50 w-max text-2xl p-3 py-2 rounded-md"
+        class="flex gap-2 text-green-600 bg-green-100 w-max text-lg p-3 py-2 rounded-lg items-center"
       >
-        Flight created successfully! You will be redirected
+        <Icon name="prime:check" />
+        <span> Flight created successfully! You will be redirected </span>
       </div>
       <div
         v-if="error"
