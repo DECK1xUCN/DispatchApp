@@ -35,7 +35,7 @@
     "zod": "^3.21.4"
   },
   "dependencies": {
-    "@graphql-tools/schema": "^9.0.19",
+    "@graphql-tools/schema": "^10.0.0",
     "@types/node-cron": "^3.0.7",
     "jest-mock-extended": "^3.0.4",
     "node-cron": "^3.0.2"
