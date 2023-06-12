@@ -1,3 +1,4 @@
+import 'package:client/classes/flight.dart';
 import 'package:client/classes/location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -12,98 +13,6 @@ class Flights extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    String flightsQuery = """
-query MyQuery {
-  flights {
-    id
-    etd
-    flightNumber
-    from {
-      id
-      name
-    }
-    to {
-      id
-      name
-    }
-    dailyUpdate {
-      id
-    }
-    site {
-      id
-    }
-  }
-}
-  """;
-
-    String dailyUpdateFineMutation = """
-mutation MyMutation(\$flightId: Int!) {
-  createDailyUpdate(
-    input: {wasFlight: true, delay: false, maintenance: false, baseAndEquipment: false, flightId: \$flightId}
-  ) {
-    delay
-    flight {
-      id
-    }
-    baseAndEquipment
-    maintenance
-  }
-}
-    """;
-
-    final dailyUpdateFine = useMutation(
-      MutationOptions(
-        document: gql(dailyUpdateFineMutation),
-      ),
-    );
-
-    final readFlights = useQuery(
-      QueryOptions(
-        document: gql(flightsQuery),
-        pollInterval: const Duration(seconds: 2),
-      ),
-    );
-    final result = readFlights.result;
-
-    if (result.hasException) {
-      return const SafeArea(
-          child:
-              Center(child: Text("An error occurred, check the console :(")));
-    }
-
-    if (result.isLoading) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(
-          child: SpinKitFoldingCube(
-            color: Theme.of(context).primaryColor,
-            size: 50.0,
-          ),
-        ),
-      );
-    }
-
-    List? flightList = result.data?["flights"];
-    List<FlightSimple> flights = [];
-
-    for (var flight in flightList!) {
-      var flightObject = FlightSimple(
-          id: flight['id'],
-          etd: DateTime.parse(flight['etd']),
-          flightnumber: flight['flightNumber'],
-          from:
-              Location(id: flight['from']['id'], name: flight['from']['name']),
-          to: Location(id: flight['to']['id'], name: flight['to']['name']),
-          siteId: flight['site']['id']);
-
-      if (flight['dailyUpdate'] != null) {
-        flightObject.hasDU = true;
-      }
-
-      flights.add(flightObject);
-    }
-
-    flights.sort((a, b) => a.etd.compareTo(b.etd));
 
     List<Widget> generateRows(flights) {
       List<Widget> rows = [];
@@ -176,10 +85,6 @@ mutation MyMutation(\$flightId: Int!) {
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();
-                                                      dailyUpdateFine
-                                                          .runMutation({
-                                                        'flightId': flight.id
-                                                      });
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
@@ -240,6 +145,16 @@ mutation MyMutation(\$flightId: Int!) {
       }
       return rows;
     }
+
+    Location from = Location(name: 'London', id: 1);
+    Location to = Location(name: 'New York', id: 2);
+
+    var flights = [
+      FlightSimple(id: 1, etd: DateTime.now(), flightnumber: 'FL111', from: from, to: to, siteId: 1, hasDU: true),
+      FlightSimple(id: 2, etd: DateTime.now().add(const Duration(hours: 1)), flightnumber: 'FL222', from: from, to: to, siteId: 1, hasDU: true),
+      FlightSimple(id: 3, etd: DateTime.now().add(const Duration(hours: 2)), flightnumber: 'FL333', from: from, to: to, siteId: 1, hasDU: false),
+      FlightSimple(id: 4, etd: DateTime.now().add(const Duration(hours: 3)), flightnumber: 'FL444', from: from, to: to, siteId: 1, hasDU: false),
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
