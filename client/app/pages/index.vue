@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-col m-14 gap-12 w-full">
-    <PageTitle :primaryText="`Welcome, ${name}!`" :secondaryText="position" />
+    <HeadersPageTitle
+      :primaryText="`Welcome, ${name}!`"
+      :secondaryText="position"
+    />
     <div class="mt-72">
       <h1 class="font-bold text-2xl mb-8">Today</h1>
       <div
@@ -15,8 +18,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import PageTitle from "~/components/Headers/PageTitle.vue";
-
 const name = "Jim Nielsen";
 const position = "Airpot Flight Officer";
 </script>

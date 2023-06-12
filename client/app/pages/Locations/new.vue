@@ -1,14 +1,14 @@
 <template>
   <div class="m-14 w-max h-max">
-    <PageTitle
+    <HeadersPageTitle
       :primaryText="'New location'"
       class="flex justify-between items-end"
     />
     <div
       class="flex flex-col gap-12 w-full mt-6 bg-white rounded-md shadow-md p-5 lg:px-16 lg:py-10 xl:px-20 xl:py-14"
     >
-      <div>
-        <Label>Location Type</Label>
+      <div class="flex flex-col">
+        <HeadersHeadersLabel>Location Type</HeadersHeadersLabel>
         <select
           v-model="selectedType"
           class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
@@ -30,10 +30,14 @@
         @submit.prevent="submit"
       >
         <div>
-          <Label>Name</Label>
+          <HeadersLabel>Name</HeadersLabel>
           <Input v-model="newSite.name" />
         </div>
-        <ButtonReusable :primaryText="'Submit'" type="submit" />
+        <ButtonsButtonReusable
+          :primaryText="'Submit'"
+          type="submit"
+          :loading="isLoading"
+        />
       </form>
 
       <form
@@ -42,33 +46,33 @@
           selectedType === 'AIRPORT' ||
           selectedType === 'VIA'
         "
-        @submit.prevent=""
+        @submit.prevent="submit()"
         class="flex flex-col gap-y-4"
       >
         <div>
-          <Label>Name</Label>
+          <HeadersLabel>Name</HeadersLabel>
           <Input v-model="newLocation.name" type="text" />
         </div>
         <div class="flex flex-col gap-x-6">
-          <Label><span class="text-2xl">Coordinates</span></Label>
+          <HeadersLabel><span class="text-2xl">Coordinates</span></HeadersLabel>
           <div class="flex flex-wrap gap-x-6">
             <div>
-              <Label>Latitude</Label>
+              <HeadersLabel>Latitude</HeadersLabel>
               <Input v-model="newLocation.lat" type="number" />
             </div>
             <div>
-              <Label>Longitude</Label>
+              <HeadersLabel>Longitude</HeadersLabel>
               <Input v-model="newLocation.lng" type="number" />
             </div>
           </div>
         </div>
         <div class="flex flex-col gap-1">
-          <Label>Site</Label>
+          <HeadersLabel>Site</HeadersLabel>
           <!-- <VueMultiselect
             v-model="selectedHeliport"
             :options="sites"
             track-by="id"
-            label="name"
+            HeadersLabel="name"
             style="min-width: 16rem; max-width: 16rem"
           /> -->
           <select
@@ -81,21 +85,23 @@
             </option>
           </select>
         </div>
-        <ButtonReusable
+        <ButtonsButtonReusable
           :primaryText="'Submit'"
           type="submit"
-          @click.prevent="submit"
+          :loading="isLoading"
         />
       </form>
+      <ResponsesError v-if="isError">
+        {{ errorMessage }}
+      </ResponsesError>
+      <ResponsesSuccess v-if="isSuccess">
+        Location created successfully!
+      </ResponsesSuccess>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import PageTitle from "@/components/Headers/PageTitle.vue";
-import Label from "@/components/Headers/Label.vue";
-import Input from "@/components/Input/Input.vue";
-import ButtonReusable from "@/components/Buttons/ButtonReusable.vue";
 import query from "~/api/sitesMinDetails.graphql";
 import createSite from "~/api/createSite.graphql";
 import createLocation from "~/api/createLocation.graphql";
@@ -107,6 +113,24 @@ const selectedHeliport: Ref<Types.Location | null> = ref(null);
 const newLocation: Ref<Types.CreateLocation> = ref({} as Types.CreateLocation);
 
 const sites: Ref<Types.Site[]> = ref([]);
+
+onBeforeMount(() => {
+  getData();
+});
+
+type Response = {
+  sites: Types.Site[];
+};
+async function getData() {
+  isLoading.value = true;
+  const { data } = await useAsyncQuery<Response>({
+    query,
+  });
+  if (data.value) {
+    sites.value = data.value.sites;
+  }
+  isLoading.value = false;
+}
 
 watch(
   () => selectedHeliport.value,
@@ -124,21 +148,13 @@ watch(
   }
 );
 
-onBeforeMount(() => {
-  getData();
-});
-
-async function getData() {
-  const { data } = await useAsyncQuery({
-    query,
-  });
-  if (data.value) {
-    // @ts-expect-error
-    sites.value = data.value.sites;
-  }
-}
+const isLoading = ref(false);
+const isSuccess = ref(false);
+const isError = ref(false);
+const errorMessage = ref("");
 
 function submit() {
+  isLoading.value = true;
   if (selectedType.value === "SITE") {
     useMutation(createSite, {
       variables: {
@@ -147,10 +163,14 @@ function submit() {
     })
       .mutate()
       .then((res) => {
-        console.log(res?.data.createSite);
+        isSuccess.value = true;
       })
       .catch((err) => {
-        console.log(err);
+        isError.value = true;
+        errorMessage.value = err.message;
+      })
+      .finally(() => {
+        isLoading.value = false;
       });
   } else {
     useMutation(createLocation, {
@@ -164,10 +184,14 @@ function submit() {
     })
       .mutate()
       .then((res) => {
-        alert(res?.data.createLocation);
+        isSuccess.value = true;
       })
       .catch((err) => {
-        alert(err);
+        isError.value = true;
+        errorMessage.value = err.message;
+      })
+      .finally(() => {
+        isLoading.value = false;
       });
   }
 }

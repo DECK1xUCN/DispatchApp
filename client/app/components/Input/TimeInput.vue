@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-1">
-    <Label>
-      <slot></slot>
-    </Label>
+    <HeadersLabel>
+      <slot />
+    </HeadersLabel>
     <input
       type="time"
       id="appt"
@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import Label from "@/components/Headers/Label.vue";
 defineProps<{
   value?: string;
   isDisabled?: boolean;

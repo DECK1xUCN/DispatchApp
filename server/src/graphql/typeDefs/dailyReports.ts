@@ -14,6 +14,9 @@ const dailyReportTypeDefs = gql`
     dailyReportByDate(date: DateTime!): [DailyReport!]!
     dailyReports(date: DateTime, id: Int): [DailyReport!]!
   }
+  type Mutation {
+    createDailyReports: Boolean!
+  }
 `;
 
 export default dailyReportTypeDefs;

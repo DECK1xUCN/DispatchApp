@@ -4,6 +4,7 @@ query ($date: DateTime!) {
     eta
     etd
     flightNumber
+    date
     to {
       name
     }

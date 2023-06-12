@@ -1,7 +1,7 @@
 mutation (
-  $flightId: Int
+  $flightId: Int!
   $wasFlight: Boolean!
-  $delay: Boolean
+  $delay: Boolean!
   $delayCode: String
   $delayTime: Int
   $delayDesc: String

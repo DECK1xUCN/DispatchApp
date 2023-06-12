@@ -4,6 +4,7 @@ query {
     eta
     etd
     flightNumber
+    date
     to {
       name
     }

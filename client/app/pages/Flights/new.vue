@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4 m-14 w-full">
-    <PageTitle primaryText="Flight" />
+    <HeadersPageTitle primaryText="Flight" />
     <form
       class="flex flex-col gap-12 w-full mt-6 bg-white rounded-md shadow-md p-5"
       @submit.prevent="submit"
@@ -8,11 +8,11 @@
       <!-- Flight number -->
       <div class="flex flex-wrap gap-x-10 gap-y-4">
         <div>
-          <Label>Flight Number</Label>
+          <HeadersLabel>Flight Number</HeadersLabel>
           <Input v-model="newFlight.flightNumber" />
         </div>
         <div>
-          <Label>Site</Label>
+          <HeadersLabel>Site</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.siteId"
@@ -30,7 +30,7 @@
       </div>
       <div class="flex flex-wrap gap-x-10 gap-y-4">
         <div>
-          <Label>Pilot</Label>
+          <HeadersLabel>Pilot</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.pilotId"
@@ -46,7 +46,7 @@
           </select>
         </div>
         <div>
-          <Label>Hoist Operator</Label>
+          <HeadersLabel>Hoist Operator</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.hoistOperatorId"
@@ -62,7 +62,7 @@
           </select>
         </div>
         <div>
-          <Label>Helicopter</Label>
+          <HeadersLabel>Helicopter</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.helicopterId"
@@ -82,7 +82,7 @@
       <div class="flex flex-wrap gap-x-10 gap-y-4">
         <!-- From -->
         <div>
-          <Label>From</Label>
+          <HeadersLabel>From</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.fromId"
@@ -100,7 +100,7 @@
         <!-- From -->
         <!-- To -->
         <div>
-          <Label>To</Label>
+          <HeadersLabel>To</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.toId"
@@ -118,7 +118,7 @@
         <!-- To -->
         <!-- Via -->
         <div>
-          <Label>Via</Label>
+          <HeadersLabel>Via</HeadersLabel>
           <select
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
             v-model="newFlight.viaIds"
@@ -138,15 +138,15 @@
       <!-- Time Input -->
       <div class="flex flex-wrap gap-x-10 gap-y-4">
         <div>
-          <Label>Date</Label>
+          <HeadersLabel>Date</HeadersLabel>
           <Input type="date" v-model="newFlight.date" />
         </div>
         <div>
-          <Label>ETD</Label>
+          <HeadersLabel>ETD</HeadersLabel>
           <Input type="time" v-model="newFlight.etd" />
         </div>
         <div>
-          <Label>ETA</Label>
+          <HeadersLabel>ETA</HeadersLabel>
           <Input type="time" v-model="newFlight.eta" />
         </div>
       </div>
@@ -154,52 +154,44 @@
       <!-- PAX and Cargo -->
       <div class="flex flex-wrap gap-x-10 gap-y-4">
         <div>
-          <Label>PAX</Label>
+          <HeadersLabel>PAX</HeadersLabel>
           <Input type="number" v-model="newFlight.pax" />
         </div>
         <div>
-          <Label>PAX TAX</Label>
+          <HeadersLabel>PAX TAX</HeadersLabel>
           <Input type="number" v-model="newFlight.paxTax" :isDisabled="true" />
         </div>
         <div>
-          <Label>Cargo per Person</Label>
+          <HeadersLabel>Cargo per Person</HeadersLabel>
           <Input type="number" v-model="newFlight.cargoPP" />
         </div>
         <div>
-          <Label>Hoist Cycles</Label>
+          <HeadersLabel>Hoist Cycles</HeadersLabel>
           <Input type="number" v-model="newFlight.hoistCycles" />
         </div>
       </div>
       <div class="flex self-end gap-x-4">
-        <BackButton @click.prevent="router.go(-1)" />
-        <ButtonReusable type="submit" text="Create Flight" />
+        <ButtonsBackButton @click.prevent="router.go(-1)" />
+        <ButtonsButtonReusable
+          type="submit"
+          text="Create Flight"
+          :loading="isLoading"
+        />
       </div>
     </form>
-    <div v-if="success || error">
-      <div
-        v-if="success"
-        class="flex gap-2 text-green-600 bg-green-100 w-max text-lg p-3 py-2 rounded-lg items-center"
-      >
-        <Icon name="prime:check" />
-        <span> Flight created successfully! You will be redirected </span>
-      </div>
-      <div
-        v-if="error"
-        class="text-red-600 bg-red-50 w-max text-2xl p-3 py-2 rounded-md"
-      >
+    <div v-if="isSuccess || isError">
+      <ResponsesSuccess v-if="isSuccess">
+        Flight was successfully created!
+      </ResponsesSuccess>
+      <ResponsesError v-if="isError">
         {{ errorMessage }}
-      </div>
+      </ResponsesError>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import PageTitle from "@/components/Headers/PageTitle.vue";
-import Input from "@/components/Input/Input.vue";
-import Label from "@/components/Headers/Label.vue";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import ButtonReusable from "@/components/Buttons/ButtonReusable.vue";
-import BackButton from "@/components/Buttons/BackButton.vue";
 
 import detailsQuery from "~/api/createFlightData.graphql";
 import optionsQuery from "~/api/createFlightOptions.graphql";
@@ -216,8 +208,9 @@ const via: Ref<Types.Location[]> = ref([]);
 const pilots: Ref<Types.Pilot[]> = ref([]);
 const hoistOperators: Ref<Types.HoistOperator[]> = ref([]);
 
-const success = ref(false);
-const error = ref(false);
+const isLoading = ref(false);
+const isSuccess = ref(false);
+const isError = ref(false);
 const errorMessage = ref("");
 
 watch(
@@ -259,29 +252,42 @@ onBeforeMount(() => {
   getData();
 });
 
+type DataResponse = {
+  sites: Types.Site[];
+  pilots: Types.Pilot[];
+  hoistOperators: Types.HoistOperator[];
+  helicopters: Types.Helicopter[];
+};
 async function getData() {
-  const { data } = (await useAsyncQuery(detailsQuery)) as any;
+  const { data } = await useAsyncQuery<DataResponse>(detailsQuery);
   if (data.value) {
-    sites.value = data.value.sites as Types.Site[];
-    pilots.value = data.value.pilots as Types.Pilot[];
-    hoistOperators.value = data.value.hoistOperators as Types.HoistOperator[];
-    helicopters.value = data.value.helicopters as Types.Helicopter[];
+    sites.value = data.value.sites;
+    pilots.value = data.value.pilots;
+    hoistOperators.value = data.value.hoistOperators;
+    helicopters.value = data.value.helicopters;
   }
 }
 
+type OptionsResponse = {
+  heliportsPerSite: Types.Location[];
+  viaPerSite: Types.Location[];
+};
 async function getFlightOptions(siteId: number) {
   heliports.value = [];
   via.value = [];
-  const { data } = (await useAsyncQuery(optionsQuery, {
+  const { data } = await useAsyncQuery<OptionsResponse>(optionsQuery, {
     siteId,
-  })) as any;
+  });
   if (data.value) {
-    heliports.value = data.value.heliportsPerSite as Types.Location[];
-    via.value = data.value.viaPerSite as Types.Location[];
+    heliports.value = data.value.heliportsPerSite;
+    via.value = data.value.viaPerSite;
   }
 }
 
 function submit() {
+  isLoading.value = true;
+  isSuccess.value = false;
+  isError.value = false;
   useMutation(mutation, {
     variables: {
       flightNumber: newFlight.value.flightNumber,
@@ -293,8 +299,8 @@ function submit() {
       fromId: newFlight.value.fromId,
       toId: newFlight.value.toId,
       viaIds: newFlight.value.viaIds,
-      etd: "2023-05-07T21:00:00.002Z",
-      eta: "2023-05-07T21:00:00.002Z",
+      etd: newFlight.value.date + "T" + newFlight.value.etd + ":00.002Z",
+      eta: newFlight.value.date + "T" + newFlight.value.eta + ":00.002Z",
       pax: newFlight.value.pax,
       paxTax: newFlight.value.paxTax,
       cargoPP: newFlight.value.cargoPP,
@@ -303,19 +309,14 @@ function submit() {
   })
     .mutate()
     .then(() => {
-      success.value = true;
+      isSuccess.value = true;
     })
     .catch((err) => {
-      error.value = true;
+      isError.value = true;
       errorMessage.value = err.message;
     })
     .finally(() => {
-      setTimeout(() => {
-        success.value = false;
-        error.value = false;
-        errorMessage.value = "";
-        router.push("/flights");
-      }, 4000);
+      isLoading.value = false;
     });
 }
 </script>

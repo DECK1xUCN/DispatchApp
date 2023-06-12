@@ -1,52 +1,48 @@
 <template>
   <section class="flex flex-col m-14 gap-12 w-full" v-if="!isLoading">
-    <PageTitle primaryText="Daily Reports" />
-    <Table
+    <HeadersPageTitle primaryText="Daily Reports" />
+    <TablesTableReusable
       :tableHeaders="tableHeaders"
       :tableData="dailyReports"
       :reports="true"
     >
-      <TableRow
+      <TablesTableRow
         v-for="dailyReport in dailyReports"
         class="flex-auto bg-gray-50 hover:cursor-pointer text-center border-t border-slate-150 h-12"
         @click.prevent="router.push(`/dailyReports/${dailyReport.id}`)"
       >
-        <TableData>{{ dailyReport.id }}</TableData>
-        <TableData>
+        <TablesTableData>
+          <TablesTableId>{{ dailyReport.id }}</TablesTableId>
+        </TablesTableData>
+        <TablesTableData>
           <span v-if="dailyReport.date">
             {{ dateFormat(dailyReport.date) }}
           </span>
           <span v-else>N/A</span>
-        </TableData>
-        <TableData>
+        </TablesTableData>
+        <TablesTableData>
           <span v-if="dailyReport.flights">
             {{ dailyReport.flights.length }}
           </span>
           <span v-else>N/A</span>
-        </TableData>
-      </TableRow>
-      <TableBody v-if="dailyReports.length === 0">
-        <TableRow
+        </TablesTableData>
+      </TablesTableRow>
+      <TablesTableBody v-if="dailyReports.length === 0">
+        <TablesTableRow
           class="flex-auto bg-gray-50 text-center border-t border-slate-150 h-12"
         >
-          <TableData colspan="3">No Daily reports found</TableData>
-        </TableRow>
-      </TableBody>
-    </Table>
+          <TablesTableData colspan="3">No Daily reports found</TablesTableData>
+        </TablesTableRow>
+      </TablesTableBody>
+    </TablesTableReusable>
   </section>
   <section v-if="isLoading" class="flex justify-center items-center w-full">
-    <Loader />
+    <LoadersLoader />
   </section>
 </template>
 <script setup lang="ts">
-import PageTitle from "@/components/Headers/PageTitle.vue";
-import Table from "@/components/Tables/TableReusable.vue";
 import { Ref, onBeforeMount, ref } from "vue";
 import { dateFormat } from "@/utils/dateFormat";
-import TableRow from "@/components/Tables/TableRow.vue";
-import TableBody from "@/components/Tables/TableBody.vue";
-import TableData from "@/components/Tables/TableData.vue";
-import Loader from "~/components/Loaders/Loader.vue";
 import query from "~/api/dailyReports.graphql";
 
 const dailyReports: Ref<Types.DailyReport[]> = ref([]);
@@ -59,11 +55,13 @@ onBeforeMount(() => {
 
 const isLoading = ref(false);
 
+type Response = {
+  dailyReports: Types.DailyReport[];
+};
 async function getData() {
   isLoading.value = true;
-  const { data } = await useAsyncQuery(query);
+  const { data } = await useAsyncQuery<Response>(query);
   if (data.value)
-    //@ts-expect-error
     dailyReports.value = data.value.dailyReports as Types.DailyReport[];
   isLoading.value = false;
 }

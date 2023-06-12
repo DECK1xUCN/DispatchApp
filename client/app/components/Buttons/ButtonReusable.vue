@@ -6,7 +6,7 @@
     :aria-pressed="pressed"
     :type="props.type"
     :class="{
-      'bg-indigo-700': loading === true || disabled === true,
+      'bg-[#00426A] hover:bg-[#003b5f]': loading === true || disabled === true,
       'cursor-wait': loading === true,
       'bg-red-600 hover:bg-red-700 shadow-md focus:ring-red-700':
         warningBtn === true,
@@ -15,7 +15,7 @@
       'bg-stone-300 hover:bg-stone-400 shadow-md focus:ring-stone-400':
         editBtn === true,
     }"
-    class="inline-flex items-center rounded-lg border border-transparent bg-[#00426A] px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 h-fit w-fit"
+    class="inline-flex items-center rounded-lg border border-transparent bg-[#00426A] px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-[#003b5f] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 h-fit w-fit"
   >
     <div v-if="props.success === true && displayIcon">
       <Icon name="icon-park-outline:check-small" />

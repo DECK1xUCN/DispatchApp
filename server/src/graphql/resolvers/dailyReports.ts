@@ -20,6 +20,7 @@ const dailyReportResolver = {
     },
 
     dailyReports: async (_: any, args: { date?: string; id?: number }) => {
+      // await DailyReportService.createDailyReports();
       let dailyReports;
       if (args.date) {
         dailyReports = await DailyReportService.getDailyReportByDate(args.date);
@@ -30,6 +31,12 @@ const dailyReportResolver = {
       }
       if (!dailyReports) throw createGraphQLError("No daily reports found");
       return dailyReports;
+    },
+  },
+
+  Mutation: {
+    createDailyReports: async () => {
+      return await DailyReportService.createDailyReports();
     },
   },
 };

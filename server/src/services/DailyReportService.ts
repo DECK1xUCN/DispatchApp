@@ -1,3 +1,4 @@
+import { Flight } from "@prisma/client";
 import { ctx } from "../utils/context";
 import { formatDate } from "../utils/dateHelper";
 import { createGraphQLError } from "graphql-yoga";
@@ -36,5 +37,40 @@ export default {
         throw createGraphQLError("No daily reports found");
       });
     return dailyReports;
+  },
+
+  createDailyReports: async () => {
+    const flights = await ctx.prisma.flight.findMany({
+      where: {
+        editable: false,
+        dailyReportId: null,
+        date: { lte: new Date() },
+      },
+    });
+
+    const dailyReports = new Map<Date, Flight[]>();
+
+    flights.forEach((flight) => {
+      const date = flight.date;
+      if (dailyReports.has(date)) {
+        const flightsForDate = dailyReports.get(date);
+        if (flightsForDate) {
+          flightsForDate.push(flight);
+        }
+      } else {
+        dailyReports.set(date, [flight]);
+      }
+    });
+
+    for (const [date, flights] of dailyReports.entries()) {
+      await ctx.prisma.dailyReport.create({
+        data: {
+          date,
+          flights: { connect: flights.map((flight) => ({ id: flight.id })) },
+        },
+      });
+    }
+
+    return true;
   },
 };

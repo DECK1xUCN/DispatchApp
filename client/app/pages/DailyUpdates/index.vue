@@ -1,56 +1,52 @@
 <template>
   <section class="flex flex-col m-14 gap-12 w-full" v-if="!isLoading">
     <div class="flex justify-between items-end">
-      <PageTitle primaryText="Daily Updates" />
-      <ButtonReusable
+      <HeadersPageTitle primaryText="Daily Updates" />
+      <ButtonsButtonReusable
         text="New Update"
         @click.prevent="router.push('dailyUpdates/new')"
       />
     </div>
-    <Table :tableHeaders="tableHeaders">
-      <TableRow
+    <TablesTableReusable :tableHeaders="tableHeaders">
+      <TablesTableRow
         v-for="dailyUpdate in dailyUpdates"
         :key="dailyUpdate.id"
         class="flex-auto bg-gray-50 text-center border-t border-slate-150 h-12 cursor-pointer"
         @click.prevent="router.push(`/dailyUpdates/${dailyUpdate.id}`)"
       >
-        <TableData>{{ dailyUpdate.id }}</TableData>
-        <TableData>{{ dailyUpdate.flight.flightNumber }}</TableData>
-        <TableData><DateFormat :date="dailyUpdate.flight.date" /></TableData>
-        <TableData>
+        <TablesTableData>
+          <TablesTableId> {{ dailyUpdate.id }}</TablesTableId>
+        </TablesTableData>
+        <TablesTableData>{{ dailyUpdate.flight.flightNumber }}</TablesTableData>
+        <TablesTableData>
+          <HelpersDateFormat :date="dailyUpdate.flight.date" />
+        </TablesTableData>
+        <TablesTableData>
           <span
             v-if="dailyUpdate.delay === false"
             class="bg-green-100 text-green-700 p-1 px-3 rounded-md"
-            >on time</span
-          >
-          <span v-else class="bg-red-100 text-red-700 p-1 px-3 rounded-md"
-            >delayed</span
-          >
-        </TableData>
-      </TableRow>
-      <TableBody v-if="dailyUpdates.length === 0">
-        <TableRow
+            >on time
+          </span>
+          <span v-else class="bg-red-100 text-red-700 p-1 px-3 rounded-md">
+            delayed
+          </span>
+        </TablesTableData>
+      </TablesTableRow>
+      <TablesTableBody v-if="dailyUpdates.length === 0">
+        <TablesTableRow
           class="flex-auto bg-gray-50 text-center border-t border-slate-150 h-12"
         >
-          <TableData colspan="4">No daily updates found</TableData>
-        </TableRow>
-      </TableBody>
-    </Table>
+          <TablesTableData colspan="4">No daily updates found</TablesTableData>
+        </TablesTableRow>
+      </TablesTableBody>
+    </TablesTableReusable>
   </section>
   <section v-if="isLoading" class="flex justify-center items-center w-full">
-    <Loader />
+    <LoadersLoader />
   </section>
 </template>
 <script setup lang="ts">
-import PageTitle from "@/components/Headers/PageTitle.vue";
-import ButtonReusable from "@/components/Buttons/ButtonReusable.vue";
-import Table from "@/components/Tables/TableReusable.vue";
-import TableBody from "@/components/Tables/TableBody.vue";
-import TableRow from "@/components/Tables/TableRow.vue";
-import TableData from "@/components/Tables/TableData.vue";
 import { Ref, onBeforeMount, ref } from "vue";
-import DateFormat from "@/components/Helpers/DateFormat.vue";
-import Loader from "@/components/Loaders/Loader.vue";
 import query from "~/api/dailyUpdates.graphql";
 
 const router = useRouter();
@@ -62,11 +58,13 @@ onBeforeMount(() => {
   getData();
 });
 
+type Response = {
+  dailyUpdates: Types.DailyUpdate[];
+};
 async function getData() {
   isLoading.value = true;
-  const { data } = await useAsyncQuery(query);
+  const { data } = await useAsyncQuery<Response>(query);
   if (data.value)
-    //@ts-expect-error
     dailyUpdates.value = data.value.dailyUpdates as Types.DailyUpdate[];
   isLoading.value = false;
 }

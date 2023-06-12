@@ -1,31 +1,34 @@
 <template>
   <div class="m-14 w-full h-max">
-    <PageTitle primaryText="Daily Update" :secondary-text="'ID: ' + id" />
+    <HeadersPageTitle
+      primaryText="Daily Update"
+      :secondary-text="'ID: ' + id"
+    />
     <form
       class="flex flex-col gap-12 w-max mt-6 bg-white rounded-md shadow-md p-5 lg:px-16 lg:py-10 xl:px-20 xl:py-14"
-      v-if="dailyUpdate"
+      v-if="dailyUpdate && !isLoading"
     >
       <div class="flex flex-col gap-4 items-start">
         <div class="flex gap-4 items-center">
-          <Label>Was flight?</Label>
+          <HeadersLabel>Was flight?</HeadersLabel>
           <ToggleSwitch v-model="dailyUpdate.wasFlight" :disabled="true" />
         </div>
         <div v-if="dailyUpdate.wasFlight" class="flex flex-col gap-1">
-          <Label>Flight</Label>
+          <HeadersLabel>Flight</HeadersLabel>
           <Input v-model="dailyUpdate.flight.flightNumber" :isDisabled="true" />
         </div>
       </div>
       <div class="flex flex-col gap-3">
         <div v-if="dailyUpdate.wasFlight" class="flex gap-4 items-center">
-          <Label>Delay</Label>
+          <HeadersLabel>Delay</HeadersLabel>
           <ToggleSwitch v-model="dailyUpdate.delay" :disabled="true" />
         </div>
         <div v-if="dailyUpdate.delay" class="flex flex-col gap-2">
-          <Label>Delay Code</Label>
+          <HeadersLabel>Delay Code</HeadersLabel>
           <Input v-model="dailyUpdate.delayCode" :isDisabled="true" />
         </div>
         <div v-if="dailyUpdate.delay" class="flex flex-col gap-1">
-          <Label>Delay Time (min)</Label>
+          <HeadersLabel>Delay Time (min)</HeadersLabel>
           <Input
             type="number"
             v-model="dailyUpdate.delayTime"
@@ -33,63 +36,64 @@
           />
         </div>
         <div v-if="dailyUpdate.delay" class="flex flex-col gap-1">
-          <Label>Delay description</Label>
+          <HeadersLabel>Delay description</HeadersLabel>
           <TextArea v-model="dailyUpdate.delayDesc" :isDisabled="true" />
         </div>
       </div>
 
       <div class="flex flex-col gap-3">
         <div class="flex gap-4 items-center">
-          <Label>Maintenance</Label>
+          <HeadersLabel>Maintenance</HeadersLabel>
           <ToggleSwitch v-model="dailyUpdate.maintenance" :disabled="true" />
         </div>
         <div class="flex gap-4 items-center" v-if="dailyUpdate.maintenance">
-          <Label>Unplanned Maintenance</Label>
+          <HeadersLabel>Unplanned Maintenance</HeadersLabel>
           <ToggleSwitch
             v-model="dailyUpdate.unplannedMaintenance"
             :disabled="true"
           />
         </div>
         <div class="flex gap-4 items-center" v-if="dailyUpdate.maintenance">
-          <Label>Planned Maintenance</Label>
+          <HeadersLabel>Planned Maintenance</HeadersLabel>
           <ToggleSwitch
             v-model="dailyUpdate.plannedMaintenance"
             :disabled="true"
           />
         </div>
         <div class="flex gap-4 items-center" v-if="dailyUpdate.maintenance">
-          <Label>Other Maintenance</Label>
+          <HeadersLabel>Other Maintenance</HeadersLabel>
           <ToggleSwitch
             v-model="dailyUpdate.otherMaintenance"
             :disabled="true"
           />
         </div>
         <div class="flex flex-col gap-1" v-if="dailyUpdate.maintenance">
-          <Label>Maintenance note</Label>
+          <HeadersLabel>Maintenance note</HeadersLabel>
           <TextArea v-model="dailyUpdate.maintenanceNote" :isDisabled="true" />
         </div>
       </div>
 
       <div class="flex gap-4">
-        <Label>Base and Equipment</Label>
+        <HeadersLabel>Base and Equipment</HeadersLabel>
         <ToggleSwitch v-model="dailyUpdate.baseAndEquipment" :disabled="true" />
       </div>
 
       <div class="flex flex-col gap-1">
-        <Label>Note</Label>
+        <HeadersLabel>Note</HeadersLabel>
         <TextArea v-model="dailyUpdate.note" :isDisabled="true" />
       </div>
       <div class="flex self-end gap-x-4">
-        <BackButton @click.prevent="router.go(-1)" />
+        <ButtonsBackButton @click.prevent="router.go(-1)" />
       </div>
     </form>
+    <section v-if="isLoading" class="flex justify-center items-center w-full">
+      <LoadersLoader />
+    </section>
   </div>
 </template>
 <script setup lang="ts">
-import PageTitle from "@/components/Headers/PageTitle.vue";
-import Label from "@/components/Headers/Label.vue";
 import TextArea from "@/components/Input/TextArea.vue";
-import BackButton from "@/components/Buttons/BackButton.vue";
+
 import ToggleSwitch from "@/components/Input/ToggleSwitch.vue";
 import Input from "@/components/Input/Input.vue";
 import query from "~/api/dailyUpdateDetails.graphql";
@@ -100,16 +104,21 @@ const route = useRoute();
 const dailyUpdate: Ref<Types.DailyUpdate | null> = ref(null);
 
 const id = Number(route.params.id);
+const isLoading = ref(false);
 
 onBeforeMount(() => {
   getData();
 });
 
+type Response = {
+  dailyUpdate: Types.DailyUpdate;
+};
 async function getData() {
-  const { data } = await useAsyncQuery(query, { id: id });
+  isLoading.value = true;
+  const { data } = await useAsyncQuery<Response>(query, { id: id });
   if (data.value) {
-    // @ts-expect-error
     dailyUpdate.value = data.value.dailyUpdate;
   }
+  isLoading.value = false;
 }
 </script>

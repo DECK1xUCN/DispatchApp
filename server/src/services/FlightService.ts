@@ -328,9 +328,12 @@ export default {
           hoistOperatorId: data.hoistOperatorId ?? data.hoistOperatorId,
           siteId: data.siteId ?? data.siteId,
           fromId: data.fromId ?? data.fromId,
-          via: (data.viaIds && data.viaIds.length > 0) ?? {
-            connect: data.viaIds.map((id) => ({ id })),
-          },
+          via:
+            data.viaIds && data.viaIds.length > 0
+              ? {
+                  connect: data.viaIds.map((id) => ({ id })),
+                }
+              : undefined,
           toId: data.toId ?? data.toId,
           etd: data.etd ?? formatDate(data.etd),
           rotorStart: data.rotorStart ?? formatDate(data.rotorStart),

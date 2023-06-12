@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-1">
-    <Label>
+    <HeadersLabel>
       <slot></slot>
-    </Label>
+    </HeadersLabel>
     <input
       type="date"
       id="date"
@@ -16,7 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import Label from "@/components/Headers/Label.vue";
 import { graphqlDateFormat } from "@/utils/dateFormat";
 
 const props = defineProps<{

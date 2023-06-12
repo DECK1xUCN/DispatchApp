@@ -1,20 +1,21 @@
 <template>
   <div class="m-14 w-full h-max">
-    <PageTitle primaryText="New Daily Update" />
+    <HeadersPageTitle primaryText="New Daily Update" />
+    <LoadersLoader v-if="isLoading" />
     <form
       class="flex flex-col gap-12 w-max mt-6 bg-white rounded-md shadow-md p-5"
-      @submit.prevent=""
+      v-if="!isLoading"
+      @submit.prevent="submit()"
     >
       <div class="flex gap-12 items-start">
         <div class="flex gap-4 items-center">
-          <Label>Was flight?</Label>
+          <HeadersLabel>Was flight?</HeadersLabel>
           <ToggleSwitch v-model="newDailyUpdate.wasFlight" />
         </div>
         <div v-if="newDailyUpdate.wasFlight" class="flex flex-col gap-1">
-          <Label>Flight</Label>
+          <HeadersLabel>Flight</HeadersLabel>
           <select
-            name=""
-            id=""
+            v-model="newDailyUpdate.flightId"
             class="border-2 border-gray-200 w-64 h-10 rounded-md text-lg"
           >
             <option value="" selected disabled>Select a flight</option>
@@ -30,11 +31,11 @@
       </div>
       <div class="flex flex-col gap-3">
         <div v-if="newDailyUpdate.wasFlight" class="flex gap-4 items-center">
-          <Label>Delay</Label>
+          <HeadersLabel>Delay</HeadersLabel>
           <ToggleSwitch v-model="newDailyUpdate.delay" />
         </div>
         <div v-if="newDailyUpdate.delay" class="flex flex-col gap-2">
-          <Label>Delay Code</Label>
+          <HeadersLabel>Delay Code</HeadersLabel>
           <select
             name=""
             id=""
@@ -51,70 +52,76 @@
           </select>
         </div>
         <div v-if="newDailyUpdate.delay" class="flex flex-col gap-1">
-          <Label>Delay Time (min)</Label>
+          <HeadersLabel>Delay Time (min)</HeadersLabel>
           <Input type="number" v-model="newDailyUpdate.delayTime" />
         </div>
         <div v-if="newDailyUpdate.delay" class="flex flex-col gap-1">
-          <Label>Delay description</Label>
+          <HeadersLabel>Delay description</HeadersLabel>
           <TextArea v-model="newDailyUpdate.delayDesc" />
         </div>
       </div>
 
       <div class="flex flex-col gap-3">
         <div class="flex gap-4 items-center">
-          <Label>Maintenance</Label>
+          <HeadersLabel>Maintenance</HeadersLabel>
           <ToggleSwitch v-model="newDailyUpdate.maintenace" />
         </div>
         <div v-if="newDailyUpdate.maintenace" class="flex gap-4 items-center">
-          <Label>Unplanned Maintenance</Label>
+          <HeadersLabel>Unplanned Maintenance</HeadersLabel>
           <ToggleSwitch v-model="newDailyUpdate.unplannedMaintenance" />
         </div>
         <div v-if="newDailyUpdate.maintenace" class="flex gap-4 items-center">
-          <Label>Planned Maintenance</Label>
+          <HeadersLabel>Planned Maintenance</HeadersLabel>
           <ToggleSwitch v-model="newDailyUpdate.plannedMaintenance" />
         </div>
         <div v-if="newDailyUpdate.maintenace" class="flex gap-4 items-center">
-          <Label>Other Maintenance</Label>
+          <HeadersLabel>Other Maintenance</HeadersLabel>
           <ToggleSwitch v-model="newDailyUpdate.otherMaintenance" />
         </div>
         <div v-if="newDailyUpdate.maintenace" class="flex flex-col gap-1">
-          <Label>Maintenance note</Label>
+          <HeadersLabel>Maintenance note</HeadersLabel>
           <TextArea v-model="newDailyUpdate.maintenanceNote" />
         </div>
       </div>
 
       <div class="flex gap-4">
-        <Label>Base and Equipment</Label>
+        <HeadersLabel>Base and Equipment</HeadersLabel>
         <ToggleSwitch v-model="newDailyUpdate.baseAndEquipment" />
       </div>
 
       <div class="flex flex-col gap-1">
-        <Label>Note</Label>
+        <HeadersLabel>Note</HeadersLabel>
         <TextArea v-model="newDailyUpdate.note" />
       </div>
       <div class="flex self-end gap-x-4">
-        <BackButton @click.prevent="router.go(-1)" />
-        <ButtonReusable
+        <ButtonsBackButton @click.prevent="router.go(-1)" />
+        <ButtonsButtonReusable
           type="submit"
-          text="Create Flight"
-          @click.prevent="mutate"
+          text="Create daily update"
+          :loading="loading"
         />
       </div>
     </form>
+    <ResponsesError v-if="isError">{{ errorMessage }}</ResponsesError>
+    <ResponsesSuccess v-if="isSuccess"
+      >Daily update created successfully!
+    </ResponsesSuccess>
   </div>
 </template>
 <script setup lang="ts">
-import Label from "@/components/Headers/Label.vue";
-import PageTitle from "@/components/Headers/PageTitle.vue";
 import ToggleSwitch from "@/components/Input/ToggleSwitch.vue";
 import Input from "@/components/Input/Input.vue";
 import TextArea from "@/components/Input/TextArea.vue";
-import ButtonReusable from "@/components/Buttons/ButtonReusable.vue";
-import BackButton from "@/components/Buttons/BackButton.vue";
+
 import query from "~/api/flightMinDetails.graphql";
 import mutation from "~/api/createDailyUpdate.graphql";
 
 const router = useRouter();
+
+const isLoading: Ref<boolean> = ref(false);
+const isSuccess: Ref<boolean> = ref(false);
+const isError: Ref<boolean> = ref(false);
+const errorMessage: Ref<string> = ref("");
 
 const newDailyUpdate: Ref<Types.CreateDailyUpdate> = ref({
   wasFlight: false,
@@ -146,12 +153,17 @@ watch(
 onBeforeMount(async () => {
   await getData();
 });
+
+type Response = {
+  flights: Types.Flight[];
+};
 async function getData() {
-  const { data } = await useAsyncQuery({ query });
+  isLoading.value = true;
+  const { data } = await useAsyncQuery<Response>({ query });
   if (data.value) {
-    // @ts-expect-error
     flights.value = data.value.flights as Types.Flight[];
   }
+  isLoading.value = false;
 }
 
 const delayCodes = [
@@ -167,7 +179,13 @@ const delayCodes = [
   { id: 10, code: "J", description: "J - Not Applicable" },
 ];
 
-const { mutate, onError, onDone } = useMutation(mutation, {
+const {
+  mutate: submit,
+  onError,
+  onDone,
+  loading,
+} = useMutation(mutation, {
+  fetchPolicy: "no-cache",
   variables: {
     flightId: newDailyUpdate.value.flightId,
     wasFlight: newDailyUpdate.value.wasFlight,
@@ -185,10 +203,10 @@ const { mutate, onError, onDone } = useMutation(mutation, {
   },
 });
 onError((err) => {
-  console.log(err);
+  isError.value = true;
+  errorMessage.value = err.message;
 });
 onDone((data) => {
-  console.log(data.data);
-  alert(data.data.createDailyUpdate);
+  isSuccess.value = true;
 });
 </script>

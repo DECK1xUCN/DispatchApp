@@ -2,7 +2,7 @@
   <button
     :aria-selected="selected"
     class="px-3 py-2 font-medium text-sm rounded-md cursor-pointer"
-    :class="[selected ? 'bg-white shadow text-indigo-600' : '']"
+    :class="[selected ? 'bg-indigo-100 shadow ' : 'border']"
   >
     <slot></slot>
   </button>
